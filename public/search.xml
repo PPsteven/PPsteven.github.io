@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>博客第一贴：Hexo 搭建</title>
+    <url>/2019/10/27/Hexo%20%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h1 id="Hexo-博客搭建"><a href="#Hexo-博客搭建" class="headerlink" title="Hexo 博客搭建"></a>Hexo 博客搭建</h1><blockquote>
+<p>CodeSheep 学习笔记</p>
+</blockquote>
+<p>Hexo 是一款基于node.js 的静态博库框架，而且可以可以方便的托管在Github 上（ 正好B站 up 主 :程序羊也推荐了）， 所以也正好简单记录一下Hexo 的安装配置过程</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p>不少博客已经总结的很好了，所以提前放上人家的地址</p>
+<p><a href="http://fangzh.top/2018/2018090514/" target="_blank" rel="noopener">hexo教程：github page+独立域名搭建(1)</a></p>
+<p><a href="https://www.cnblogs.com/visugar/p/6821777.html" target="_blank" rel="noopener">hexo从零开始到搭建完整</a></p>
+<h2 id="本地搭建hexo博客"><a href="#本地搭建hexo博客" class="headerlink" title="本地搭建hexo博客"></a>本地搭建hexo博客</h2><h3 id="下载node-js"><a href="#下载node-js" class="headerlink" title="下载node.js"></a>下载node.js</h3><p> 官网下载LTS版本，直接安装</p>
+<h3 id="npm-安装hexo"><a href="#npm-安装hexo" class="headerlink" title="npm 安装hexo"></a>npm 安装hexo</h3><p>注意：切换为 root 账号操作    <code>su</code>  ,切换淘宝源 cnpm,会更加快</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<p>安装hexo <code>cnpm install hexo-cli -g</code> </p>
+<p>安装完后用<code>hexo -v</code> 查看一下是否安装成功</p>
+<h3 id="启动hexo"><a href="#启动hexo" class="headerlink" title="启动hexo"></a>启动hexo</h3><p>在目录下创建 blog 文件夹  <code>mkdir blog</code> ,进入 <code>cd blog</code></p>
+<p><strong>初始化hexo</strong> </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo hexo init</span><br></pre></td></tr></table></figure>
+
+<p>出现 <code>INFO  Start blogging with Hexo!</code>  表示安装完成</p>
+<p><strong>启动hexo</strong> </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo server / hexo s</span><br></pre></td></tr></table></figure>
+
+<h3 id="写第一篇博客"><a href="#写第一篇博客" class="headerlink" title="写第一篇博客"></a>写第一篇博客</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo n &apos;my first blog&apos;</span><br></pre></td></tr></table></figure>
+
+<p>命令会在 /Users/YourUserName/blog/source/_posts/ 文件夹下生成一篇 md文件</p>
+<p>可以在finder 中用 typro 编辑</p>
+<p>清空hexo: <code>hexo clean</code></p>
+<p>重新生成hexo： <code>hexo generate / hexo g</code></p>
+<h2 id="github-仓库上搭建"><a href="#github-仓库上搭建" class="headerlink" title="github 仓库上搭建"></a>github 仓库上搭建</h2><h3 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h3><p>New repository </p>
+<p>注意：名字必须为自己的用户名+.github.io</p>
+<p>如 PPsteven.github.io</p>
+<h3 id="安装git-插件"><a href="#安装git-插件" class="headerlink" title="安装git 插件"></a>安装git 插件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cnpm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改-config-yml-配置文件"><a href="#修改-config-yml-配置文件" class="headerlink" title="修改 _config.yml 配置文件"></a>修改 _config.yml 配置文件</h3><p>在配置文件中找到如下代码，添加repo 信息和 branch 信息</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/deployment.html</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">git</span></span><br><span class="line"><span class="attr">  repo:</span> <span class="attr">https://github.com/PPsteven/PPsteven.github.io.git</span></span><br><span class="line"><span class="attr">  branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>部署hexo</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean    <span class="comment">#会清除缓存文件db.json及之前生成的静态文件夹public；</span></span><br><span class="line">hexo g     <span class="comment">#会重新生成静态文件夹public；</span></span><br><span class="line">hexo deploy/ hexo d    <span class="comment">#因为之前已经安装了插件并且在博客配置文件中也配置好了，所以这个命令会在博客根目录下生成一个.deploy_git的文件夹，并 把本地生成的静态文件部署到LiLei.github.io这个仓库中的master分支上；</span></span><br></pre></td></tr></table></figure>
+
+<p>如果是第一次部署，会提示输入github 账号和密码</p>
+<p><strong>成功！！</strong></p>
+<p>远端访问：PPsteven.github.io</p>
+<h1 id="进阶教程"><a href="#进阶教程" class="headerlink" title="进阶教程"></a>进阶教程</h1><h2 id="参考教程："><a href="#参考教程：" class="headerlink" title="参考教程："></a>参考教程：</h2><blockquote>
+<p><a href="http://fangzh.top/2018/2018090715/" target="_blank" rel="noopener">hexo教程:基本配置+更换主题+多终端工作+coding page部署分流(2)</a></p>
+<p><a href="https://uchuhimo.me/2017/04/11/genesis/#more" target="_blank" rel="noopener">如何使用 Hexo 和 GitHub Pages 搭建这个博客</a></p>
+</blockquote>
+<p>学习了上面的教程后，基本的搭建和部署已经没有问题了。</p>
+<p>主要的一个需求就是多电脑同步的问题。</p>
+<h2 id="Hexo-CheetSheet"><a href="#Hexo-CheetSheet" class="headerlink" title="Hexo CheetSheet"></a>Hexo CheetSheet</h2><ul>
+<li><p>初始化目录：<code>hexo init [folder]</code></p>
+</li>
+<li><p>新建文章：<code>hexo new/n [layout] &lt;title&gt;</code> 或</p>
+<ul>
+<li>新建草稿：<code>hexo new draft &lt;title&gt;</code></li>
+<li>新建页面：<code>hexo new page tags</code></li>
+</ul>
+</li>
+<li><p>将草稿发布为正式文章：<code>hexo publish &lt;title&gt;</code></p>
+</li>
+<li><p>生成静态文件：<code>hexo generate/g</code></p>
+<ul>
+<li>监听文件变化：<code>hexo g --watch</code> 或 <code>hexo g -w</code></li>
+</ul>
+</li>
+<li><p>部署：<code>hexo deploy/d</code></p>
+<ul>
+<li>先生成后部署：<code>hexo d -g</code></li>
+<li>等于 <code>hexo g</code> 加 <code>hexo d</code></li>
+</ul>
+</li>
+<li><p>启动本地服务器（服务器会监听文件变化并自动更新）</p>
+<ul>
+<li><p><code>hexo server/s</code></p>
+</li>
+<li><p>启动调试：<code>hexo s --debug</code></p>
+</li>
+<li><p>预览草稿：<code>hexo s --draft</code></p>
+</li>
+</ul>
+</li>
+<li><p>清除缓存：<code>hexo clean</code></p>
+</li>
+</ul>
+<h2 id="Hexo安装主题"><a href="#Hexo安装主题" class="headerlink" title="Hexo安装主题"></a>Hexo安装主题</h2><blockquote>
+<p>安装教程：<a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT官网</a></p>
+</blockquote>
+<h3 id="下载主题-amp-启动"><a href="#下载主题-amp-启动" class="headerlink" title="下载主题&amp;启动"></a>下载主题&amp;启动</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next themes/next</span><br><span class="line"><span class="comment"># 编辑_config.yml</span></span><br><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="NexT-主题配置"><a href="#NexT-主题配置" class="headerlink" title="NexT 主题配置"></a>NexT 主题配置</h2><h3 id="设定主题-语言"><a href="#设定主题-语言" class="headerlink" title="设定主题/语言"></a>设定主题/语言</h3><p>主题配置的文件在themes/NexT 文件夹下的_config.yml 中，我们按照官网教程，依次配置</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="attr">scheme:</span> <span class="string">Pisces</span></span><br><span class="line"></span><br><span class="line"><span class="attr">language:</span> <span class="string">zh-Hans</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="添加标签-分类-关于页面"><a href="#添加标签-分类-关于页面" class="headerlink" title="添加标签/分类/关于页面"></a>添加标签/分类/关于页面</h3><p>hexo 新建命令 <code>hexo n [layout] title</code> 中 layout 有三个模板</p>
+<p>post创建文章，生成在<code>/source/_posts</code>文件夹下，draft创建草稿，生成在<code>/source/ _drafts</code> 文件夹下，page创建页面，生成在<code>/source/YourPageName</code>文件夹下   </p>
+<p>![image-20191027011714501](/Users/ppsteven/Library/Application Support/typora-user-images/image-20191027011714501.png)</p>
+<ul>
+<li><p>新建页面</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br><span class="line">hexo new page about</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改菜单（编辑 themes/next/_config.yml）</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line"><span class="attr">  about:</span> <span class="string">/about/</span> <span class="string">||</span> <span class="string">user</span> <span class="comment"># 关于页面</span></span><br><span class="line"><span class="attr">  tags:</span> <span class="string">/tags/</span> <span class="string">||</span> <span class="string">tags</span>  <span class="comment"># 标签页面</span></span><br><span class="line"><span class="attr">  categories:</span> <span class="string">/categories/</span> <span class="string">||</span> <span class="string">th</span> <span class="comment"># 分类页面</span></span><br><span class="line"><span class="attr">  archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">archive</span> <span class="comment"># 归档页面</span></span><br><span class="line">  <span class="comment">#schedule: /schedule/ || calendar</span></span><br><span class="line">  <span class="comment">#sitemap: /sitemap.xml || sitemap</span></span><br><span class="line"><span class="attr">  commonweal:</span> <span class="string">/404/</span> <span class="string">||</span> <span class="string">heartbeat</span> <span class="comment"># 公益404</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="设置头像"><a href="#设置头像" class="headerlink" title="设置头像"></a>设置头像</h3><p>_config.yml 在blog 文件和 theme/next 文件夹下都有</p>
+<p>blog 下的为站点配置文件，主题下的为主题配置文件</p>
+<p><code>mkdir themes/next/source/uploads</code> ，放置头像图片（jpg/gif 等）</p>
+<p>修改配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># avatar: http://example.com/avatar.png</span></span><br><span class="line"><span class="attr">avatar:</span> <span class="string">/uploads/avatar_1.jpg</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="设置作者昵称"><a href="#设置作者昵称" class="headerlink" title="设置作者昵称"></a>设置作者昵称</h3><p>修改  <strong>站点配置文件</strong> </p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">author:</span> <span class="string">Your</span> <span class="string">name</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="设置阅读字数与时长"><a href="#设置阅读字数与时长" class="headerlink" title="设置阅读字数与时长"></a>设置阅读字数与时长</h3><p>需要安装插件，<a href="https://github.com/willin/hexo-wordcount" target="_blank" rel="noopener">地址</a></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Post wordcount display settings</span></span><br><span class="line"><span class="comment"># Dependencies: https://github.com/willin/hexo-wordcount</span></span><br><span class="line"><span class="attr">post_wordcount:</span></span><br><span class="line"><span class="attr">  item_text:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  wordcount:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  min2read:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  totalcount:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  separated_meta:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="配置搜索服务"><a href="#配置搜索服务" class="headerlink" title="配置搜索服务"></a>配置搜索服务</h3><p>Local Search添加百度/谷歌/本地 自定义站点内容搜索</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cnpm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+
+<p>编辑站点配置文件，新增如下代码</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">search.xml</span></span><br><span class="line"><span class="attr">  field:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">  format:</span> <span class="string">html</span></span><br><span class="line"><span class="attr">  limit:</span> <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+
+<p>编辑主题配置文件，启动本地搜索</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Local search</span></span><br><span class="line"><span class="comment"># Dependencies: https://github.com/flashlab/hexo-generator-search</span></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># if auto, trigger search by changing input</span></span><br><span class="line">  <span class="comment"># if manual, trigger search by pressing enter key or search button</span></span><br><span class="line"><span class="attr">  trigger:</span> <span class="string">auto</span></span><br><span class="line">  <span class="comment"># show top n results per article, show all results by setting to -1</span></span><br><span class="line"><span class="attr">  top_n_per_article:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>设置摘要</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Automatically Excerpt. Not recommend.</span></span><br><span class="line"><span class="comment"># Please use &lt;!-- more --&gt; in the post to control excerpt accurately.</span></span><br><span class="line"><span class="attr">auto_excerpt:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">True</span></span><br><span class="line"><span class="attr">  length:</span> <span class="number">150</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>电脑基本配置</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mac 入门基础环境搭建</title>
+    <url>/2019/09/01/Mac%20%E5%85%A5%E9%97%A8%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="Mac-基础配置"><a href="#Mac-基础配置" class="headerlink" title="Mac 基础配置"></a>Mac 基础配置</h1><h2 id="Homebrew常用命令"><a href="#Homebrew常用命令" class="headerlink" title="Homebrew常用命令"></a>Homebrew常用命令</h2><blockquote>
+<p>官网安装 Homebrew</p>
+<p><a href="http://mxcl.github.com/homebrew/" target="_blank" rel="noopener">http://mxcl.github.com/homebrew/</a></p>
+</blockquote>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>包管理软件</p>
+<p>Win: 360软件管家</p>
+<p>Debian/Ubuntu: apt包管理系统 </p>
+<p>Redhat/Fedora: yum包管理系统</p>
+<p>Mac OS X: Macports,Fink,AppStore</p>
+<p>以及   <strong>Homebrew</strong> </p>
+<h4 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h4><p>brew -v    查询Homebrew版本<br>brew -h    brew帮助<br>brew update    更新Homebrew<br>brew install <pkg_name>    安装任意软件<br>brew uninstall <pkg_name>    卸载任意软件<br>brew search <pkg_name>    查询任意包<br>brew list    列出安装列表<br>brew info <pkg_name>    查看任意包内容信息<br>brew upgrade <pkg_name>    更新任意包<br>brew cleanup <pkg_name>    删除具体旧软件<br>brew cleanup        删除所有旧软件<br>brew outdated        已安装的包是否需要更新</p>
+<h2 id="item2-oh-my-zsh"><a href="#item2-oh-my-zsh" class="headerlink" title="item2+oh-my-zsh"></a>item2+oh-my-zsh</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)</span>"</span></span><br></pre></td></tr></table></figure>
+
+<p>chsh -s /bin/zsh. # 命令航切换bash为zsh shell<br>iterm的perference-&gt;profiles-&gt;commond 设置成/bin/zsh # iterm2 界面手动切换</p>
+<ul>
+<li>更改shell 语言<ol>
+<li>cat /etc/shells # 查看所有 shell</li>
+<li>chsh -s /bin/zsh #切换为zsh </li>
+<li>修改文件<br>vi ~/.zshrc<br>source ~/.zshrc</li>
+<li>echo $SHELL # 查看当前shell </li>
+</ol>
+</li>
+</ul>
+<h4 id="Iterm2-使用技巧"><a href="#Iterm2-使用技巧" class="headerlink" title="Iterm2 使用技巧"></a>Iterm2 使用技巧</h4><p>设置全局打开快捷键</p>
+<p>Perferemance -&gt; Keys -&gt;Hotkey -&gt; show/hide all windows with a system-wide hotkey</p>
+<p>command + .  # 设置快捷键 打开iterm2<br>command + d # 打开多个terminal<br>command + shift + d # 垂直打开多个terminal</p>
+<h4 id="zsh-插件配置"><a href="#zsh-插件配置" class="headerlink" title="zsh  插件配置"></a>zsh  插件配置</h4><p>目前已经有的自带插件在官网Github中可以看到，<a href="https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins。" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins。</a><br>凡是这里有的，都可以立刻生效。</p>
+<p><strong>参考页面</strong></p>
+<p><a href="https://blog.e9china.net/lesson/yixieshiyongchangyongchajiantuijianforzshoh-my-zsh.html" target="_blank" rel="noopener">一些实用常用插件推荐 for zsh oh-my-zsh</a></p>
+<h5 id="git-默认自带"><a href="#git-默认自带" class="headerlink" title="git 默认自带"></a>git 默认自带</h5><h5 id="zsh-syntax-highlighting-语法高亮"><a href="#zsh-syntax-highlighting-语法高亮" class="headerlink" title="zsh-syntax-highlighting  语法高亮"></a>zsh-syntax-highlighting  语法高亮</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+<p>将zsh-syntax-highlighting 下载到zsh 的plugins 目录中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plugins=(其他的插件 zsh-autosuggestions)</span><br></pre></td></tr></table></figure>
+
+<h5 id="zsh-autosuggestions-自动建议"><a href="#zsh-autosuggestions-自动建议" class="headerlink" title="zsh-autosuggestions 自动建议"></a>zsh-autosuggestions 自动建议</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://github.com/zsh-users/zsh-autosuggestions <span class="variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plugins=(其他的插件 zsh-autosuggestions)</span><br></pre></td></tr></table></figure>
+
+<h5 id="sublime-默认自带"><a href="#sublime-默认自带" class="headerlink" title="sublime 默认自带"></a>sublime 默认自带</h5><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>st</td>
+<td>打开sublime</td>
+</tr>
+<tr>
+<td>st + 文件夹</td>
+<td>打开文件夹</td>
+</tr>
+<tr>
+<td>st + 文件</td>
+<td>打开文件</td>
+</tr>
+<tr>
+<td>stt</td>
+<td>打开当前文件夹 ，等价于 st .</td>
+</tr>
+<tr>
+<td>sst</td>
+<td>管理员权限 相当于 sudo st</td>
+</tr>
+</tbody></table>
+<h5 id="z-默认自带"><a href="#z-默认自带" class="headerlink" title="z 默认自带"></a>z 默认自带</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">z -x 无效路径</span><br><span class="line">z 目录名称</span><br></pre></td></tr></table></figure>
+
+<h3 id="解压软件-unrar"><a href="#解压软件-unrar" class="headerlink" title="解压软件 unrar"></a>解压软件 unrar</h3><p>brew install unrar</p>
+<p>使用方法</p>
+<p>unrar x test.rar # 解压到当前目录</p>
+<h3 id="解压软件-7z"><a href="#解压软件-7z" class="headerlink" title="解压软件 7z"></a>解压软件 7z</h3><p>brew search 7z   # p7zip</p>
+<p>brew install p7zip</p>
+<p>使用方法</p>
+<p>7z e filename.7z</p>
+]]></content>
+      <categories>
+        <category>电脑基本配置</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+</search>
