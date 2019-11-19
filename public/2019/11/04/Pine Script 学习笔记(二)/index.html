@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>Pine Script 学习笔记(二)——基本特点 | 软微9133</title><meta name="description" content="Pine Script 学习笔记(二)——基本特点"><meta name="keywords" content="Pine,TradingView,量化"><meta name="author" content="PPsteven"><meta name="copyright" content="PPsteven"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="canonical" href="http://ppsteven.github.io/2019/11/04/Pine%20Script%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Pine Script 学习笔记(二)——基本特点"><meta name="twitter:description" content="Pine Script 学习笔记(二)——基本特点"><meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104214742.png"><meta property="og:type" content="article"><meta property="og:title" content="Pine Script 学习笔记(二)——基本特点"><meta property="og:url" content="http://ppsteven.github.io/2019/11/04/Pine%20Script%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)/"><meta property="og:site_name" content="软微9133"><meta property="og:description" content="Pine Script 学习笔记(二)——基本特点"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104214742.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="prev" title="git cheetsheet" href="http://ppsteven.github.io/2019/11/14/git%20cheetsheet/"><link rel="next" title="Pine Script 学习笔记" href="http://ppsteven.github.io/2019/10/31/Pine%20Script%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight_copy: 'true',
+  highlight_lang: 'true',
+  highlight_shrink: 'false',
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    title: '添加书签',
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  copyright: undefined,
+  copy_copyright_js: false
+  
+}</script></head><body><div id="header"> <div id="page-header"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">软微9133</a></span><i class="fa fa-bars fa-fw toggle-menu pull-right close" aria-hidden="true"></i><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/python/"><i class="fa-fw fa fa-code"></i><span> Python</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 列表</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li><li><a class="site-page" href="/Machine Learning/"><i class="fa-fw fa fa-cube"></i><span> ML</span></a></li></ul></div><script>document.body.addEventListener('touchstart', function(){ });</script></div></span><span class="pull-right" id="search_button"><a class="site-page social-icon search"><i class="fa fa-search fa-fw"></i><span> 搜索</span></a></span></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="lozad avatar_img" src="/uploads/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'"></div><div class="mobile_post_data"><div class="mobile_data_item is_center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">6</div></a></div></div><div class="mobile_data_item is_center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">7</div></a></div></div><div class="mobile_data_item is_center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">5</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/python/"><i class="fa-fw fa fa-code"></i><span> Python</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 列表</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li><li><a class="site-page" href="/Machine Learning/"><i class="fa-fw fa fa-cube"></i><span> ML</span></a></li></ul></div><script>document.body.addEventListener('touchstart', function(){ });</script></div></div><div id="mobile-sidebar-toc"><div class="toc_mobile_headline">目录</div><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#Context-switching-and-the-security-function"><span class="toc_mobile_items-text">Context switching and the security function</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#bar-state-变量"><span class="toc_mobile_items-text">bar state.* 变量</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#会话和时间信息"><span class="toc_mobile_items-text">会话和时间信息</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#策略编写"><span class="toc_mobile_items-text">策略编写</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#backtesting-amp-forwardtesting"><span class="toc_mobile_items-text">backtesting &amp; forwardtesting</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#经纪商模拟"><span class="toc_mobile_items-text">经纪商模拟</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#订单生成命令"><span class="toc_mobile_items-text">订单生成命令</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#strategy-entry-订单生成函数"><span class="toc_mobile_items-text">strategy.entry 订单生成函数</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#strategy-exit-订单退出函数"><span class="toc_mobile_items-text">strategy.exit 订单退出函数</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#strategy-order"><span class="toc_mobile_items-text">strategy.order</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-4"><a class="toc_mobile_items-link" href="#实例"><span class="toc_mobile_items-text">实例</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-5"><a class="toc_mobile_items-link" href="#例1"><span class="toc_mobile_items-text">例1</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-5"><a class="toc_mobile_items-link" href="#例2"><span class="toc_mobile_items-text">例2</span></a></li></ol></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#风险管理"><span class="toc_mobile_items-text">风险管理</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#指标重绘"><span class="toc_mobile_items-text">指标重绘</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#绘图"><span class="toc_mobile_items-text">绘图</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#label"><span class="toc_mobile_items-text">label</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#line"><span class="toc_mobile_items-text">line</span></a></li></ol></li></ol></div></div><div id="body-wrap"><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true">     </i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Context-switching-and-the-security-function"><span class="toc-text">Context switching and the security function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bar-state-变量"><span class="toc-text">bar state.* 变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话和时间信息"><span class="toc-text">会话和时间信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略编写"><span class="toc-text">策略编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#backtesting-amp-forwardtesting"><span class="toc-text">backtesting &amp; forwardtesting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#经纪商模拟"><span class="toc-text">经纪商模拟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#订单生成命令"><span class="toc-text">订单生成命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#strategy-entry-订单生成函数"><span class="toc-text">strategy.entry 订单生成函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strategy-exit-订单退出函数"><span class="toc-text">strategy.exit 订单退出函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#strategy-order"><span class="toc-text">strategy.order</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例"><span class="toc-text">实例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#例1"><span class="toc-text">例1</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#例2"><span class="toc-text">例2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#风险管理"><span class="toc-text">风险管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指标重绘"><span class="toc-text">指标重绘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#绘图"><span class="toc-text">绘图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#label"><span class="toc-text">label</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#line"><span class="toc-text">line</span></a></li></ol></li></ol></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104214742.png)"><div id="post-info"><div id="post-title"><div class="posttitle">Pine Script 学习笔记(二)——基本特点</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-11-04<span class="post-meta__separator">|</span><i class="fa fa-history" aria-hidden="true"></i> 更新于 2019-11-04</time><span class="post-meta__separator mobile_hidden">|</span><span class="mobile_hidden"><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E9%87%8F%E5%8C%96/">量化</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E9%87%8F%E5%8C%96/Pine/">Pine</a></span><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.5k</span><span class="post-meta__separator">|</span><span>阅读时长: 9 分钟</span><span class="post-meta__separator">|</span><span>阅读量: </span><span id="busuanzi_value_page_pv"></span></div></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><h2 id="Context-switching-and-the-security-function"><a href="#Context-switching-and-the-security-function" class="headerlink" title="Context switching and the security function"></a>Context switching and the security function</h2><p>security 函数可以用于按照特定要求请求数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">study(&quot;Example security 1&quot;, overlay=true)</span><br><span class="line">ibm_15 = security(&quot;NYSE:IBM&quot;, &quot;15&quot;, close)</span><br><span class="line">plot(ibm_15)</span><br></pre></td></tr></table></figure>
+
+<p><img alt data-src="https://www.tradingview.com/pine-script-docs/en/v4/_images/Chart_security_1.png" class="lozad"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security(symbol, resolution, expression, gaps, lookahead)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>symbol (string)</strong> 商品代码。</p>
+<p>商品代码可以包含数据提供商信息，也可以不含</p>
+<p>如 “NYSE:IBM”,”BATS:IBM”,”IBM”(如不提供，默认使用BATS)</p>
+<p> <a href="https://www.tradingview.com/pine-script-reference/v4/#var_syminfo{dot}ticker" target="_blank" rel="noopener">syminfo.ticker</a> and <a href="https://www.tradingview.com/pine-script-reference/v4/#var_syminfo{dot}tickerid" target="_blank" rel="noopener">syminfo.tickerid</a>是表示当前图标上的商品代码，syminfo.ticker是不含数据供应商信息，syminfo.tickerid是包含供应商信息。Pine教程建议使用后者，为了避免数据的模糊性</p>
+</li>
+<li><p><strong>resolution (string)</strong> 分辨率/ <strong>timeframe</strong>时间周期</p>
+<ul>
+<li>分钟级：1，5，10，21，60，120，等等</li>
+<li>日级: D,1D,2D 等等</li>
+<li>周级：W，1W，2W</li>
+<li>月级：M，1M，2M</li>
+<li>timeframe.period 记录当前图标时间周期</li>
+</ul>
+</li>
+<li><p><strong>expression (series)</strong> 计数并从 <a href="https://cn.tradingview.com/pine-script-reference/v3/#fun_security" target="_blank" rel="noopener">security</a>调用返回的表达式。</p>
+<p>如果仅仅是获取收盘价数据，我们可以用<code>security(&#39;EURUSD&#39;,&#39;D&#39;,close)</code></p>
+<p>但是，expression能给我们提供更加丰富的操作，比如，我们需要知道，EURUSD相对于GBPUSD 上涨的幅度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">study(title = &quot;Advance Decline Ratio&quot;, shorttitle=&quot;ADR&quot;)</span><br><span class="line">ratio(t1, t2, source) =&gt;</span><br><span class="line">    s1 = security(t1, timeframe.period, source)</span><br><span class="line">    s2 = security(t2, timeframe.period, source)</span><br><span class="line">    s1 / s2</span><br><span class="line">plot(ratio(&quot;GBPUSD&quot;, &quot;EURUSD&quot;, close-open))</span><br></pre></td></tr></table></figure>
+
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191102123145.png" class="lozad"></p>
+<p>如上图所以，GBPUSD上涨幅度/EURUSD 的上涨幅度我们可以很轻松的通过7行代码实现。在绝大多数情况下，两者是同比例变动，但是在某些特等情况下，变化是相反的。这对于研究这两种货币对的走势关系有很大的帮助。</p>
+</li>
+</ul>
+<p>在security数据应用到当前图表上的时候，有两个控制，一个是gaps，另一个是lookahead</p>
+<ul>
+<li><p><strong>gaps (const bool)</strong> 默认值为<a href="https://cn.tradingview.com/pine-script-reference/v3/#var_barmerge{dot}gaps_off" target="_blank" rel="noopener">barmerge.gaps_off</a>。可以理解为数据平滑的操作，因为数据中会存在空值（na），在gaps_off的情况下，na会被离它最近的非空值所替代，也就不会出现间隔（gap）的情况</p>
+</li>
+<li><p><strong>lookahead (const bool)</strong> 默认值为<a href="https://cn.tradingview.com/pine-script-reference/v3/#var_barmerge{dot}lookahead_off" target="_blank" rel="noopener">barmerge.lookahead_off</a>。</p>
+<p>合并所请求数据位置的策略。 请求的条形图与当前的条形图按照k线开盘时间合并。 这种合并策略可能导致从“未来”获取数据计算历史的不良影响。 这在回溯测试策略中不被接受，但在指标中可使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">study(&apos;My Script&apos;, overlay=true)</span><br><span class="line">a = security(syminfo.tickerid, &apos;60&apos;, low, lookahead=barmerge.lookahead_off)</span><br><span class="line">plot(a, color=color.red)</span><br><span class="line">b = security(syminfo.tickerid, &apos;60&apos;, low, lookahead=barmerge.lookahead_on)</span><br><span class="line">plot(b, color=color.lime)</span><br></pre></td></tr></table></figure>
+
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191102163742.png" class="lozad"></p>
+<p>红色是lookahead_off，绿色是lookahead_on。 我们发现开启了lookahead功能后，所产生的最低价是整个时间段的最低价，而原先是开盘K点的最低价。</p>
+</li>
+</ul>
+<h2 id="bar-state-变量"><a href="#bar-state-变量" class="headerlink" title="bar state.* 变量"></a>bar state.* 变量</h2><ul>
+<li><p>barstate.isfirst  当前k线为k线组的第一条k线</p>
+</li>
+<li><p>barstate.islast  当前k线为k线组的最后一条k线</p>
+</li>
+<li><p>barstate.ishistory  当前k线为历史k线</p>
+</li>
+<li><p>batstate.isrealtime 当前k线为实时k线</p>
+</li>
+<li><p>barstate.isnew 新K线的第一次更新</p>
+</li>
+<li><p>batstate.isconfirmed =当前k线的最后(关闭)更新 </p>
+<blockquote>
+<p>不建议在<a href="https://cn.tradingview.com/pine-script-reference/v3/#fun_security" target="_blank" rel="noopener">security</a>表达式中使用<a href="https://cn.tradingview.com/pine-script-reference/v3/#var_barstate{dot}isconfirmed" target="_blank" rel="noopener">barstate.isconfirmed</a></p>
+</blockquote>
+</li>
+</ul>
+<p>所有的历史柱线都曾被认为是新的柱线，因为脚本是依次执行的。当柱线第一更开盘价生成的时候，认为此柱线是新的。</p>
+<h2 id="会话和时间信息"><a href="#会话和时间信息" class="headerlink" title="会话和时间信息"></a>会话和时间信息</h2><p>Pine 提供方法来生成 交易区间，时间和日期的信息。</p>
+<p>time(变量): 返回的是时间戳格式</p>
+<p>time(函数)：time(resolution, session) → series 返回的是按照session 格式返回的时间，如果不在session时间段的话便会返回na值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">study(&quot;Time&quot;, overlay=true)</span><br><span class="line">t1 = time(timeframe.period, &quot;0000-0000&quot;)</span><br><span class="line">bgcolor(t1 ? color.blue : na)</span><br></pre></td></tr></table></figure>
+
+<p>session = “0000-0000:23456” 即24h，去除周六日，运行结果如下</p>
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191102203555.png" class="lozad"></p>
+<p>可以看到，周一至周五背景都变成了蓝色，因为t1 不在session的范围内的时候返回na值</p>
+<p>交易区间的格式有</p>
+<ul>
+<li><p>0000-0000:1234567 24小时交易，时间从午夜0点开始</p>
+</li>
+<li><p>0000-0000:23456 工作日24小时交易</p>
+</li>
+<li><p>1700-1700：24小时交易，时间从17点开始</p>
+</li>
+<li><p>0930-1700:146  交易时间为09:30~17:00，交易时间在周日（1），周三（4），周五（6）</p>
+</li>
+<li><p>24x7 等价于 0000-0000:1234567</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 判断是否为30min的新柱线</span><br><span class="line">//@version=4</span><br><span class="line">study(&quot;new 30 min bar&quot;)</span><br><span class="line">is_newbar(res) =&gt;</span><br><span class="line">    t = time(res)</span><br><span class="line">    not na(t) and (na(t[1]) or t &gt; t[1])</span><br><span class="line">plot(is_newbar(&quot;30&quot;) ? 1 : 0)</span><br></pre></td></tr></table></figure>
+
+<p>用到的函数变量和类型</p>
+<ul>
+<li>time：UNIX格式的当前k线时间</li>
+<li>timenow：UNIX格式的当前时间</li>
+<li>syminfo.timezone：时区</li>
+</ul>
+<p>当前K线用到的变量</p>
+<ul>
+<li>year/month/weekofyear</li>
+<li>dayofmonth</li>
+<li>dayofweek（sunday,monday 等）</li>
+<li>hour/minute/second</li>
+</ul>
+<p>创建时间</p>
+<ul>
+<li><a href="https://www.tradingview.com/pine-script-reference/v4/#fun_timestamp" target="_blank" rel="noopener">timestamp(year, month, day, hour, minute)</a> </li>
+</ul>
+<h2 id="策略编写"><a href="#策略编写" class="headerlink" title="策略编写"></a>策略编写</h2><h3 id="backtesting-amp-forwardtesting"><a href="#backtesting-amp-forwardtesting" class="headerlink" title="backtesting &amp; forwardtesting"></a>backtesting &amp; forwardtesting</h3><p>strategy脚本是可以产生交易订单的Pine 脚本。利用strategy 可以做策略回测（backtesting）和 模拟交易（forwardtesting）</p>
+<p>无论backtesting 还是forwardtesting，计算都是<strong><u>默认</u></strong>发生在K线收盘的时候，但是在forwardtesting 的时候，可以选择在每一个tick发生的时候，都运行一次。</p>
+<p>做法一是调整strategy的 Setting/Properties，或者修改代码，添加<code>strategy(... ,calc_on_every_tick=true )</code> ，此外还可以选择在每笔订单完成之后计算<code>strategy(... , calc_on_order_fills=true)</code></p>
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191102215042.png" class="lozad"></p>
+<h3 id="经纪商模拟"><a href="#经纪商模拟" class="headerlink" title="经纪商模拟"></a>经纪商模拟</h3><p>仅仅只有OHLC数据的话，K线内数据的生成有一套逻辑，如果最高价更接近开盘价，生成顺序是 open-&gt;high-&gt;low-&gt;close，此外还假设价格是没有gaps的</p>
+<h3 id="订单生成命令"><a href="#订单生成命令" class="headerlink" title="订单生成命令"></a>订单生成命令</h3><h4 id="strategy-entry-订单生成函数"><a href="#strategy-entry-订单生成函数" class="headerlink" title="strategy.entry 订单生成函数"></a>strategy.entry 订单生成函数</h4><p>这是进入市场的命令。 如果具有相同ID的订单已经挂起，则可修改订单。 如果没有指定ID的订单，则会发出新的订单。 </p>
+<p>要取消/停用预挂单，应使用命令<a href="https://cn.tradingview.com/pine-script-reference/v4/#fun_strategy{dot}cancel" target="_blank" rel="noopener">strategy.cancel</a>或<a href="https://cn.tradingview.com/pine-script-reference/v4/#fun_strategy{dot}cancel_all" target="_blank" rel="noopener">strategy.cancel_all</a>。 </p>
+<p>与函数<a href="https://cn.tradingview.com/pine-script-reference/v4/#fun_strategy{dot}order" target="_blank" rel="noopener">strategy.order</a>相比，<a href="https://cn.tradingview.com/pine-script-reference/v4/#fun_strategy{dot}entry" target="_blank" rel="noopener">strategy.entry</a>功能受金字塔影响，可以正确反转市场位置。 如果“Limit”和“stop”参数均为“NaN”，则订单类型为市场订单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strategy.entry(id, long, qty, limit, stop, oca_name, oca_type, comment, when) → void</span><br></pre></td></tr></table></figure>
+
+<h4 id="strategy-exit-订单退出函数"><a href="#strategy-exit-订单退出函数" class="headerlink" title="strategy.exit 订单退出函数"></a>strategy.exit 订单退出函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strategy.exit(id, from_entry, qty, qty_percent, profit, limit, loss, stop, trail_price, trail_points, trail_offset, oca_name, comment, when) → void</span><br></pre></td></tr></table></figure>
+
+<p>这是一个退出指定进场或整个市场地位的命令，重点区分它和strategy.close 的不同</p>
+<ul>
+<li>id(string): 订单的标识符。</li>
+<li>from_entry(string): 这里填入要平仓的订单的标识符，默认为空。</li>
+<li>qty: 平仓手数(弄清楚合约的大小)</li>
+<li>qty_percent: 平台的比例</li>
+<li>profit: 获利点数(一定搞清楚单位是点还是步)</li>
+<li>limit: 与profit 相似，limit约定获利的价格</li>
+<li>loss:止损点数</li>
+<li>stop:与loss 相似，stop约定止损的价格</li>
+<li>tail.*: 指明跟踪指数</li>
+</ul>
+<h4 id="strategy-order"><a href="#strategy-order" class="headerlink" title="strategy.order"></a>strategy.order</h4><p>这条命令可以生成开仓也可以生成平仓命令，但是它不受金字塔影响。它的作用就是弥补strategy.entry 和 strategy.exit 函数的不灵活星。</p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>下面是几个例子，可以帮助我们理解strategy函数</p>
+<h5 id="例1"><a href="#例1" class="headerlink" title="例1"></a>例1</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">strategy(&quot;revers demo&quot;)</span><br><span class="line">if bar_index &gt; 4000</span><br><span class="line">    strategy.entry(&quot;buy&quot;, strategy.long, 4, when=strategy.position_size &lt;= 0)</span><br><span class="line">    strategy.entry(&quot;sell&quot;, strategy.short, 6, when=strategy.position_size &gt; 0)</span><br><span class="line">plot(strategy.equity)</span><br></pre></td></tr></table></figure>
+
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191103235510.png" class="lozad"></p>
+<p>当仓位为空头或者无头寸的话，买4。当仓位为多头的话，卖6。</p>
+<p>我们可以看到entry中buy 或sell 在交易的时候，会自动平仓，平掉反向的仓位。仓位在+4 –&gt; -6 变化。</p>
+<h5 id="例2"><a href="#例2" class="headerlink" title="例2"></a>例2</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">strategy(&quot;Partial exit demo&quot;)</span><br><span class="line">if bar_index &gt; 6500 and bar_index &lt;6550</span><br><span class="line">    strategy.entry(&quot;buy&quot;, strategy.long, 40000, when=strategy.position_size &lt;= 0)</span><br><span class="line">strategy.exit(&quot;bracket1&quot;, &quot;buy&quot;,  20000, profit = 3000,loss = 3000)</span><br><span class="line">strategy.exit(&quot;bracket2&quot;, &quot;buy&quot;,  profit=2000, loss=2000)</span><br><span class="line">plot(strategy.equity)</span><br></pre></td></tr></table></figure>
+
+<p>盈亏曲线</p>
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104151143.png" class="lozad"></p>
+<p>交易逻辑</p>
+<ul>
+<li>buy：当空仓时候买入，40000笔合约（40000美金）</li>
+<li>bracket1：设定平仓对象为buy标识的交易，平仓2000美金，止盈300点（单位为步，3000步=300点）。止损300点</li>
+<li>bracket2：止盈止损200点</li>
+</ul>
+<p>下面结合交易清单具体分析</p>
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104215413.png" class="lozad"></p>
+<ul>
+<li>1：空仓买入4000美金</li>
+<li>2：止损200点，亏损20000 * 200 * 0.0001 = $ 400，从图中可以看到是bracket2 先止损</li>
+<li>3：价格继续向下，亏损300点，bracket1策略触发，亏损$ 600</li>
+<li>4,5,6:同上逻辑</li>
+</ul>
+<h3 id="风险管理"><a href="#风险管理" class="headerlink" title="风险管理"></a>风险管理</h3><p>strategy.risk.* 一系列函数，可以帮助进行风险管理。当风险管理规则被激活的时候，没有订单会生成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">strategy(&quot;multi risk demo&quot;, overlay=true, pyramiding=10, calc_on_order_fills = true)</span><br><span class="line">if year &gt; 2014</span><br><span class="line">    strategy.entry(&quot;LE&quot;, strategy.long)</span><br><span class="line">strategy.risk.max_intraday_filled_orders(5)</span><br><span class="line">strategy.risk.max_intraday_filled_orders(2)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>strategy.risk.max_intraday_filled_orders(2)</p>
+<p>限制一天成交的最大的交易单数，一旦达到，所有未成交订单全部取消，成交订单关闭。并且一直关闭交易直到本交易日结束。</p>
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104172514.png" class="lozad"></p>
+<p>上图中，当第二笔交易生成的时候，同时也是两笔交易关闭的时间。</p>
+</li>
+<li><p>其余的函数参考手册</p>
+</li>
+</ul>
+<h2 id="指标重绘"><a href="#指标重绘" class="headerlink" title="指标重绘"></a>指标重绘</h2><p>历史数据仅仅包含OHLC，不包含线内的运动。这会导致的问题是，历史数据上的回测和实时数据不一致的情况。</p>
+<p>另外一个担心是，未来函数的使用。这里尤其要关注security 函数，此函数可能会错误的引入未来的信息。</p>
+<h2 id="绘图"><a href="#绘图" class="headerlink" title="绘图"></a>绘图</h2><p>Pine V4 中存在两种绘图类型：label 和 line。</p>
+<blockquote>
+<p>注：用户的绘图和 编程绘图是不一样的，编程得到的绘图是不能用鼠标修改的。</p>
+</blockquote>
+<p>和指标绘图函数(plot,plotshape,plotchar) 不一样的是，绘图函数可以在图表右侧没有K线的地方。</p>
+<h3 id="label"><a href="#label" class="headerlink" title="label"></a>label</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">label.new(x, y, text, xloc, yloc, color, style, textcolor, size) → series[label]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//@version=4</span><br><span class="line">study(&quot;My Script&quot;, overlay=true)</span><br><span class="line">label.new(bar_index, high, style=label.style_none,</span><br><span class="line">          text=&quot;x=&quot; + tostring(bar_index) + &quot;\ny=&quot; + tostring(high))</span><br></pre></td></tr></table></figure>
+
+<p><img alt data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104175710.png" class="lozad"></p>
+<ul>
+<li><p>x的位置是用bar_index 标识的，此时xloc 的默认值为xloc.barindex</p>
+</li>
+<li><p>y的位置是最高价</p>
+</li>
+<li><p>xloc取值：xloc.bar_index(默认) 和 xloc.bar_time</p>
+</li>
+<li><p>yloc取值：</p>
+<ul>
+<li><p>yloc.price 传入此函数，需要输入y值</p>
+</li>
+<li><p>yloc.abovebar,yloc.belowbar 启动时，y值会失效。标签在图表上部或者下部</p>
+</li>
+</ul>
+</li>
+<li><p>style: 很多种，可能用到比较多的有label.style_none，无底色</p>
+</li>
+</ul>
+<p>label.set_* 一系列函数可以用来对对象进一步的修改。</p>
+<h3 id="line"><a href="#line" class="headerlink" title="line"></a>line</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">line.new(x1, y1, x2, y2, xloc, extend, color, style, width) → series[line]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>extend: extend.none/extend.right/extend.left</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" target="_blank" rel="noopener">PPsteven</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ppsteven.github.io/2019/11/04/Pine%20Script%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)/">http://ppsteven.github.io/2019/11/04/Pine%20Script%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://ppsteven.github.io">软微9133</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Pine/">Pine    </a><a class="post-meta__tags" href="/tags/TradingView/">TradingView    </a><a class="post-meta__tags" href="/tags/%E9%87%8F%E5%8C%96/">量化    </a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104214742.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull-left"><a href="/2019/11/14/git%20cheetsheet/"><img class="prev_cover lozad" data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191119215108.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">上一篇</div><div class="prev_info"><span>git cheetsheet</span></div></a></div><div class="next-post pull-right"><a href="/2019/10/31/Pine%20Script%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><img class="next_cover lozad" data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191031220526.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">下一篇</div><div class="next_info"><span>Pine Script 学习笔记</span></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2019/10/31/Pine Script 学习笔记/" title="Pine Script 学习笔记"><img class="relatedPosts_cover lozad"data-src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191031220526.png"><div class="relatedPosts_title">Pine Script 学习笔记</div></a></div></div><div class="clear_both"></div></div></div></div><footer><div id="footer"><div class="copyright">&copy;2019 By PPsteven</div><div class="framework-info"><span>驱动 </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换">繁</a><i class="nightshift fa fa-moon-o" id="nightshift" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script async src="/js/search/local-search.js"></script><script src="/js/nightshift.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script id="ribbon" src="https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/js/piao.js"></script><script src="/js/tw_cn.js"></script><script>translateInitilization()
+
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@1.2.2/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script><script>const observer = lozad(); // lazy loads elements with default selector as '.lozad'
+observer.observe();
+</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

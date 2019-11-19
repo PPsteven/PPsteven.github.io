@@ -1,0 +1,27 @@
+class:
+  class_name: 友情链接
+  link_list:
+    1:
+      name: Jacky's blogs
+      link: https://wangjs-jacky.github.io/
+      avatar: https://cdn.jsdelivr.net/gh/wangjs-jacky/testpic/小李.jpg
+      descr: 
+    2:
+      name: Jordenbruce
+      link: https://jordenbruce.com/
+      avatar: https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191104221056.png
+      descr: 大神
+
+# class2:
+#   class_name: 链接无效
+#   link_list:
+#     1:
+#       name: 梦xxx
+#       link: https://blog.xxx.com
+#       avatar: https://xxxx/avatar.png
+#       descr: xxxx
+#     2:
+#       name: xx
+#       link: https://www.axxxx.cn/
+#       avatar: https://x
+#       descr: xx

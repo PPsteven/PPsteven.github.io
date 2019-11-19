@@ -5,14 +5,27 @@
 # sub-menu
 # xxx || icon:
 #   xxx || 連結 || icon
+# menu:
+#   Home: / || fa fa-home
+#   Archives: /archives/ || fa fa-archive
+#   Tags: /tags/ || fa fa-tags
+#   Categories: /categories/ || fa fa-folder-open
+#   Python: /python/ || fa fa-code
+#   # Link: /link/ || fa fa-link
+#   About: /about/ || fa fa-heart
+#   List||fa fa-list:
+#     - Music || /music/ || fa fa-music
+#     - Movie || /movies/ || fa fa-film
+#     - ML || /Machine Learning/ || fa fa-cube 
 menu:
-  Home: / || fa fa-home
-  Archives: /archives/ || fa fa-archive
-  Tags: /tags/ || fa fa-tags
-  Categories: /categories/ || fa fa-folder-open
-  # Link: /link/ || fa fa-link
-  About: /about/ || fa fa-heart
-  List||fa fa-list:
+  首页: / || fa fa-home
+  归档: /archives/ || fa fa-archive
+  标签: /tags/ || fa fa-tags
+  分类: /categories/ || fa fa-folder-open
+  Python: /python/ || fa fa-code
+  Link: /link/ || fa fa-link
+  关于: /about/ || fa fa-heart
+  列表||fa fa-list:
     - Music || /music/ || fa fa-music
     - Movie || /movies/ || fa fa-film
     - ML || /Machine Learning/ || fa fa-cube 
@@ -49,7 +62,7 @@ code_word_wrap: true
 # copyright 複製的内容後面加上版權信息
 copy:
   enable: true  # true 開啓 / false 禁止
-  copyright: true
+  copyright: false
 
 # social settings
 # formal: 
@@ -76,7 +89,7 @@ algolia_search:
 # Please see doc for more details: https://jerryc.me/posts/21cfbf15/#本地搜索
 # ---------------
 local_search:
-  enable: false
+  enable: true
   labels:
     input_placeholder: Search for Posts
     hits_empty: "We didn't find any results for the search: ${query}" # if there are no result
@@ -140,14 +153,15 @@ top_img: uploads/background1.jpg
 
 #the banner image of post
 # if the post not set the post cover and post top image, it will show it
-post_img: https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/Photo/post.png
+post_img:  https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png
 
 # the default cover of the post
+# default_cover: https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png
 default_cover: 
-   - https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png
-   - uploads/background1.jpg
-   - uploads/background2.jpg
-   - uploads/background3.jpg
+   - https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191031012321.png
+   # - https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191031010508.jpg
+   # - https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/cover/default_bg.png
+
 # the banner image of archive page
 archive_img: https://cdn.jsdelivr.net/gh/jerryc127/CDN@latest/Photo/archive.jpg
 
@@ -202,7 +216,7 @@ sharejs:
 
 # https://www.addtoany.com/
 addtoany:
-  enable: false
+  enable: true
   item:
     - facebook
     - twitter
@@ -293,15 +307,15 @@ qihu_site_verification:
 Flink:
   headline: 友情鏈接
   info_headline: 我的Blog資料
-  name: Blog 名字： JerryC
-  address: Blog 地址： https://jerryc.me/
-  avatar: Blog 頭像： https://jerryc.me/img/avatar.png
-  info: Blog 簡介： 今日事,今日畢
+  name: Blog 名字： PPsteven
+  address: Blog 地址： https://ppsteven.github.io/
+  avatar: Blog 頭像： https://ppsteven.github.io/uploads/avatar.jpg
+  info: Blog 簡介： 每天进步一点点
   comment: 如果需要交換友鏈,請留言
 
 # 打賞按鈕
 reward:
-  enable: true
+  enable: false
   QR_code:
     - itemlist:
         img: /img/wechat.jpg
@@ -399,7 +413,7 @@ display_mode: day
 
 # 美化post頁顯示
 post_beautify:
-  enable: true
+  enable: false
   title-prefix-icon: '\f0c1'
   title-prefix-icon-color: "#F47466"
 
@@ -517,6 +531,11 @@ note:
   # Offset lighter of background in % for modern and flat styles (modern: -12 | 12; flat: -18 | 6).
   # Offset also applied to label tag variables. This option can work with disabled note tag.
   light_bg_offset: 0
+
+# {% note default %}
+# #### Default Header
+# Welcome to [Hexo!](https://hexo.io)
+# {% endnote %}
 
 # 圖片懶加載
 lazyload:

@@ -3,6 +3,7 @@ title: 博客第一贴：Hexo 搭建
 date: 2019-10-27 21:46:00
 tags: Hexo
 categories: 电脑基本配置
+cover: https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191031005140.png
 ---
 
 # Hexo 博客搭建
@@ -153,9 +154,13 @@ hexo deploy/ hexo d    #因为之前已经安装了插件并且在博客配置�
 
 - 清除缓存：`hexo clean`
 
-## Hexo安装主题
+## 主题安装教程
 
-> 安装教程：[NexT官网](http://theme-next.iissnan.com/getting-started.html)
+
+> 安装教程： [NexT官网](http://theme-next.iissnan.com/getting-started.html)
+>          [jerry博客](https://jerryc.me/posts/21cfbf15/)
+
+
 
 ### 下载主题&启动
 
@@ -166,7 +171,12 @@ git clone https://github.com/iissnan/hexo-theme-next themes/next
 theme: next
 ```
 
-
+```bash
+cd blog
+git clone https://github.com/jerryc127/hexo-theme-butterfly.git themes/Butterfly
+# 编辑_config.yml
+theme: Butterfly
+```
 
 ## NexT 主题配置
 
