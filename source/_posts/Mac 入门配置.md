@@ -62,15 +62,30 @@ iterm的perference->profiles->commond 设置成/bin/zsh # iterm2 界面手动切
 
 #### Iterm2 使用技巧
 
+> 参考 [iTerm2常用的快捷键](https://www.cnblogs.com/manastudent/p/7367718.html)
+
 设置全局打开快捷键
 
 Perferemance -> Keys ->Hotkey -> show/hide all windows with a system-wide hotkey
 
-command + .  # 设置快捷键 打开iterm2
-command + d # 打开多个terminal
-command + shift + d # 垂直打开多个terminal
+command + shift + t  # 设置快捷键 打开iterm2
 
-
+```
+新建标签：command + t
+关闭标签：command + w
+切换全屏：command + enter
+查找：command + f
+垂直分屏：command + d
+垂直上下分屏：command + shift + d
+左右 tab 之间来回切换：⌘ + 1 / 2
+查看历史命令：command + ; （输入常用命令的前缀后使用该快捷键可以实现补全的功能）
+除当前行：ctrl + u / ctrl +c 
+上一条命令：ctrl + p
+搜索命令历史：ctrl + r
+清屏：clear
+重新打开：command + r
+iTerm2 剪切板历史：command + shift + h
+```
 
 #### zsh  插件配置
 

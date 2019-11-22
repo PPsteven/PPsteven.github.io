@@ -302,3 +302,63 @@ auto_excerpt:
   length: 150
 ```
 
+
+
+## 多端同步
+
+正常情况下，我们写的博客是备份在本地的，没有上传服务器，但是若是有多台电脑的话。如何保持同步是一个问题。最近用闲置的笔记本搞了一个manjaro 玩耍，需要进行多端同步
+
+### 环境配置
+
+具体的步骤请参考上面的教程，主要安装
+
+- node.js
+- git
+- hexo
+
+### 创建分支
+
+在`blog`文件夹下，我们用`hexo d` 命令提交的仅仅是public 文件夹里面的内容，默认的是提交在 master 分支上。为了在同一个repo 下管理我们的博客，我们可以建立新的分支hexo
+
+- github 上创建一个新的分支 hexo。进入仓库在，点击Branch，输入新的分支名回车建立
+
+  [](https://upload-images.jianshu.io/upload_images/4122543-a8884eab55430542.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+
+- 在本地仓库创建hexo 分支，添加remote 地址
+
+  ```bash
+  $git checkout -b hexo # 代表创建并切换
+  $git remote add origin git@github.com:PPsteven/hexo_source.git 
+  # 添加远端地址
+  $git remote -v # 查看remote 地址
+  origin	git@github.com:PPsteven/PPsteven.github.io.git (fetch)
+  origin	git@github.com:PPsteven/PPsteven.github.io.git (push)# 表示添加成功
+  ```
+
+  其实有一个取巧的方法，在GitHub上创建新的分支hexo 后，在blog 文件夹中直接将该仓库的hexo 分支克隆到本地。
+
+  ```bash
+  $git clone -b git@github.com:PPsteven/PPsteven.github.io.git
+  ```
+
+- 向本地分支添加文件
+
+  ```bash
+  $git add . # 本地文件添加至暂存区
+  $git commit -m "blog file backup" # 暂存区文件提交至本地分支
+  $git push origin hexo # 向远端hexo 分支提交文件
+  ```
+
+> 备注: 看到网上讨论，在提交文件的时候，themes 文件夹会出错。原因是themes 下文件夹的主题包含.git 文件，造成了冲突，删除即可。
+
+### 同步分支
+
+进入新的电脑，同步到本地就可以编辑了
+
+```bash
+$git pull origin hexo
+```
+
+
+
+  
