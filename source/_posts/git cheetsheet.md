@@ -317,6 +317,7 @@ git stash apply stash@[1] # 可以多次stash，通过git stash list查看所有
 - [ ] git pull
 - [ ] git rebase
 - [ ] git 标签 
+- [ ] 看完教程[git 教程](http://www.findme.wang/share/detail/id/327.html#sub6)
 
 ## 参考资料
 - [廖雪峰git教程](https://www.liaoxuefeng.com/wiki/896043488029600)

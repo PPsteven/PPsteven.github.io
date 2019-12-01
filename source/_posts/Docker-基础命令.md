@@ -1,7 +1,7 @@
 ---
 title: Docker 基础命令
 date: 2019-11-21 20:22:30
-tags: 日常学习笔记,Docker
+tags: [日常学习笔记,Docker]
 categories:  基础技能
 keywords: 
 description: 
@@ -23,6 +23,74 @@ copyright:
 最近的工作，让我感到Docker的学习一定要提前了。因为只是先用起来，首先记录一些常用的命令，争取一天搞定。
 
 <!--more-->
+
+## Docker 安装
+我的主力机子是Mac，家里用旧电脑搭了 manjaro ，所以我需要两个安装教程
+
+### Mac Docker安装
+Mac 上配置docker最为方便
+> 这里参考 [菜鸟教程:MacOS Docker 安装](https://www.runoob.com/docker/macos-docker-install.html) 
+
+```bash
+$ brew cask install docker 
+# 查看是否安装成功
+$ docker info 
+$ docker -v 
+```
+**镜像加速**
+鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：http://hub-mirror.c.163.com。
+
+在任务栏点击 Docker for mac 应用图标 -> Perferences... -> Daemon -> Registry mirrors。在列表中填写加速器地址即可。修改完成之后，点击 Apply & Restart 按钮，Docker 就会重启并应用配置的镜像地址了。
+![](https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191124001923.png)
+
+### Manjaro docker 安装
+Manjaro 也拥有非常强大的包管理软件 pacman 和 yay
+这里我们使用pacman，这里面的软件都是来自官方库
+
+```bash
+# 安装docker
+$ sudo pacman -S docker
+# 启动docker 服务
+$ sudo systemctl start docker 
+# 查看docker服务状态
+$ sudo systemctl status docker
+# 设置docker开启启动服务
+$ sudo systemctl enable docker 
+```
+这里Linux 有一个比Mac 麻烦一点的地方，就是每次使用docker 需要用sudo 超级管理员权限
+```bash
+# 如果还没有 docker group 就添加一个
+sudo groupadd docker
+
+# 将自己的登录名(${USER} )加入该 group 内。然后退出并重新登录就生效啦
+sudo gpasswd -aG ${USER} docker
+
+# 重启 docker 服务
+sudo systemctl restart docker
+```
+**Linux 镜像加速**
+
+```bash
+# 新建配置文件
+$ sudo touch /etc/docker/daemon.json 
+# 添加国内站点
+{
+    "registry-mirrors": ["https://registry.docker-cn.com","http://hub-mirror.c.163.com"]
+}
+
+# 重启docker daemon
+$ sudo systemctl restart docker 
+
+# 查看是否有修改成功
+$ docker info 
+# 查看Register Mirrors的信息
+Registry Mirrors:
+  https://registry.docker-cn.com/
+  http://hub-mirror.c.163.com/
+
+```
+
+
 
 ## Docker 镜像使用
 
@@ -125,4 +193,7 @@ $docker-compose stop # 停止服务
 
 ## 参考资料
 > [DockerCheatSheet](https://github.com/eon01/DockerCheatSheet)
+> [Linux(Manjaro) -Docker 安装及基本配置](https://www.cnblogs.com/imzhizi/p/10718310.html)
+
+
 

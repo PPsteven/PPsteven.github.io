@@ -9,6 +9,10 @@ description: 学习菜鸟教程随意记的一点东西
 cover: https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191119215225.png
 ---
 
+php 入门教程，主要来自于菜鸟教程，入门级别。
+
+随后慢慢的补充
+
 ## 示例
 
 ```php
