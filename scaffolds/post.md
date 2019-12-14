@@ -1,7 +1,7 @@
 ---
 title: {{ title }}
 date: {{ date }}
-tags: 
+tags: [xxxx,xxxx]
 categories:  
 keywords: 
 description: 
@@ -12,3 +12,8 @@ toc:
 toc_number:  
 copyright: 
 ---
+
+## 前言
+<!--more-->
+
+## 参考资料

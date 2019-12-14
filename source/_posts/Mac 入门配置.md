@@ -140,7 +140,24 @@ z 目录名称
 ##### autojump
 
 ```bash
-$brew install autojump 
+$ brew install autojump 
+plugins=(其他的插件 autojump)
+
+# 如果是linux 系统可能比较麻烦一点，需要从github 上下源码安装（当然也可以保证是最新的）
+$ git clone git@github.com:wting/autojump.git  autojump
+$ cd autojump
+$ ./install.py
+
+# 运行完毕后就会出现如下信息
+Please manually add the following line(s) to ~/.zshrc:
+
+	[[ -s /home/ppsteven/.autojump/etc/profile.d/autojump.sh ]] && source /home/ppsteven/.autojump/etc/profile.d/autojump.sh
+
+	autoload -U compinit && compinit -u
+
+Please restart terminal(s) before running autojump.
+
+# 按照操作在 .zshrc 中添加，我是乖乖添加了，其实我们可以直接在plugins 中添加的
 plugins=(其他的插件 autojump)
 ```
 

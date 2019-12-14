@@ -23,7 +23,7 @@ copyright:
 
 家中的电脑，由于没有公网ip，只能在家中用ssh 访问，一旦出门，就无法访问服务器了。这非常不方便，因为可能要从电脑上获取资料，访问数据库，修改代码等等操作，一旦离开本地环境，也太不方便了。
 
-经过百度后发现，需要利用  **内外穿透** 技术实现。 内网穿透技术有很多了，我这里选择的是ngrok 这个方案。
+经过百度后发现，需要利用  **内网穿透** 技术实现。 内网穿透技术有很多了，我这里选择的是ngrok 这个方案。
 
 我试了一下两种方案，第一个是外国的，没有尝试成功，而且免费版本每次断开后，生成的url 是随机的。所以没有采用。第二个是国内的Sunny-Ngrok，有免费版的。先尝试一波，如果好用再购买。
 
@@ -80,15 +80,15 @@ ssh -p 22 ppsteven@192.168.1.l02
 
 ![](https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191201153141.png)
 
-```
-ssh ppsteven@free.aa.com 就可以连接上你的服务器了
+```bash
+$ ssh -p 10568 psteven@free.aa.com 就可以连接上你的服务器了
 ```
 
 ### Ngrok 启动
 
-上图可以看到，有一项显示，你有没有开启ngrok
+上图可以看到，在状态栏显示 是否成功开启ngrok
 
-启动的方法，官网教程里面也有写,我走一遍
+启动的方法，官网教程里面也有写，本人按照流程走一遍。
 
 ### 下载客户端
 
@@ -103,25 +103,40 @@ $ unzip linux_amd64.zip
 ### 启动ngrok 服务
 ```bash
 # 当前目录在linux_amd64 下
-$ ./sunny clientid 隧道id
+$ ./sunny clientid 隧道id  # 启动隧道服务
+$ nohup ./sunny clientid 743acXXXX > sunny.out & # 在后台启动隧道服务
 ```
 启动服务后，我们在官网的后端就可以看到结果。
+为了让我们的服务器能不断的在后台运行，我们需要登录服务器后，运行第二行的命令
+
+ - & 作用是后台运行程序
+ - nohup 作用是当终端关闭的时候命令一直不会关闭
+ - \> sunny.out 表示把运行的结果输出到文件 sunny.out 中
+    这一段语句感觉必须加上去，本人尝试过 `nohup ./sunny clientid 隧道id &` 命令后，
+   程序用 `jobs` 显示的是 suspended 状态，在后台中查询端口也是 **不在线**的状态。
+   加上这一条输出语句，正常了。
+ - 若是 遇到suspended 的进程
+   用以下语句可以运行
+   ```
+   jobs # 查看当前终端中的进程（当关闭终端就看不到了）
+   fg %1 # 后台程序调入前台并运行
+   bg %1 # 后台程序在后台运行
+   ```
 
 ### 连接远程服务器
 ngrok 的作用直观的来说，就是给我们提供了一个公网ip，使我们可以访问内网地址。
 可以简单的认为 192.168.1.102 等于 www.abc.com (提供的域名)，命令如下
 
 ```bash
-$ ssh ppsteven@www.abc.com 
+$ ssh -p PORT_NUM ppsteven@www.abc.com 
 ```
 
 ## .zshrc 配置小结
 
 ```bash
 $ alias localDell="ssh ppsteven@192.168.1.102"
-$ alias remoteDell="ssh ppsteven@free.aa.com &"
+$ alias remoteDell="ssh -p 10568 ppsteven@free.aa.com"
 ```
-加上& 表示是后台运行
 
 
 

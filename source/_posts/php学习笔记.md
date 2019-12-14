@@ -291,9 +291,9 @@ three : 3
 __LINE__: 语句所处的行号
 __FILE__: 文件的完整路径（含文件名）
 __DIR__: 文件的目录
-__FUNCTION__:函数名
-__CLASS__:类名
-__TRAIT__:
+__FUNCTION__: 函数名
+__CLASS__: 类名
+__TRAIT__: Trait 名
 __METHOD__:类的方法名
 __NAMESPACE__:命名空间
 ```
@@ -344,13 +344,12 @@ $t->_print();
 1. 自动分配id
 
 ```php
-$cars=array("Volvo","BMW","Toyota");
+$cars = array("Volvo","BMW","Toyota");
 ```
 
 ```php
 $a = array( 'a',3 => 'b',1 => 'c', 'd');
 var_dump($a)
-?>
 
 // 输出
 //array(4) { [0]=> string(1) "a" [3]=> string(1) "b" [1]=> string(1) "c" [4]=> string(1) "d" }
@@ -359,14 +358,14 @@ var_dump($a)
 2. 关联数组
 
 ```php
-$age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
+$age = array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
 ```
 
 3. 遍历数组
 
 ```php
 <?php
-$age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
+$age = array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
 foreach ($age as $key => $value) {
 	echo $key,'  => ',$value,'  type: ',var_dump($key),'<br>';
 }
@@ -476,7 +475,7 @@ x2(x1)
 ?>
 ```
 
-## Others
+## 其他
 
 包含一些小的知识点和未系统整理的知识
 
@@ -508,7 +507,6 @@ x2(x1)
 
   ```php
   <?php
-  $y = "global varibale"
   function myTest()
   {
       static $x=0;
@@ -516,14 +514,15 @@ x2(x1)
       $x++;
       echo PHP_EOL;    // 换行符
   }
-   
-  myTest();
-  myTest();
-  myTest();
+  
+  // 这里的 static 使得$x 的值会一直累加
+  myTest(); // 0 
+  myTest(); // 1
+  myTest(); // 2
   ?>
   ```
   
 - echo PHP_EOL; // 换行符
 
-- == 弱比较
+- ==   弱比较
 === 强比较
