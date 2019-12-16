@@ -2,12 +2,12 @@
 title: php协程笔记
 comments: false
 date: 2019-12-07 18:19:13
-tags:
-categories:
+tags: [php,协程]
+categories: php
 keywords:
 description:
 top_img:
-cover:
+cover: https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191216194707.png
 toc:
 toc_number:
 copyright:
@@ -68,11 +68,10 @@ yield 的作用
   - 对用户可见
   - 协同，因为是由程序员自己写的调度策略，其通过协作而不是抢占来进行切换
   - **协程的思想本质上就是控制流的主动让出（yield）和恢复（resume）机制**（来源：[PHP7下的协程实现](https://segmentfault.com/a/1190000012457145)）
-  - 安全性上，
 
 ## 迭代生成器
 迭代生成器是我们对于 yield 最常用的一个功能。
-用 yield 替代 return 作为函数的返回最大的作用是，它返回的不仅是一个值，而是一个迭代器。这一优点在面对无法载入到内存的大型数据集有很大的作用
+用 yield 替代 return 作为函数的返回最大的作用是，它返回的不仅是一个值，而是一个迭代器。这一优点在面对无法载入到内存的大型数据集有很大的作用。
 
 如以下代码
 ```php
@@ -86,15 +85,16 @@ foreach (xrange(1,10000000000) as $num) {
 	echo $num ."<br>";
 }
 ```
-很明显，这里使用return的话，返回的是一个巨型的数据，当你数据量特别的时候会造成数据溢出的问题。
+很明显，这里使用return的话，返回的是一个非常大的数组，当你数据量特别大的时候会造成数据溢出的问题。
 yield 的神奇之处在于，它会保持生成器的状态。函数会一直运行，直到下一个yield。程序执行的控制流可以在主代码和生成器函数之间切换，也不用用户担心上下文环境的问题。
 优点
+
 - 运行大型数据集
 - 不用编写就能生成复杂的生成器
 
 写一个生成器的流程，需要
-- 被迭代的类实现 IteratorAggregate 接口
-- 定义一个返回迭代类的方法，这个类必须实现Iterator 接口
+- 被迭代的类实现 IteratorAggregate **接口**
+- 定义一个返回迭代类的方法，这个类必须实现Iterator **接口**
 - 提供一系列必须实现的方法
   - rewind : 函数内部指针设置回到数据开始处
   - valid : 判读是否还有数据
@@ -112,13 +112,11 @@ yield 的一个特性是函数每次执行到yield 的时候，就会主动让�
 
 public Generator::send ( [mixed](https://www.php.net/manual/zh/language.pseudo-types.php#language.types.mixed) `$value` ) : [mixed](https://www.php.net/manual/zh/language.pseudo-types.php#language.types.mixed)
 
-向生成器中传入一个值，并且当做 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 表达式的结果，
+向生成器中传入一个值，并且当做 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 表达式的结果。
 
 ***然后继续执行生成器***。
 
-如果当这个方法被调用时，生成器不在 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 表达式，那么在传入值之前，它会先运行到第一个 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 表达式。
-
-传入生成器的值。这个值将会被作为生成器当前所在的 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 的返回值。
+如果当这个方法被调用时，生成器不在 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 表达式，那么在传入值之前，它会先运行到第一个 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 表达式。传入生成器的值。这个值将会被作为生成器当前所在的 [yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield) 的返回值。
 
 > 利用send 函数，我们可以很方便的与协程进行交互，具体如下。
 
@@ -144,7 +142,7 @@ yield 作用：
  - 2. 可以利用send方法给 yield 传递数据
 
 > 那自然会有一个疑问，此处的 yield 有没有接受数据回来？
-> 答案： 没有
+> 经过试验，发现此处的yield 是没有返回数据的。
 
 这个例子可以看到yield 并没有返回数据，是NULL
 ```php
@@ -160,7 +158,6 @@ function logger($fileName) {
 $logger = logger(__DIR__ . '/log');
 $a = $logger->send('Foo');  // 输出 "这个语句只会执行一次", 输出 Foo;
 var_dump($a); // 返回 NULL , 这里的yield 并没有返回任何值
-
 ?>
 ```
 
@@ -447,6 +444,492 @@ public function run() {
 }
 ```
 
+在xdebug 的帮助下，我们可以看到第一次 `$retval = $task->run()` 的返回值，会走到 Task(line: 24) 的`$this->coroutine->current();` 最终取得的 `getTaskId()` 的返回值(类型为 SystemCall)
+
+![](https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191215161137.png)
+
+第二次走到`$retval = $task->run()` 的时候，最终是返回task 函数中的`yield();` 所以返回值是`null`。
+
+![](https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191215162115.png)
+
+运行的结果就是，两个任务交替运行，知道结束。
+
+```
+This is task 1 iteration 1.
+This is task 2 iteration 1.
+This is task 1 iteration 2.
+This is task 2 iteration 2.
+This is task 1 iteration 3.
+This is task 2 iteration 3.
+This is task 1 iteration 4.
+This is task 2 iteration 4.
+This is task 1 iteration 5.
+This is task 2 iteration 5.
+This is task 1 iteration 6.
+This is task 1 iteration 7.
+This is task 1 iteration 8.
+This is task 1 iteration 9.
+This is task 1 iteration 10.
+```
 
 
-yield指令提供了任务中断自身的一种方法，然后把控制交回给任务调度器。因此协程可以运行多个其他任务。更进一步来说, yield还可以用来在任务和调度器之间进行通信。
+
+## 协程堆栈
+
+协程堆栈是一个非常重要的应用，当你的项目变得越来越大的时候，会出现协程中套用另一个协程的情况。我们看下面这个例子。
+
+```php
+<?php
+function echoTimes($msg, $max) { // 子协程
+    for ($i = 1; $i <= $max; ++$i) {
+        echo "$msg iteration $i\n";
+        yield;
+    }
+}
+ 
+function task() {
+    echoTimes('foo', 10); // 期待打印10次foo，实际上返回的协程，并没有真实运行过
+    echo "---\n";
+    echoTimes('bar', 5); // 期待打印5次bar，实际上返回的协程，并没有真实运行过
+    yield; // force it to be a coroutine
+}
+ 
+$scheduler = new Scheduler;
+$scheduler->newTask(task());
+$scheduler->run();// 运行结果： ---\n
+```
+
+最终的结果只运行了`echo "---\n";`  
+
+原因也很简单，当`echoTimes('foo', 10)` 运行后，实际上返回的协程，并没有参数去接受，也没有对协程进行进一步的处理（如 `$this->current()` `$this->send` ）自然也就不会运行了。
+
+但是若是直接调用 echoTimes 子协程，也是无法运行
+
+```php
+function task() {
+    yield echoTimes('foo', 10); // 添加了 yield 语句
+    echo "---\n";
+    yield echoTimes('bar', 5); // 添加了 yield 语句
+    yield; // force it to be a coroutine
+}
+```
+
+因为这里`yield echoTimes('foo', 10); `返回的是一个Generator 类型，而在我们的Task 类的run 方法里面，并没有对这一类型进行处理。而且我们需要的是进入函数内执行 yield 语句。这样来说，我们原先的方法就不适用了。如何解决？？
+
+>  解决的方法就是使用——***协程栈***
+
+首先，我们对传入的 \$coroutine 裸协程上写一个小小的封装，stackedCoroutine就是：***“协程堆栈”***。 因为它将管理嵌套的协程调用堆栈。这将使得通过生成协程来调用子协程成为可能。
+
+> 注意: stackedCoroutine 中包含 yield 语句，所以它也是一个协程
+
+```php
+function stackedCoroutine(Generator $gen)
+{
+    $stack = new SplStack; // 新建一个栈
+
+    // 不断遍历这个传进来的生成器，作用和 while(True)一样
+    for (; ;) {
+        // $gen可以理解为指向当前运行的协程闭包函数（生成器）
+        $value = $gen->current(); // 获取中断点，也就是yield出来的值
+
+        if ($value instanceof Generator) {
+            // 如果是也是一个生成器，这就是子协程了，把当前运行的协程入栈保存
+            $stack->push($gen);
+            $gen = $value; // 把子协程函数给gen，继续执行，注意接下来就是执行子协程的流程了
+            continue;
+        }
+
+        // 我们对子协程返回的结果做了封装
+        $isReturnValue = $value instanceof CoroutineReturnValue; // 子协程返回`$value`需要主协程帮忙处理
+        
+        if (!$gen->valid() || $isReturnValue) {// 协程栈没有执行完 或者 存在返回值
+            if ($stack->isEmpty()) {
+                return;
+            }
+            // 如果是gen已经执行完毕，或者遇到子协程需要返回值给主协程去处理
+            $gen = $stack->pop(); //出栈，得到之前入栈保存的主协程
+            $gen->send($isReturnValue ? $value->getValue() : NULL); // 调用主协程处理子协程的输出值
+            continue;
+        }
+				
+        $gen->send(yield $gen->key() => $value); // 继续执行子协程
+    }
+}
+```
+
+我们发现这段语句中使用了到了一个我们之前没有使用到的类 `CoroutineReturnValue` 它的作用是接受 yield 的返回值，这个类比较简单，就是对返回的值，做了一层封装。子协程的返回的结果也需要主协程帮助处理。
+
+> 在 \$gen->send(yield ​\$gen->key()=>$value)；
+>
+> 调用者和当前正在运行的子协程之间扮演着简单代理的角色。
+
+```php
+class CoroutineReturnValue {
+    protected $value;
+ 
+    public function __construct($value) {
+        $this->value = $value;
+    }
+     
+    // 获取能把子协程的输出值给主协程，作为主协程的send参数
+    public function getValue() {
+        return $this->value;
+    }
+}
+// 返回的值被封装成了一个类，这个类的话也很简单，就是存值。
+function retval($value) {
+    return new CoroutineReturnValue($value);
+}
+```
+
+定义完了协程栈，如何去使用呢？这里需要将Task中的初始化方法改一下。
+
+```php
+public function __construct($taskId, Generator $coroutine)
+    {
+        $this->taskId = $taskId;
+        // $this->coroutine = $coroutine;
+        // 换成这个，实际Task->run的就是stackedCoroutine这个函数，不是$coroutine保存的闭包函数了
+        $this->coroutine = stackedCoroutine($coroutine); 
+    }
+```
+
+主程序如下
+
+```php
+<?php
+
+include ("Task.php");
+include ("Scheduler.php");
+include ("stackedCorountine.php");
+
+function echoTimes($msg, $max) {
+    for ($i = 1; $i <= $max; ++$i) {
+        echo "$msg iteration $i\n";
+        yield ;
+    }
+    yield retval("程序运行结束"); //我们在这里让子协程传值
+}
+
+function task() {
+    $ret = yield echoTimes('foo', 5); // print foo ten times
+    if ($ret){
+        echo $ret;
+    }
+    echo "---\n";
+    $ret = (yield echoTimes('bar', 2)); // print bar five times
+    if ($ret){
+        echo $ret;
+    }
+    yield; // force it to be a coroutine
+}
+
+$scheduler = new Scheduler;
+$scheduler->newTask(task());
+$scheduler->run();
+
+结果:
+foo iteration 1
+foo iteration 2
+foo iteration 3
+foo iteration 4
+foo iteration 5
+程序运行结束
+---
+bar iteration 1
+bar iteration 2
+程序运行结束
+```
+
+这个程序真的是不容易看懂，我是在xdebug 的逐步调试的过程中才看懂了一点。
+
+解释下`$gen->send(yield $gen->key()=>$value)；` 这个语句中send 和 yield 交叉，而且用了 `$gen->key => $value`  这样的用法。
+
+yield 有三种用法 
+
+**参考：**[php manual: yield](https://www.php.net/manual/zh/language.generators.syntax.php#control-structures.yield)
+
+```php
+yield; // 相当于 (yield null);
+$data = (yield $value); // 必须使用圆括号把yield申明包围起来
+$data = (yield $key => $value); //返回的是键值对，迭代的时候用 foreach($data as $key => $value)
+```
+
+首先我们找到 `(yield $gen->key()=>$value)；` 返回的地方
+
+```php
+public function run() {
+        if ($this->beforeFirstYield) {
+            $this->beforeFirstYield = false;
+            return $this->coroutine->current();  // <-- 返回的是这里
+        } else {
+            $retval = $this->coroutine->send($this->sendValue); // <-- 返回的是这里
+            $this->sendValue = null;  
+            return $retval;
+        }
+    }
+```
+
+这里会让人很奇怪，因为我们返回的是键值对，这里直接调用current() 。经过实践可知 最终的值是`$value` ，也就是说，我们直接把语句改成 `(yield $value)` 也是正确的。
+
+我的第二个疑问是`$gen->send(yield $gen->key()=>$value)；` 中 send 方法到低发送出去了什么❓
+
+send  方法中是一个yield 语句。那我们就可以找找在这个协程中有没有对应的send 方法即可。
+
+![](https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191216192955.png)
+
+最后，我们找到了这个协程的send 方法，但是`$this->sendValue` 我们是一直都没有设置过，始终是null。
+
+### 协程堆栈小结
+
+这个协程堆栈实现起来比较费脑子，特别是主协程和子协程之间的沟通方式。可能现实情况下动手写的情况很少（我感觉是框架已经实现完毕，我们只需要简单的使用 `$ret = (yield readfile());` 语句就可以）。但是如果能自己实现一遍协程堆栈，对yield 的用法肯定掌握的更好。
+
+这篇教程参考了很多博客
+
+[PHP7下的协程实现](https://segmentfault.com/a/1190000012457145)
+
+[我是这么理解协程yield异步IO的](http://reatang.com/?id=23)
+
+TO DO LIST
+
+- [ ] yield from
+- [ ] 教程中的 非阻塞IO 案例 代码分析 测试 配合[我是这么理解协程yield异步IO的](http://reatang.com/?id=23)
+
+
+
+
+
+## 程序附录
+
+### 程序一： 与调度器之间的通讯
+
+Index.php
+
+```php
+<?php
+include ("Task.php");
+include ("Scheduler.php");
+include ("SystemCall.php");
+
+function getTaskId() {
+    return new SystemCall(function(Task $task, Scheduler $scheduler) {
+        $task->setSendValue($task->getTaskId());
+        $scheduler->schedule($task);
+    });
+}
+
+function task($max) {
+    $tid = (yield getTaskId()); // <-- here's the syscall!
+    for ($i = 1; $i <= $max; ++$i) {
+        echo "This is task $tid iteration $i.\n";
+        yield;
+    }
+}
+
+$scheduler = new Scheduler;
+
+$scheduler->newTask(task(10));
+$scheduler->newTask(task(5));
+
+$scheduler->run();
+?>
+```
+
+Scheduler.php
+
+```php
+<?php
+
+
+class Scheduler {
+    protected $maxTaskId = 0;
+    protected $taskMap = []; // taskId => task
+    protected $taskQueue;
+
+    public function __construct() {
+        $this->taskQueue = new \SplQueue();
+    }
+
+    public function newTask(Generator $coroutine) {
+        $tid = ++$this->maxTaskId;
+        $task = new Task($tid, $coroutine);
+        $this->taskMap[$tid] = $task;
+        $this->schedule($task);
+        return $tid;
+    }
+
+    public function schedule(Task $task) {
+        $this->taskQueue->enqueue($task);
+    }
+
+    public function run() {
+        while (!$this->taskQueue->isEmpty()) {
+            $task = $this->taskQueue->dequeue();
+            $retval = $task->run();
+
+            if ($retval instanceof SystemCall) {
+                $retval($task, $this);
+                continue;
+            }
+
+            if ($task->isFinished()) {
+                unset($this->taskMap[$task->getTaskId()]);
+            } else {
+                $this->schedule($task);
+            }
+        }
+    }
+}
+?>
+```
+
+SystemCall.php
+
+```php
+<?php
+class SystemCall {
+    protected $callback;
+
+    public function __construct(callable $callback) {
+        $this->callback = $callback;
+    }
+
+    public function __invoke(Task $task, Scheduler $scheduler) {
+        $callback = $this->callback;
+        return $callback($task, $scheduler);
+    }
+}
+```
+
+Task.php
+
+```php
+<?php
+class Task {
+    protected $taskId;
+    protected $coroutine;
+    protected $sendValue = null;
+    protected $beforeFirstYield = true;
+
+    public function __construct($taskId, Generator $coroutine) {
+        $this->taskId = $taskId;
+        $this->coroutine = $coroutine;
+    }
+
+    public function getTaskId() {
+        return $this->taskId;
+    }
+
+    public function setSendValue($sendValue) {
+        $this->sendValue = $sendValue;
+    }
+
+    public function run() {
+        if ($this->beforeFirstYield) {
+            $this->beforeFirstYield = false;
+            return $this->coroutine->current();
+        } else {
+            $retval = $this->coroutine->send($this->sendValue);
+            $this->sendValue = null;
+            return $retval;
+        }
+    }
+
+    public function isFinished() {
+        return !$this->coroutine->valid();
+    }
+}
+?>
+```
+
+### 程序二： 协程堆栈
+
+index.php
+
+```php
+<?php
+
+include ("Task.php");
+include ("Scheduler.php");
+include ("stackedCorountine.php");
+
+function echoTimes($msg, $max) {
+    for ($i = 1; $i <= $max; ++$i) {
+        echo "$msg iteration $i\n";
+        yield ;
+    }
+    yield retval("程序运行结束\n");
+}
+
+function task() {
+    $ret = yield echoTimes('foo', 5); // print foo ten times
+    if ($ret){
+        echo $ret;
+    }
+    echo "---\n";
+    $ret = (yield echoTimes('bar', 2)); // print bar five times
+    if ($ret){
+        echo $ret;
+    }
+    yield; // force it to be a coroutine
+}
+
+$scheduler = new Scheduler;
+$scheduler->newTask(task());
+$scheduler->run();
+```
+
+
+
+stackedCoroutine.php
+
+```php
+<?php
+
+function stackedCoroutine(Generator $gen) {
+    $stack = new SplStack;
+
+    for (;;) {
+        $value = $gen->current();
+
+        if ($value instanceof Generator) {
+            $stack->push($gen);
+            $gen = $value;
+            continue;
+        }
+
+        $isReturnValue = $value instanceof CoroutineReturnValue;
+        if (!$gen->valid() || $isReturnValue) {
+            if ($stack->isEmpty()) {
+                return;
+            }
+
+            $gen = $stack->pop();
+            $gen->send($isReturnValue ? $value->getValue() : NULL);
+            continue;
+        }
+        
+        $gen->send( (yield $gen->key() => $value));
+    }
+}
+
+
+class CoroutineReturnValue {
+    protected $value;
+
+    public function __construct($value) {
+        $this->value = $value;
+    }
+
+    // 获取能把子协程的输出值给主协程，作为主协程的send参数
+    public function getValue() {
+        return $this->value;
+    }
+}
+
+function retval($value) {
+    return new CoroutineReturnValue($value);
+}
+```
+
+Task.php  和   Scheduler.php 不变

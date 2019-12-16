@@ -3,7 +3,7 @@ title: PHP+phpstorm+xdebug 环境配置
 comments: false
 date: 2019-12-14 23:19:51
 tags: [php,php环境配置,phpstorm]
-categories: 环境配置
+categories: php
 keywords: [php,phpstorm,xdebug]
 description:
 top_img: 
