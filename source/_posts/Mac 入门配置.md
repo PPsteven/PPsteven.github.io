@@ -1,6 +1,6 @@
 ---
 title: Mac 入门基础环境搭建
-date: 
+date: 2019-10-26 21:46:00
 tags: Hexo
 categories: 电脑基本配置
 cover: https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191031005821.png
