@@ -9,9 +9,10 @@ description: 学习菜鸟教程随意记的一点东西
 cover: https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191119215225.png
 ---
 
-php 入门教程，主要来自于菜鸟教程，入门级别。
+php 入门教程，主要来自于菜鸟教程，入门级别，日常学习笔记。
+找了一个 `php` 的实习，必须马上掌握啊。
 
-随后慢慢的补充
+<!--more-->
 
 ## 示例
 

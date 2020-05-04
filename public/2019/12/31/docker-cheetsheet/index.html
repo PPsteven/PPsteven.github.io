@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>docker命令大全 | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="日常学习笔记Docker" />
+  
+  
+  
+  
+  <meta name="description" content="最近在实习的过程中，需要将现有的服务上云，使用到了容器化的操作。需要自己制作Dockerfile文件，完成部署。鉴于对于docker技术的不熟练，用了几天时间好好把这个知识梳理了一下。 安装和基础命令详见上一篇文章  Docker安装及基础命令 P.S. 这篇博客又切换回了next 主题，主要的原因是这篇文章中一些代码与Butterfly主题有所冲突，所以又改用兼容性比较好的hexo。今天发现原来">
+<meta name="keywords" content="日常学习笔记,Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker命令大全">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2019&#x2F;12&#x2F;31&#x2F;docker-cheetsheet&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="最近在实习的过程中，需要将现有的服务上云，使用到了容器化的操作。需要自己制作Dockerfile文件，完成部署。鉴于对于docker技术的不熟练，用了几天时间好好把这个知识梳理了一下。 安装和基础命令详见上一篇文章  Docker安装及基础命令 P.S. 这篇博客又切换回了next 主题，主要的原因是这篇文章中一些代码与Butterfly主题有所冲突，所以又改用兼容性比较好的hexo。今天发现原来">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-26T08:59:10.833Z">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-docker-cheetsheet" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      docker命令大全
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/12/31/docker-cheetsheet/" class="article-date">
+	  <time datetime="2019-12-31T09:09:15.000Z" itemprop="datePublished">2019-12-31</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80%E6%8A%80%E8%83%BD/">基础技能</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/docker-cheetsheet.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在实习的过程中，需要将现有的服务上云，使用到了容器化的操作。需要自己制作Dockerfile文件，完成部署。鉴于对于docker技术的不熟练，用了几天时间好好把这个知识梳理了一下。</p>
+<p>安装和基础命令详见上一篇文章  <a href="https://ppsteven.github.io/2019/11/21/Docker%E5%AE%89%E8%A3%85%E5%8F%8A%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/">Docker安装及基础命令</a></p>
+<p>P.S. 这篇博客又切换回了next 主题，主要的原因是这篇文章中一些代码与Butterfly主题有所冲突，所以又改用兼容性比较好的hexo。今天发现原来WordPress是用php写的，作为一个php程序员肯定要搞一把，之后有时间再研究一下。</p>
+<a id="more"></a>
+
+<h2 id="docker-镜像"><a href="#docker-镜像" class="headerlink" title="docker 镜像"></a>docker 镜像</h2><h3 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull alpine</span><br><span class="line">$ docker pull registry.hub.docker.com/alpine:latest</span><br></pre></td></tr></table></figure>
+
+<p>指定默认的仓库和版本号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_118_62_centos ~]<span class="comment"># docker pull alpine</span></span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/alpine</span><br><span class="line">e6b0cf9c0882: Pull complete </span><br><span class="line">Digest: sha256:2171658620155679240babee0a7714f6509fae66898db422ad803b951257db78</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> alpine:latest</span><br></pre></td></tr></table></figure>
+
+<h3 id="列出镜像"><a href="#列出镜像" class="headerlink" title="列出镜像"></a>列出镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br><span class="line">$ docker image ls</span><br></pre></td></tr></table></figure>
+
+<h3 id="给镜像加tag"><a href="#给镜像加tag" class="headerlink" title="给镜像加tag"></a>给镜像加tag</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker tag alpine <span class="built_in">test</span> 起到了链接的作用</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看镜像"><a href="#查看镜像" class="headerlink" title="查看镜像"></a>查看镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect  IMAGE <span class="comment"># 返回json 格式</span></span><br><span class="line">$ docker inspect  -f &#123;&#123; .<span class="string">"DockerVersion"</span>&#125;&#125;  IMAGE <span class="comment"># 以GO 模范返回格式化的信息</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker search IMAGE # 搜索镜像</span><br><span class="line">docker search --filter=starts=4 IMAGE # 返回收藏超过4的镜像</span><br><span class="line">docker search --filter=is-official=true IMAGE # 返回官方镜像</span><br></pre></td></tr></table></figure>
+
+<h3 id="移除镜像"><a href="#移除镜像" class="headerlink" title="移除镜像"></a>移除镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker rmi IMAGE <span class="comment"># 删除镜像</span></span><br><span class="line">docker image rm IMAGE <span class="comment"># 删除镜像</span></span><br><span class="line">docker image rm ubuntu:latest <span class="comment"># 删除指定tag 的镜像</span></span><br><span class="line">-f --force <span class="comment"># 强制删除</span></span><br><span class="line"></span><br><span class="line">docker image prune</span><br><span class="line">  -a, --all             Remove all unused images, not just dangling ones （临时镜像）</span><br><span class="line">      --filter filter   Provide filter values (e.g. <span class="string">'until=&lt;timestamp&gt;'</span>)</span><br><span class="line">  -f, --force           Do not prompt <span class="keyword">for</span> confirmation</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建镜像"><a href="#创建镜像" class="headerlink" title="创建镜像"></a>创建镜像</h3><blockquote>
+<p>commit import build 三个子命令</p>
+</blockquote>
+<h4 id="commit-基于现有容器创建"><a href="#commit-基于现有容器创建" class="headerlink" title="commit 基于现有容器创建"></a>commit 基于现有容器创建</h4><p>docker run -it alpine /bash/sh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># add a new file to this container </span></span><br><span class="line">[root@VM_118_62_centos ~]<span class="comment"># docker run -it alpine /bin/sh  </span></span><br><span class="line">/ <span class="comment"># touch text</span></span><br><span class="line">/ <span class="comment"># exit</span></span><br></pre></td></tr></table></figure>
+
+<p>docker [container] commit -m “add a new file” -a “johnjhwang”  CONTAINER</p>
+<blockquote>
+<p>注：方括号中的 container 是可以省略不写的。这里指出是说明commit 这个命令是 容器相关的命令<br>比较建议写全，比如rm 在image 和 container 中都有，避免歧义</p>
+</blockquote>
+<p>-m: 表示 Comment  -a: 表示 Author<br>由于是添加了一个文件，所以镜像的 IAMGE ID 发生了变化</p>
+<p>当我们查看新的镜像的时候，能看到我们后续追加的信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_118_62_centos ~]# docker inspect 764a657de081</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Id&quot;: &quot;sha256:764a657de08117c11b3af9720efe2310386fa99074802ad13f68973081972819&quot;,</span><br><span class="line">        &quot;Parent&quot;: &quot;sha256:cc0abc535e36a7ede71978ba2bbd8159b8a5420b91f2fbc520cdf5f673640a34&quot;,</span><br><span class="line">        &quot;Comment&quot;: &quot;add a  new file &quot;,</span><br><span class="line">       ......</span><br><span class="line">        &quot;Author&quot;: &quot;johnjhwang&quot;,</span><br><span class="line">       ......</span><br><span class="line">      &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h4 id="基于Dockerfile创建"><a href="#基于Dockerfile创建" class="headerlink" title="基于Dockerfile创建"></a>基于Dockerfile创建</h4><p>首先，创建一个文件Dockerfile</p>
+<blockquote>
+<p>文件名必须是Dockerfile</p>
+</blockquote>
+<p>编辑Dockerfile</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ununtu:latest</span><br><span class="line"><span class="keyword">LABEL</span><span class="bash"> version=<span class="string">'1.0'</span> maintainer=<span class="string">'johnjhwang@tencent.com'</span></span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get update &amp;&amp;\</span></span><br><span class="line"><span class="bash">    apt-get install -y python3 \</span></span><br><span class="line"><span class="bash">    apt-get clean</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker [image] build -t python:3 .(小数点:这是上下文环境为当前目录)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>python 是镜像名，3是版本号<br>注意，最后有一个点，代表的是上下文环境(当前目录) </p>
+</blockquote>
+<h4 id="基于本地模板导入"><a href="#基于本地模板导入" class="headerlink" title="基于本地模板导入"></a>基于本地模板导入</h4><p>// TO DO </p>
+<h3 id="存出和载入镜像"><a href="#存出和载入镜像" class="headerlink" title="存出和载入镜像"></a>存出和载入镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker [image] save -o ubuntu_18.04.tar ubuntu:18.04 # 本地会出现ubuntu_18.04.tar 文件</span><br><span class="line">docker [image] load -i ubuntu_18.04.tar # 导入本地的文件，之后查看镜像库，发现出现了该镜像</span><br></pre></td></tr></table></figure>
+
+<p>这里我们可以用更加简便的写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker save alpine &gt; alpine.tar</span><br><span class="line">docker load alpine &lt; alpine.tar</span><br></pre></td></tr></table></figure>
+
+<h3 id="上传镜像-push"><a href="#上传镜像-push" class="headerlink" title="上传镜像 push"></a>上传镜像 push</h3><p>// TO DO</p>
+<h2 id="docker-容器"><a href="#docker-容器" class="headerlink" title="docker 容器"></a>docker 容器</h2><h3 id="新建容器-amp-amp-启动容器"><a href="#新建容器-amp-amp-启动容器" class="headerlink" title="新建容器&amp;&amp;启动容器"></a>新建容器&amp;&amp;启动容器</h3><blockquote>
+<p>create、start、run</p>
+</blockquote>
+<h4 id="docker-create-start"><a href="#docker-create-start" class="headerlink" title="docker create/start"></a>docker create/start</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker [container] create -it alpine <span class="comment"># 用create创建的容器处于停止状态 Created ，加-it 使用的是默认的sh</span></span><br><span class="line"></span><br><span class="line">docker [container] start CONTAINER <span class="comment"># 运行后的容器状态转为 Up</span></span><br></pre></td></tr></table></figure>
+
+<p>查看状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_118_62_centos ~/desktop]<span class="comment"># docker start 77a32260848</span></span><br><span class="line">[root@VM_118_62_centos ~/desktop]<span class="comment"># docker ps</span></span><br><span class="line">CONTAINER ID   IMAGE  COMMAND  CREATED   STATUS   PORTS   NAMES</span><br><span class="line">77a32260848e     alpine  <span class="string">"/bin/sh"</span> 2 minutes ago  Up 5 seconds       naughty_lamport</span><br></pre></td></tr></table></figure>
+
+<p>还有一个更加方便的启动方式，等价于 先执行create 后执行 start</p>
+<h4 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker [container] run -it alpine /bin/sh</span><br><span class="line">-t, --tty                            Allocate a pseudo-TTY 分配一个伪终端</span><br><span class="line"> -i, --interactive                    Keep STDIN open even <span class="keyword">if</span> not attached  标准输入保持打开</span><br><span class="line"> -d, --detach                         Run container <span class="keyword">in</span> background and <span class="built_in">print</span> container ID</span><br></pre></td></tr></table></figure>
+
+<h3 id="暂停终止容器"><a href="#暂停终止容器" class="headerlink" title="暂停终止容器"></a>暂停终止容器</h3><h4 id="暂停-恢复容器"><a href="#暂停-恢复容器" class="headerlink" title="暂停/恢复容器"></a>暂停/恢复容器</h4><blockquote>
+<p>状态变为：  Up  (Paused)   </p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker [container] pause/unpause CONTAINER</span><br></pre></td></tr></table></figure>
+
+<h4 id="终止-启动容器"><a href="#终止-启动容器" class="headerlink" title="终止/启动容器"></a>终止/启动容器</h4><blockquote>
+<p>stop、kill、运行结束会使容器状态变为： Exited</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker [container] stop/start CONTAINER</span><br><span class="line">   -t, --time int   Seconds to wait for stop before killing it (default 10)</span><br><span class="line"></span><br><span class="line">docker [container] kill  CONTAINER</span><br></pre></td></tr></table></figure>
+
+<p>stop 是主动向容器发送 SIGTERM 信号，等待一段时候后，再发送SIGKILL信号来终止容器。默认10<br>kill 是直接发送SIGKILL信号去终止容器。</p>
+<p>有一种情况，当容器运行结束后，状态也会变为Exited</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_118_62_centos ~]<span class="comment"># docker attach test</span></span><br><span class="line">/ <span class="comment"># ps</span></span><br><span class="line">PID   USER     TIME  COMMAND</span><br><span class="line">    1 root      0:00 /bin/sh</span><br><span class="line">    6 root      0:00 ps</span><br><span class="line">/ <span class="comment"># exit  // 退出后容器会终止</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到容器中只有 /bin/sh 命令运行，此时使用 exit 或者 ctrl+d 退出容器，该容器会终止</p>
+<h3 id="清除容器"><a href="#清除容器" class="headerlink" title="清除容器"></a>清除容器</h3><h4 id="prune"><a href="#prune" class="headerlink" title="prune"></a>prune</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker container prune  <span class="comment"># Remove all stopped containers</span></span><br><span class="line">  -f, --force           Do not prompt <span class="keyword">for</span> confirmation</span><br></pre></td></tr></table></figure>
+
+<h4 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker container rm \&lt;CONTAINER ID&gt; <span class="comment"># Remove one or more containers</span></span><br><span class="line">  -f, --force     Force the removal of a running container (uses SIGKILL)</span><br><span class="line">  -l, --link      Remove the specified link</span><br><span class="line">  -v, --volumes   Remove the volumes associated with the container</span><br></pre></td></tr></table></figure>
+
+<h3 id="重启容器"><a href="#重启容器" class="headerlink" title="重启容器"></a>重启容器</h3><blockquote>
+<p>先停止容器后重启容器</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart CONTAINER</span><br></pre></td></tr></table></figure>
+
+<h3 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h3><h4 id="attach"><a href="#attach" class="headerlink" title="attach"></a>attach</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach CONTAINER</span><br></pre></td></tr></table></figure>
+
+<h4 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h4><blockquote>
+<p>exec 相较于 attach 的优势是可以在运行的容器内执行任意命令<br>Run a command in a running container</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it  CONTAINER /bin/sh</span><br><span class="line">  --detach-keys string   Override the key sequence <span class="keyword">for</span> detaching a container</span><br><span class="line">                        // 重载退出容器的方法,默认是ctrl+q</span><br><span class="line">  -e, --env list             Set environment variables</span><br><span class="line">  -u, --user string          Username or UID (format: &lt;name|uid&gt;[:&lt;group|gid&gt;])</span><br><span class="line">  -w, --workdir string       Working directory inside the container</span><br></pre></td></tr></table></figure>
+
+<h3 id="导入-导出容器"><a href="#导入-导出容器" class="headerlink" title="导入/导出容器"></a>导入/导出容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker [container] export -o test.tar test </span><br><span class="line">docker [image] import  test.tar test01/test02:v1.0</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意: docker export 是 container 下的方法<br>            docker import 是 image 下的方法，不要以为import 后导入到的容器库。</p>
+</blockquote>
+<p>可以看到 docker [image] save  和 dokcer [image] load 是一对。docker [container] export 和 docker [image] import 是一对。但是 load 和 import 同样都是导入到 镜像库，区别在什么地方?</p>
+<ul>
+<li><code>docker save images_name</code>：将一个镜像导出为文件，再使用<code>docker load</code>命令将文件导入为一个镜像，会保存该镜像的的所有历史记录。比<code>docker export</code>命令导出的文件大，很好理解，因为会保存镜像的所有历史记录。</li>
+<li><code>docker export container_id</code>：将一个容器导出为文件，再使用<code>docker import</code>命令将容器导入成为一个新的镜像，但是相比<code>docker save</code>命令，容器文件会丢失所有元数据和历史记录，仅保存容器当时的状态，相当于虚拟机快照。</li>
+</ul>
+<h3 id="查看容器"><a href="#查看容器" class="headerlink" title="查看容器"></a>查看容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker [container] inspect CONTAINRER</span><br><span class="line">docker [container] top CONTAINER  # 显示docker 内运行的进程	</span><br><span class="line">docker [container] stats CONTAINER # 显示docker的状态，CPU，内存，存储，网络等实时监控</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他容器命令"><a href="#其他容器命令" class="headerlink" title="* 其他容器命令"></a>* 其他容器命令</h3><blockquote>
+<p>制作Dockerfile所需掌握的命令</p>
+</blockquote>
+<h4 id="docker-cp-复制文件"><a href="#docker-cp-复制文件" class="headerlink" title="docker cp 复制文件"></a>docker cp 复制文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Usage:  docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH|-</span><br><span class="line">        docker cp [OPTIONS] SRC_PATH|- CONTAINER:DEST_PATH</span><br><span class="line"><span class="comment"># FROM 左 TO 右</span></span><br></pre></td></tr></table></figure>
+
+<p><code>docker [container] cp data test:/temp</code></p>
+<p>这是将本地路径下的 data 复制到 test 容器的/temp 路径下，注意只是复制文件内容，不没有包含文件夹。</p>
+<p><code>docker [container] cp data test:/temp/data</code></p>
+<p>这样才是把data文件夹移到了目标容器的文件夹下</p>
+<h3 id="docker-container-命令大全"><a href="#docker-container-命令大全" class="headerlink" title="docker container 命令大全"></a>docker container 命令大全</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">attach      Attach local standard input, output, and error streams to a running container</span><br><span class="line">commit      Create a new image from a container&apos;s changes</span><br><span class="line">cp          Copy files/folders between a container and the local filesystem</span><br><span class="line">create      Create a new container</span><br><span class="line">diff        Inspect changes to files or directories on a container&apos;s filesystem</span><br><span class="line">exec        Run a command in a running container</span><br><span class="line">export      Export a container&apos;s filesystem as a tar archive</span><br><span class="line">inspect     Display detailed information on one or more containers</span><br><span class="line">kill        Kill one or more running containers</span><br><span class="line">logs        Fetch the logs of a container</span><br><span class="line">ls          List containers</span><br><span class="line">pause       Pause all processes within one or more containers</span><br><span class="line">port        List port mappings or a specific mapping for the container</span><br><span class="line">prune       Remove all stopped containers</span><br><span class="line">rename      Rename a container</span><br><span class="line">restart     Restart one or more containers</span><br><span class="line">rm          Remove one or more containers</span><br><span class="line">run         Run a command in a new container</span><br><span class="line">start       Start one or more stopped containers</span><br><span class="line">stats       Display a live stream of container(s) resource usage statistics</span><br><span class="line">stop        Stop one or more running containers</span><br><span class="line">top         Display the running processes of a container</span><br><span class="line">unpause     Unpause all processes within one or more containers</span><br><span class="line">update      Update configuration of one or more containers</span><br><span class="line">wait        Block until one or more containers stop, then print their exit codes</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="docker-容器卷"><a href="#docker-容器卷" class="headerlink" title="docker 容器卷"></a>docker 容器卷</h2><p>本章不再详述命令细节，只关注于常用命令</p>
+<p>容器中对数据进行持久化的操作，需要借助数据管理操作。</p>
+<p>一般有两种管理方式:</p>
+<ul>
+<li>Data Volumes</li>
+<li>Data Volume Containers</li>
+</ul>
+<h3 id="数据卷-Data-Volumes"><a href="#数据卷-Data-Volumes" class="headerlink" title="数据卷(Data Volumes)"></a>数据卷(Data Volumes)</h3><p>创建一个本地数据卷</p>
+<p>docker volume create -d local –name haha</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-d, --driver string   Specify volume driver name (default <span class="string">"local"</span>) </span><br><span class="line">--name 重命名</span><br></pre></td></tr></table></figure>
+
+<p>docker volumn create 创建完成的数据卷是在 /var/lib/docker/volumes 下的，可以通过 ls （查看） inspect(详细信息) prune 和 rm 去做进一步的操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker volume ls</span><br><span class="line">DRIVER              VOLUME NAME</span><br><span class="line"><span class="built_in">local</span>               haha</span><br></pre></td></tr></table></figure>
+
+<p>这里mac需要注意，因为在mac上用docker会在mac上启动一个虚拟机运行docker，因此volume创建的directory并不在你的machine上，而是在虚拟机中。</p>
+<h4 id="mac用户如何查看数据卷地址"><a href="#mac用户如何查看数据卷地址" class="headerlink" title="mac用户如何查看数据卷地址"></a>mac用户如何查看数据卷地址</h4><p>如何进入mac上的虚拟机的办法请参考:<a href="https://www.jianshu.com/p/1baeabdd0e27" target="_blank" rel="noopener">这篇教程</a></p>
+<p>具体的做法是执行：<code>screen ~/Library/Containers/com.docker.docker/Data/vms/0/tty</code></p>
+<p>然后查看<code>/var/lib/docker/volumes</code>里面的容器</p>
+<h4 id="数据卷的类型"><a href="#数据卷的类型" class="headerlink" title="数据卷的类型"></a>数据卷的类型</h4><ul>
+<li>volume : 普通数据卷，映射到 /var/lib/docker/volumes下</li>
+<li>bind: 绑定数据卷，是自己制定的目录</li>
+<li>tmpfs: 临时数据卷，只存在于内存中，目前没有使用过</li>
+</ul>
+<p>docker run -d –name test –mount type=bind,source=/mydata,destination=/opt/mydata CONTAINER COMMAND</p>
+<p>这句话是绑定当前目录下的mydata文件夹至docker容器下的/opt/mydata文件夹</p>
+<p>还有一个简洁的方式 -v</p>
+<p>docker run -d –name test -v /mydata:/opt/mydata CONTAINER COMMAND</p>
+<h3 id="数据容器-Data-Volume-Containers"><a href="#数据容器-Data-Volume-Containers" class="headerlink" title="数据容器(Data Volume Containers)"></a>数据容器(Data Volume Containers)</h3><p>创建一个数据卷容器，起别名 dbtest，并挂载 <code>~/Desktop/dbfile</code> 到当前容器</p>
+<p>docker run -it –name dbtest -v ~/Desktop/dbfile:/dbfile alpine:latest</p>
+<p>然后，可以在其他容器中使用 –volumes-from 挂载dbtest 中的数据卷</p>
+<p>docker run -it –name db1 –volumes-from dbtest alpine<br>docker run -it –name db2 –volumes-from dbtest alpine</p>
+<h3 id="数据卷高级用法：迁移数据"><a href="#数据卷高级用法：迁移数据" class="headerlink" title="数据卷高级用法：迁移数据"></a>数据卷高级用法：迁移数据</h3><p>数据的迁移有两步构成：备份+迁移</p>
+<p>首先我们使用了上面建立好的 dbtest 数据卷容器，该容器和 ~/Desktop/dbfile 绑定，其中包含了我们需要保存的重要的数据。</p>
+<p><strong>备份</strong></p>
+<p>docker run –volumes-from dbtest -v $(pwd):/backup –name worker alpine tar cvf /backup/backup.tar /dbfile</p>
+<p>这里我们把绑定的本地和容器内的/backup绑定，所以我们用压缩方法，把dbfile 内的数据打包放入了/backup文件夹中，直观的来说，在当前目录下会看到backup.tar 文件。</p>
+<p><strong>迁移</strong></p>
+<p>先创建一个新的数据卷容器dbtest2 </p>
+<p>docker run -v  ~/Desktop/dbfile2:/dbfile –name dbtest2  alpine</p>
+<p>创建新容器，挂载dbtest2的容器，并使用untar解压放在/backup/backup.tar 文件</p>
+<p>docker run –volumes-from dbtest2 -v $(pwd):/backup –name worker2 ubuntu tar xvf  /backup/backup.tar </p>
+<p>docker </p>
+<h2 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h2><p>启动一个web服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -P straining/webapp python app.py  // 随机映射端口，49000~49900到容器内部端口</span><br><span class="line">docker run -d -p 5000:5000 training/webapp python app.py// HostPort:ContainerPort</span><br><span class="line">docker run -d -p 127.0.0.1:5000:5000 training/webapp python app.py// IP:HostPort:ContainerPort</span><br><span class="line">docker run -d -p 127.0.0.1::5000 training/webapp python app.py // 自动分配一个端口</span><br><span class="line">docker run -d -p 127.0.0.1::5000/udp training/webapp python app.py // 制定UDP</span><br></pre></td></tr></table></figure>
+
+<p>稍后我们可以看到映射结果（下面是举例）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:32768-&gt;5000/tcp </span><br><span class="line">0.0.0.0:3306-&gt;3306/tcp</span><br><span class="line">127.0.0.1:32768-&gt;5000/udp</span><br></pre></td></tr></table></figure>
+
+<h3 id="容器互联"><a href="#容器互联" class="headerlink" title="容器互联"></a>容器互联</h3><p>–link name:alias<br>name:连接的容器 alias 容器的别名</p>
+<p>容器间的互联是一个比较重要的知识点，后续会写一篇博客完善</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/Cherry-Linux/p/8025777.html" target="_blank" rel="noopener">docker load与docker import</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2019/12/31/docker-cheetsheet/" target="_blank" title="docker命令大全">http://ppsteven.github.io/2019/12/31/docker-cheetsheet/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">日常学习笔记</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/12/how-to-manage-multipul-git/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          如何配置多个git账号
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/22/Hexo%E8%BF%9B%E9%98%B6:%E5%8D%9A%E5%AE%A2%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0%E8%AE%BE%E7%BD%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Hexo进阶:博客转载文章设置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-镜像"><span class="nav-number">1.</span> <span class="nav-text">docker 镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拉取镜像"><span class="nav-number">1.1.</span> <span class="nav-text">拉取镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列出镜像"><span class="nav-number">1.2.</span> <span class="nav-text">列出镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#给镜像加tag"><span class="nav-number">1.3.</span> <span class="nav-text">给镜像加tag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看镜像"><span class="nav-number">1.4.</span> <span class="nav-text">查看镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索镜像"><span class="nav-number">1.5.</span> <span class="nav-text">搜索镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移除镜像"><span class="nav-number">1.6.</span> <span class="nav-text">移除镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建镜像"><span class="nav-number">1.7.</span> <span class="nav-text">创建镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#commit-基于现有容器创建"><span class="nav-number">1.7.1.</span> <span class="nav-text">commit 基于现有容器创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于Dockerfile创建"><span class="nav-number">1.7.2.</span> <span class="nav-text">基于Dockerfile创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于本地模板导入"><span class="nav-number">1.7.3.</span> <span class="nav-text">基于本地模板导入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存出和载入镜像"><span class="nav-number">1.8.</span> <span class="nav-text">存出和载入镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传镜像-push"><span class="nav-number">1.9.</span> <span class="nav-text">上传镜像 push</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-容器"><span class="nav-number">2.</span> <span class="nav-text">docker 容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建容器-amp-amp-启动容器"><span class="nav-number">2.1.</span> <span class="nav-text">新建容器&amp;&amp;启动容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-create-start"><span class="nav-number">2.1.1.</span> <span class="nav-text">docker create/start</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-run"><span class="nav-number">2.1.2.</span> <span class="nav-text">docker run</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#暂停终止容器"><span class="nav-number">2.2.</span> <span class="nav-text">暂停终止容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#暂停-恢复容器"><span class="nav-number">2.2.1.</span> <span class="nav-text">暂停/恢复容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#终止-启动容器"><span class="nav-number">2.2.2.</span> <span class="nav-text">终止/启动容器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除容器"><span class="nav-number">2.3.</span> <span class="nav-text">清除容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#prune"><span class="nav-number">2.3.1.</span> <span class="nav-text">prune</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rm"><span class="nav-number">2.3.2.</span> <span class="nav-text">rm</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启容器"><span class="nav-number">2.4.</span> <span class="nav-text">重启容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进入容器"><span class="nav-number">2.5.</span> <span class="nav-text">进入容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#attach"><span class="nav-number">2.5.1.</span> <span class="nav-text">attach</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exec"><span class="nav-number">2.5.2.</span> <span class="nav-text">exec</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入-导出容器"><span class="nav-number">2.6.</span> <span class="nav-text">导入/导出容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看容器"><span class="nav-number">2.7.</span> <span class="nav-text">查看容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他容器命令"><span class="nav-number">2.8.</span> <span class="nav-text">* 其他容器命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-cp-复制文件"><span class="nav-number">2.8.1.</span> <span class="nav-text">docker cp 复制文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-container-命令大全"><span class="nav-number">2.9.</span> <span class="nav-text">docker container 命令大全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-容器卷"><span class="nav-number">3.</span> <span class="nav-text">docker 容器卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据卷-Data-Volumes"><span class="nav-number">3.1.</span> <span class="nav-text">数据卷(Data Volumes)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mac用户如何查看数据卷地址"><span class="nav-number">3.1.1.</span> <span class="nav-text">mac用户如何查看数据卷地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据卷的类型"><span class="nav-number">3.1.2.</span> <span class="nav-text">数据卷的类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据容器-Data-Volume-Containers"><span class="nav-number">3.2.</span> <span class="nav-text">数据容器(Data Volume Containers)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据卷高级用法：迁移数据"><span class="nav-number">3.3.</span> <span class="nav-text">数据卷高级用法：迁移数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口映射"><span class="nav-number">4.</span> <span class="nav-text">端口映射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#容器互联"><span class="nav-number">4.1.</span> <span class="nav-text">容器互联</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

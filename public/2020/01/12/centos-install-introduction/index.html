@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>centos 环境配置（持续总结） | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="centos" />
+  
+  
+  
+  
+  <meta name="description" content="本章节收集一下配置一个centos 环境所需要的操作 第一部分：必要软件的安装  git wget MiniConda(python) mysql  第二部分：Docker 服务  web-vscode phpredisAdmin(redis web 管理工具)">
+<meta name="keywords" content="centos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos 环境配置（持续总结）">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;01&#x2F;12&#x2F;centos-install-introduction&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="本章节收集一下配置一个centos 环境所需要的操作 第一部分：必要软件的安装  git wget MiniConda(python) mysql  第二部分：Docker 服务  web-vscode phpredisAdmin(redis web 管理工具)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200121224825.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200128214315.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200206175541.png">
+<meta property="og:updated_time" content="2020-02-23T09:32:17.584Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200121224825.png">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-centos-install-introduction" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Centos 环境配置（持续总结）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/01/12/centos-install-introduction/" class="article-date">
+	  <time datetime="2020-01-12T08:35:50.000Z" itemprop="datePublished">2020-01-12</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/centos/">centos</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/centos-install-introduction.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本章节收集一下配置一个centos 环境所需要的操作</p>
+<p>第一部分：必要软件的安装</p>
+<ul>
+<li>git</li>
+<li>wget</li>
+<li>MiniConda(python)</li>
+<li>mysql</li>
+</ul>
+<p>第二部分：Docker 服务</p>
+<ul>
+<li>web-vscode</li>
+<li>phpredisAdmin(redis web 管理工具)</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h2><h3 id="显示完整文件路径"><a href="#显示完整文件路径" class="headerlink" title="显示完整文件路径"></a>显示完整文件路径</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">命令行提示符完全显示完整的工作目录名称:（推荐用法）</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">'[\u@\h $PWD]$ '</span></span><br><span class="line">命令行提示符只列出最后一个目录：</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">'[\u@\h \W]$'</span></span><br><span class="line">命令行提示符显示完整工作目录，当前用户目录会以 ~代替：</span><br><span class="line"><span class="built_in">export</span> PS1=<span class="string">'[\u@\h \w]$'</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>命令释义</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">\u 显示当前用户账号</span><br><span class="line">\h 显示当前主机名</span><br><span class="line">\W 只显示当前路径最后一个目录</span><br><span class="line">\w 显示当前绝对路径（当前用户目录会以 ~代替）</span><br><span class="line">$PWD 显示当前全路径</span><br><span class="line">\$ 显示命令行’$&apos;或者’#&apos;符号</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考资料：<a href="https://www.cnblogs.com/gered/p/11364053.html" target="_blank" rel="noopener">linux下显示完整路径，linux下显示绝对路径</a></p>
+</blockquote>
+<h2 id="必要软件安装"><a href="#必要软件安装" class="headerlink" title="必要软件安装"></a>必要软件安装</h2><h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install -y git</span><br></pre></td></tr></table></figure>
+
+<h3 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install -y wget</span><br></pre></td></tr></table></figure>
+
+<h3 id="MiniConda"><a href="#MiniConda" class="headerlink" title="MiniConda"></a>MiniConda</h3><h4 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h4><p><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/" target="_blank" rel="noopener">https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/</a></p>
+<p>下载最新的版本，一般来说是 <code>Miniconda-latest-Linux</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda-latest-Linux-x86_64.sh</span><br><span class="line">$ bash Miniconda-latest-Linux-x86_64.sh</span><br><span class="line"><span class="comment"># 添加环境变量</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=/root/miniconda2/bin:<span class="variable">$PATH</span>"</span> &gt;&gt; .bashrc</span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="comment"># 检查是否成功安装</span></span><br><span class="line">$ /root/miniconda2/bin/conda -V</span><br><span class="line">conda 4.0.5</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-Anaconda-仓库镜像源"><a href="#配置-Anaconda-仓库镜像源" class="headerlink" title="配置 Anaconda 仓库镜像源"></a>配置 Anaconda 仓库镜像源</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/</span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置快捷命令"><a href="#设置快捷命令" class="headerlink" title="设置快捷命令"></a>设置快捷命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> conl=<span class="string">"conda env list"</span></span><br><span class="line"><span class="built_in">alias</span> conc=<span class="string">"conda create -n"</span></span><br><span class="line"><span class="built_in">alias</span> cona=<span class="string">"source activate"</span></span><br><span class="line"><span class="built_in">alias</span> cond=<span class="string">"source deactivate"</span></span><br><span class="line"><span class="built_in">alias</span> conr=<span class="string">"conda remove --all -n"</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="新建-python-环境"><a href="#新建-python-环境" class="headerlink" title="新建 python 环境"></a>新建 python 环境</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新环境 base 并安装python3.6</span></span><br><span class="line">$ conda create -n base python=3.6</span><br><span class="line"><span class="comment"># 查看当前环境</span></span><br><span class="line">$ conl</span><br><span class="line"><span class="comment"># conda environments:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">base                     /root/miniconda2/envs/base</span><br><span class="line">root                  *  /root/miniconda2</span><br><span class="line"><span class="comment"># 切换为 base 环境</span></span><br><span class="line">$ cona base</span><br><span class="line">$ <span class="built_in">which</span> python </span><br><span class="line">/root/miniconda2/envs/base/bin/python <span class="comment"># 当前python的地址</span></span><br></pre></td></tr></table></figure>
+
+<p>安装必要的库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ pip install --upgrade pip</span><br><span class="line">$ pip install numpy pandas jsonpath pymysql requests datetime dateutil</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考来源：<a href="https://blog.51cto.com/loufeng/2342003" target="_blank" rel="noopener">Centos7安装Miniconda及配置jupyter</a></p>
+</blockquote>
+<h3 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h3><p>MariaDB 是由 MySQL 开发的 MySQL的替代版本。如果我们直接在 Centos 上 <code>yum install mysql</code> </p>
+<h4 id="第零步：查看系统版本号"><a href="#第零步：查看系统版本号" class="headerlink" title="第零步：查看系统版本号"></a>第零步：查看系统版本号</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/redhat-release</span><br><span class="line">CentOS Linux release 7.6.1810 (Core)</span><br></pre></td></tr></table></figure>
+
+<h4 id="第一步：安装MySQL"><a href="#第一步：安装MySQL" class="headerlink" title="第一步：安装MySQL"></a>第一步：安装MySQL</h4><p>需要到如下网站上去定位需要安装的版本号</p>
+<p><a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">https://dev.mysql.com/downloads/repo/yum/</a></p>
+<blockquote>
+<p>注意：我们使用的CentOs Linux 7 选择下面的第二个</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200121224825.png" alt=""></p>
+<p>不用试图去点击右手边的 <code>Download</code>  按钮，因为这个会导向一个登陆界面。获取版本号后，直接用 wget 下载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载完了以后，还是可以检查一下是否正常下载</span></span><br><span class="line">$ md5sum mysql80-community-release-fc30-1.noarch.rpm</span><br><span class="line"></span><br><span class="line">$ rpm -ivh mysql80-community-release-fc30-1.noarch.rpm</span><br><span class="line">警告：mysql80-community-release-fc30-1.noarch.rpm: 头V3 DSA/SHA1 Signature, 密钥 ID 5072e1f5: NOKEY</span><br><span class="line">准备中...                          <span class="comment">################################# [100%]</span></span><br><span class="line">正在升级/安装...</span><br><span class="line">   1:mysql80-community-release-fc30-1 <span class="comment">################################# [100%]</span></span><br></pre></td></tr></table></figure>
+
+<p>若是安装错误 repo 源了怎么办？我很不幸就干过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有 mysql 源</span></span><br><span class="line">$ rpm -qa|grep mysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删掉安装错误的 mysql 源</span></span><br><span class="line">$ rpm -e mysql80-community-release-fc30-1.noarch --nodeps</span><br></pre></td></tr></table></figure>
+
+<p>安装 MySQL</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install mysql-server</span><br></pre></td></tr></table></figure>
+
+<h4 id="第二步：启动-mysql-服务"><a href="#第二步：启动-mysql-服务" class="headerlink" title="第二步：启动 mysql 服务"></a>第二步：启动 mysql 服务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start mysqld</span><br></pre></td></tr></table></figure>
+
+<p>该命令不会返回报错，为了进一步确认 mysql 服务确实启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl status mysqld</span><br><span class="line">Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since 二 2020-01-28 20:07:00 CST; 6s ago</span><br><span class="line">     Docs: man:mysqld(8)</span><br><span class="line">           http://dev.mysql.com/doc/refman/en/using-systemd.html</span><br><span class="line">  Process: 12281 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)</span><br><span class="line"> Main PID: 12402 (mysqld)</span><br><span class="line">   Status: <span class="string">"Server is operational"</span></span><br><span class="line">    Tasks: 39</span><br><span class="line">   Memory: 616.5M</span><br><span class="line">   CGroup: /system.slice/mysqld.service</span><br><span class="line">           └─12402 /usr/sbin/mysqld</span><br></pre></td></tr></table></figure>
+
+<h4 id="第三步：修改默认配置"><a href="#第三步：修改默认配置" class="headerlink" title="第三步：修改默认配置"></a>第三步：修改默认配置</h4><p>首先，我们需要修改 MySQL 给我们的默认密码，这个直接从日志中获取即可</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /var/<span class="built_in">log</span>/mysqld.log | grep <span class="string">"temporary password"</span></span><br><span class="line">2020-01-28T12:06:55.699956Z 5 [Note] [MY-010454] [Server] A temporary password is generated <span class="keyword">for</span> root@localhost: 5H(?khVdysDW</span><br></pre></td></tr></table></figure>
+
+<p>初始密码只能用于登录，但是此时你不能进行任何操作，必须修改新的密码</p>
+<p>在修改密码之前，你需要做的是修改密码的规格（默认的规格···太严格了）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># validate_password_policy代表密码策略，默认是1：符合长度，且必须含有数字，小写或大写字母，特殊字符。设置为0判断密码的标准就基于密码的长度了。一定要先修改两个参数再修改密码</span><br><span class="line">set global validate_password.policy=0;</span><br><span class="line"></span><br><span class="line"># validate_password_length代表密码长度，最小值为4</span><br><span class="line">set global validate_password.length=4;</span><br></pre></td></tr></table></figure>
+
+<p>最后，修改为合适的密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &apos;root&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;new password&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们安装的是 MySQL8.0 以上的版本，加密规则是mysql_native_password,而在mysql8之后,加密规则是caching_sha2_password。为了解决兼容性问题，一般来说，我选择把加密等级调低一点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select host,user,plugin,authentication_string from mysql.user;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200128214315.png" alt=""></p>
+<p>最后需要修改一下，加密规则 和 远程登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">USE mysql;</span><br><span class="line">UPDATE user SET host = &apos;%&apos; where user = &apos;root&apos;;</span><br><span class="line"></span><br><span class="line">ALTER USER &apos;root&apos;@&apos;%&apos; IDENTIFIED WITH mysql_native_password BY &apos;password&apos;;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>参考资料:<br><a href="https://www.cnblogs.com/zipxzf/p/10718544.html" target="_blank" rel="noopener">CentOS7 安装并配置MySQL8.0</a><br><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-centos-7" target="_blank" rel="noopener">How To Install MySQL on CentOS 7</a></p>
+</blockquote>
+<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><p>docker 安装其实比较麻烦的，感谢 <code>图灵:Docker开发指南</code> 给的安装建议，我们可以直接用别人写好的脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl https://get.docker.com &gt; install.sh</span><br><span class="line">chmod +x install.sh</span><br><span class="line">cat install.sh <span class="comment"># 感兴趣的话，可以研究一下 shell 究竟写了啥</span></span><br><span class="line">./install.sh </span><br><span class="line"><span class="comment"># 安装完了，记得启动 docker 服务</span></span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+
+<h4 id="linux下-docker-加速"><a href="#linux下-docker-加速" class="headerlink" title="linux下 docker 加速"></a>linux下 docker 加速</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ sudo touch /etc/docker/daemon.json </span><br><span class="line"><span class="comment"># 添加国内站点</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"registry-mirrors"</span>: [<span class="string">"https://registry.docker-cn.com"</span>,<span class="string">"http://hub-mirror.c.163.com"</span>,<span class="string">"https://mirror.ccs.tencentyun.com"</span>,<span class="string">"https://dockerhub.azk8s.cn"</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启docker daemon</span></span><br><span class="line">$ sudo systemctl restart docker </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看是否有修改成功</span></span><br><span class="line">$ docker info </span><br><span class="line"><span class="comment"># 查看Register Mirrors的信息</span></span><br><span class="line">Registry Mirrors:</span><br><span class="line">  https://registry.docker-cn.com/</span><br><span class="line">  http://hub-mirror.c.163.com/</span><br></pre></td></tr></table></figure>
+
+<h4 id="docker-compose-github-安装"><a href="#docker-compose-github-安装" class="headerlink" title="docker-compose(github 安装)"></a>docker-compose(github 安装)</h4><blockquote>
+<p>有条件的话，参考 <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">docker官方教程</a><br>这一种方法是官方推荐，但是鉴于中国墙，速度有可能非常感人</p>
+</blockquote>
+<h5 id="1-从-github-上下载-docker-compose-命令"><a href="#1-从-github-上下载-docker-compose-命令" class="headerlink" title="1. 从 github 上下载 docker-compose 命令"></a>1. 从 github 上下载 docker-compose 命令</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -L <span class="string">"https://github.com/docker/compose/releases/download/1.25.3/docker-compose-<span class="variable">$(uname -s)</span>-<span class="variable">$(uname -m)</span>"</span> -o /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-赋予可执行权限"><a href="#2-赋予可执行权限" class="headerlink" title="2. 赋予可执行权限"></a>2. 赋予可执行权限</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +x /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-验证是否安装成功"><a href="#3-验证是否安装成功" class="headerlink" title="3. 验证是否安装成功"></a>3. 验证是否安装成功</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose --version</span><br></pre></td></tr></table></figure>
+
+<h4 id="docker-compose-pip-安装"><a href="#docker-compose-pip-安装" class="headerlink" title="docker-compose(pip 安装)"></a>docker-compose(pip 安装)</h4><blockquote>
+<p>一般容易出问题的是 pip 的版本，如果是使用了conda作为包管理的话，可能主要注意pip的版本。我一开始是使用base环境的pip作下载，然后将安装的docker-compose 软连接至 <code>/usr/local/bin</code> 中</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install docker-compose</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Selenium-Chrome-环境配置"><a href="#Selenium-Chrome-环境配置" class="headerlink" title="Selenium + Chrome 环境配置"></a>Selenium + Chrome 环境配置</h3><p>linux 是无图形化界面，selenium 需要借助图形化的工具，下面我们直接看如何配置。</p>
+<blockquote>
+<p>参考教程：<a href="https://segmentfault.com/a/1190000019459125" target="_blank" rel="noopener">centos7安装selenium</a></p>
+</blockquote>
+<h4 id="安装selenium"><a href="#安装selenium" class="headerlink" title="安装selenium"></a>安装selenium</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install selenium</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装chrome-browser"><a href="#安装chrome-browser" class="headerlink" title="安装chrome-browser"></a>安装chrome-browser</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm --no-check-certificate</span><br><span class="line">yum install ./google-chrome-stable_current_x86_64.rpm</span><br><span class="line"><span class="comment"># 安装后，注意要查看一下 chrome 的版本号</span></span><br><span class="line">$ google-chrome --version</span><br><span class="line">Google Chrome 80.0.3987.87</span><br></pre></td></tr></table></figure>
+
+<h4 id="下载chromedriver"><a href="#下载chromedriver" class="headerlink" title="下载chromedriver"></a>下载chromedriver</h4><blockquote>
+<p>建议到 <a href="http://npm.taobao.org/mirrors/chromedriver/" target="_blank" rel="noopener">淘宝镜像</a>下载</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200206175541.png" alt=""></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://npm.taobao.org/mirrors/chromedriver/80.0.3987.16/chromedriver_linux64.zip</span><br><span class="line"><span class="comment"># 解压此文件，并将文件移动到/usr/bin目录下</span></span><br><span class="line">unzip chromedriver_linx64.zip</span><br><span class="line"><span class="comment"># 移到 /usr/bin 下后，之后运行的时候就不必特意制定 chromedriver 路径了</span></span><br><span class="line">mv chromedriver /usr/bin/</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用selenium"><a href="#使用selenium" class="headerlink" title="使用selenium"></a>使用selenium</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">url=<span class="string">'http://bing.com'</span></span><br><span class="line">option = webdriver.ChromeOptions()</span><br><span class="line">option.add_argument(<span class="string">'--no-sandbox'</span>)</span><br><span class="line">option.add_argument(<span class="string">'--headless'</span>)</span><br><span class="line">driver = webdriver.Chrome(chrome_options=option)</span><br><span class="line">driver.get(url)</span><br><span class="line">print(driver.page_source)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Docker-服务"><a href="#Docker-服务" class="headerlink" title="Docker 服务"></a>Docker 服务</h2><p>用 <code>docker</code> 安装需要用到的服务实在是太方便了，我们下面介绍一些好的轮子来用。</p>
+<h3 id="web-vscode-安装"><a href="#web-vscode-安装" class="headerlink" title="web-vscode 安装"></a>web-vscode 安装</h3><blockquote>
+<p> 传送门: <a href="https://github.com/cdr/code-server" target="_blank" rel="noopener">code-server</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建</span></span><br><span class="line">docker rm -f vscode </span><br><span class="line">docker run \</span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line">-d \ </span><br><span class="line"><span class="comment"># 总是运行</span></span><br><span class="line">--restart=always \ </span><br><span class="line"><span class="comment"># Alias</span></span><br><span class="line">--name web_vscode \ </span><br><span class="line"><span class="comment"># hostname</span></span><br><span class="line">-h vscode \ </span><br><span class="line"><span class="comment"># 一定要以root账号运行,不然会报 Permission denied</span></span><br><span class="line">-u root \ </span><br><span class="line"><span class="comment"># 所有端口映射，而不要是127.0.0.1</span></span><br><span class="line">-p 8086:8080 \ </span><br><span class="line">-v <span class="string">"<span class="variable">$&#123;HOME&#125;</span>/.local/share/code-server:/home/coder/.local/share/code-server"</span> \ </span><br><span class="line"><span class="comment"># 密码是通过环境变量加入的</span></span><br><span class="line">-e PASSWORD=mycode \ </span><br><span class="line"><span class="comment"># $PWD 是当前希望项目放置的位置</span></span><br><span class="line">-v <span class="string">"<span class="variable">$PWD</span>:/home/coder/project"</span> \</span><br><span class="line"><span class="comment"># 镜像名，本地不存在的话，会从仓库拉取</span></span><br><span class="line">codercom/code-server:v2  </span><br><span class="line"></span><br><span class="line"><span class="comment">#查看</span></span><br><span class="line">docker ps -l</span><br><span class="line">docker logs web_vscode</span><br></pre></td></tr></table></figure>
+
+<p>运行成功后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">info  Server listening on http://0.0.0.0:8080</span><br><span class="line">info    - Password is 558ba38067432e3beddf1228</span><br><span class="line">info      - To use your own password, <span class="built_in">set</span> the PASSWORD environment variable</span><br><span class="line">info      - To <span class="built_in">disable</span> use `--auth none`</span><br><span class="line">info    - Not serving HTTPS</span><br></pre></td></tr></table></figure>
+
+<p>由于我们的 web-vscode 是运行在容器内的，所以很多环境我们需要自己配置，参考上述操作。</p>
+<h3 id="redis-web-管理工具"><a href="#redis-web-管理工具" class="headerlink" title="redis web 管理工具"></a>redis web 管理工具</h3><p>mac 上 redis 管理工具破解版不好找，但是在 github 上找到了一个开源的工具，非常方便。拿来用一下</p>
+<blockquote>
+<p>传送门: <a href="https://github.com/erikdubbelboer/phpRedisAdmin" target="_blank" rel="noopener">phpRedisAdmin</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull erikdubbelboer/phpredisadmin</span><br><span class="line">docker run --rm -itd -e REDIS_1_HOST=redis -e REDIS_1_NAME=myredis  -p 8015:80  --link redis-test:redis --name redisadmin erikdubbelboer/phpredisadmin</span><br><span class="line"><span class="comment"># 需要注意的是 REDIS_1_HOST 填写的是自己 redis 服务器的地址</span></span><br><span class="line"><span class="comment"># 这里我采用的是容器链接的方式</span></span><br></pre></td></tr></table></figure>
+
+<p>因为服务器地址是会变的，所以我这里就直接写一个 <code>docker-compose.yml</code> 作为启动的脚本</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># phpredisadmin.yml</span></span><br><span class="line"><span class="attr">phpredisadmin:</span></span><br><span class="line"><span class="attr">  image:</span> <span class="string">erikdubbelboer/phpredisadmin</span></span><br><span class="line"><span class="attr">  environment:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ADMIN_USER=admin</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ADMIN_PASS=admin</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">REDIS_1_HOST=127.0.0.1/172.17.0.1</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">REDIS_1_PORT=6379</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"8011:80"</span></span><br></pre></td></tr></table></figure>
+
+<p>每次使用直接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose -f phpredisadmin up -d <span class="comment"># 启动(以后台方式)</span></span><br><span class="line">docker-compose down <span class="comment"># 关闭</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2020/01/12/centos-install-introduction/" target="_blank" title="Centos 环境配置（持续总结）">http://ppsteven.github.io/2020/01/12/centos-install-introduction/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/centos/" rel="tag">centos</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/12/python%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Python编码规范
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/12/git-skill-in-learning/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">git 实战（持续更新）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础配置"><span class="nav-number">1.</span> <span class="nav-text">基础配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#显示完整文件路径"><span class="nav-number">1.1.</span> <span class="nav-text">显示完整文件路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#必要软件安装"><span class="nav-number">2.</span> <span class="nav-text">必要软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-number">2.1.</span> <span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wget"><span class="nav-number">2.2.</span> <span class="nav-text">wget</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MiniConda"><span class="nav-number">2.3.</span> <span class="nav-text">MiniConda</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网址"><span class="nav-number">2.3.1.</span> <span class="nav-text">网址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置-Anaconda-仓库镜像源"><span class="nav-number">2.3.2.</span> <span class="nav-text">配置 Anaconda 仓库镜像源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置快捷命令"><span class="nav-number">2.3.3.</span> <span class="nav-text">设置快捷命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新建-python-环境"><span class="nav-number">2.3.4.</span> <span class="nav-text">新建 python 环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql"><span class="nav-number">2.4.</span> <span class="nav-text">mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第零步：查看系统版本号"><span class="nav-number">2.4.1.</span> <span class="nav-text">第零步：查看系统版本号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：安装MySQL"><span class="nav-number">2.4.2.</span> <span class="nav-text">第一步：安装MySQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：启动-mysql-服务"><span class="nav-number">2.4.3.</span> <span class="nav-text">第二步：启动 mysql 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：修改默认配置"><span class="nav-number">2.4.4.</span> <span class="nav-text">第三步：修改默认配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker"><span class="nav-number">2.5.</span> <span class="nav-text">docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#linux下-docker-加速"><span class="nav-number">2.5.1.</span> <span class="nav-text">linux下 docker 加速</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose-github-安装"><span class="nav-number">2.5.2.</span> <span class="nav-text">docker-compose(github 安装)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-从-github-上下载-docker-compose-命令"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">1. 从 github 上下载 docker-compose 命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-赋予可执行权限"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">2. 赋予可执行权限</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-验证是否安装成功"><span class="nav-number">2.5.2.3.</span> <span class="nav-text">3. 验证是否安装成功</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose-pip-安装"><span class="nav-number">2.5.3.</span> <span class="nav-text">docker-compose(pip 安装)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Selenium-Chrome-环境配置"><span class="nav-number">2.6.</span> <span class="nav-text">Selenium + Chrome 环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装selenium"><span class="nav-number">2.6.1.</span> <span class="nav-text">安装selenium</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装chrome-browser"><span class="nav-number">2.6.2.</span> <span class="nav-text">安装chrome-browser</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载chromedriver"><span class="nav-number">2.6.3.</span> <span class="nav-text">下载chromedriver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用selenium"><span class="nav-number">2.6.4.</span> <span class="nav-text">使用selenium</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-服务"><span class="nav-number">3.</span> <span class="nav-text">Docker 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-vscode-安装"><span class="nav-number">3.1.</span> <span class="nav-text">web-vscode 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-web-管理工具"><span class="nav-number">3.2.</span> <span class="nav-text">redis web 管理工具</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

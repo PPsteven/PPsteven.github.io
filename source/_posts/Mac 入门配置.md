@@ -331,3 +331,48 @@ img/
 https://cdn.jsdelivr.net/gh/PPsteven/pictures
 ```
 
+## 设置 ssh 远程连接超时
+
+为了解决 ssh 连接一段时间后会断开，我们需要在 `服务端` 和 `客户端` 做出以下操作
+
+```
+/etc/ssh/sshd_config # 服务端配置
+/etc/ssh/ssh_config # 客户端配置
+```
+
+### 服务器端
+
+```bash
+vim /etc/ssh/sshd_config
+# 修改为
+ClientAliveInterval 30 # 客户端每隔多少秒向服务发送一个心跳数据
+ClientAliveCountMax 86400 # 客户端多少秒没有相应，服务器自动断掉连接
+```
+
+最后重启 sshd 服务 (centos7+)
+
+```bash
+sudo systemctl restart sshd
+```
+
+### 客户端
+
+```bash
+ServerAliveInterval 60 # 每分钟发送一次, 然后客户端响应, 从而保持长连接;
+ServerAliveCountMax 3 # 表示服务器发出请求后客户端没有响应的次数达到3次, 就自动断开
+```
+
+
+
+## Charles破解教程
+
+> 参考教程：[Charles mac 破解教程](https://www.jianshu.com/p/0bc767840e42)
+
+```
+# 工具栏中的 help --> register
+Registered Name: https://zhile.io
+License Key: 48891cf209c6d32bf4
+```
+
+> Charles设置指南：[Charles使用指南](https://www.jianshu.com/p/4e748e481a1a)
+

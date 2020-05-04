@@ -13,7 +13,6 @@ toc_number:
 copyright: 
 ---
 
-## 前言
 <!--more-->
 
 ## 参考资料

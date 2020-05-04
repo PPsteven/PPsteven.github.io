@@ -15,6 +15,12 @@ toc_number:
 copyright:
 ---
 
+### 前言
+
+这是Pine Script 学习笔记的第二篇，简单挑教程上重要的记录了一下。
+
+<!--more-->
+
 ## Context switching and the security function
 
 security 函数可以用于按照特定要求请求数据

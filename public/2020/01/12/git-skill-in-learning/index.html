@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>git 实战（持续更新） | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="git" />
+  
+  
+  
+  
+  <meta name="description" content="主要记录 git 在实际使用中碰到的问题，会逐步慢慢积累 问题一：新项目如何与远端同步？12345$ git init$ git remote add origin git@e.coding.net:datamate&#x2F;pujiangjiaoye.git # 添加远端仓库$ git branch --set-upstream-to=origin&#x2F;master # 设置分支对应关系$ git push">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git 实战（持续更新）">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;01&#x2F;12&#x2F;git-skill-in-learning&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="主要记录 git 在实际使用中碰到的问题，会逐步慢慢积累 问题一：新项目如何与远端同步？12345$ git init$ git remote add origin git@e.coding.net:datamate&#x2F;pujiangjiaoye.git # 添加远端仓库$ git branch --set-upstream-to=origin&#x2F;master # 设置分支对应关系$ git push">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225406.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225457.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225533.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225610.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225659.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225740.png">
+<meta property="og:updated_time" content="2020-02-19T09:12:22.397Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200124225406.png">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-git-skill-in-learning" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      git 实战（持续更新）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/01/12/git-skill-in-learning/" class="article-date">
+	  <time datetime="2020-01-12T08:35:50.000Z" itemprop="datePublished">2020-01-12</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/git/">git</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/git-skill-in-learning.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主要记录 git 在实际使用中碰到的问题，会逐步慢慢积累</p>
+<h3 id="问题一：新项目如何与远端同步？"><a href="#问题一：新项目如何与远端同步？" class="headerlink" title="问题一：新项目如何与远端同步？"></a>问题一：新项目如何与远端同步？</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br><span class="line">$ git remote add origin git@e.coding.net:datamate/pujiangjiaoye.git <span class="comment"># 添加远端仓库</span></span><br><span class="line">$ git branch --<span class="built_in">set</span>-upstream-to=origin/master <span class="comment"># 设置分支对应关系</span></span><br><span class="line">$ git push --<span class="built_in">set</span>-upstream origin master <span class="comment"># 设置push 对应的远程仓库，建立本地分支的上游</span></span><br><span class="line">$ git remote -v <span class="comment"># 查看分支</span></span><br></pre></td></tr></table></figure>
+
+<p>当我们尝试push的时候又会出现一个问题</p>
+<a id="more"></a>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">error: 推送一些引用到 <span class="string">'git@e.coding.net:datamate/pujiangjiaoye.git'</span> 失败</span><br><span class="line">提示：更新被拒绝，因为您当前分支的最新提交落后于其对应的远程分支。</span><br><span class="line">提示：再次推送前，先与远程变更合并（如 <span class="string">'git pull ...'</span>）。详见</span><br><span class="line">提示：<span class="string">'git push --help'</span> 中的 <span class="string">'Note about fast-forwards'</span> 小节。</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按照提示，尝试用git pull 合并,又失败</span></span><br><span class="line">$ git pull</span><br><span class="line">fatal: 拒绝合并无关的历史</span><br></pre></td></tr></table></figure>
+
+<p>原因是我们本地与远程的版本不一致，但是我们是新提交，怎么会出现这样的问题呢？<br>因为很多平台在我们创建项目的时候，自动帮我们创建了README.md文件，所以会有不一致的情况存在。git pull 失败的原因是，两个不一致的文件没有<strong><em>共同祖先的历史</em></strong>。</p>
+<p>解决方法也很简单</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master --allow-unrelated-histories</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200124225406.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200124225457.png" alt=""></p>
+<h3 id="问题二：如何修改上一次的提交？"><a href="#问题二：如何修改上一次的提交？" class="headerlink" title="问题二：如何修改上一次的提交？"></a>问题二：如何修改上一次的提交？</h3><p>git 是分支管理的工具，我们的工作最好在一个 commit 中提交相应的代码，完成一个功能（如 bugfix 或者 feature_add ）。但是有的时候，我们的提交经过 Code Review 之后，可能会被打回来。这样面对新的修改，不应该重复提交。</p>
+<p>首先，我们可以先建立一个提交。面对第二个文件（这里我们给 a 新增了 Hello world again ）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200124225533.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200124225610.png" alt=""></p>
+<p>第一种选择，我们提交两个 commit </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"second commit"</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200124225659.png" alt=""></p>
+<blockquote><p>第二种选择，我们直接修改上一次的修改（推荐）</p>
+</blockquote>
+
+<p>工作流如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit --amend <span class="comment"># 代表直接在上一次的提交修改，这里会弹出上一次 commit 的信息。</span></span><br><span class="line">git push -f <span class="comment"># 由于我们只是改了本地，提交的时候使用 -f 强制推送一下</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里强烈建议，使用 –amend 的方法的时候，一定要检查 commit 的信息，确定不是把别人的给冲掉了。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200124225740.png" alt=""></p>
+<h3 id="问题三：服务器端强制同步远端-git-仓库？"><a href="#问题三：服务器端强制同步远端-git-仓库？" class="headerlink" title="问题三：服务器端强制同步远端 git 仓库？"></a>问题三：服务器端强制同步远端 git 仓库？</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git fetch </span><br><span class="line">git reset  --hard origin/master <span class="comment"># 要强制同步的分支！--hard 是丢弃分支的修改</span></span><br><span class="line">git pull</span><br><span class="line">Already up-to-date.</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="问题四：为什么修改了-gitignore-文件，忽略项还是不起作用"><a href="#问题四：为什么修改了-gitignore-文件，忽略项还是不起作用" class="headerlink" title="问题四：为什么修改了 .gitignore 文件，忽略项还是不起作用"></a>问题四：为什么修改了 <code>.gitignore</code> 文件，忽略项还是不起作用</h3><p>新建的文件在git中会有缓存，如果某些文件已经被纳入了版本管理中，就算是在.gitignore中已经声明了忽略路径也是不起作用的，这时候我们就应该先把本地缓存删除，然后再进行git的push</p>
+<p>git清除本地缓存命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git rm -r --cached .</span><br><span class="line">git add .</span><br></pre></td></tr></table></figure>
+
+<p>下面附上我的 <code>.gitignore</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># Windows:</span><br><span class="line">Thumbs.db</span><br><span class="line">ehthumbs.db</span><br><span class="line">Desktop.ini</span><br><span class="line"></span><br><span class="line"># MAC:</span><br><span class="line">*.DS_Store</span><br><span class="line"></span><br><span class="line"># Python:</span><br><span class="line">*.py[cod]</span><br><span class="line">*.so</span><br><span class="line">*.egg</span><br><span class="line">*.egg-info</span><br><span class="line">dist</span><br><span class="line">build</span><br><span class="line"></span><br><span class="line"># My configurations:</span><br><span class="line">*.log</span><br><span class="line">*.log.*</span><br></pre></td></tr></table></figure>
+
+<p>如何使用 git merge</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开发分支（dev）上的代码达到上线的标准后，要合并到 master 分支</span></span><br><span class="line">git checkout dev</span><br><span class="line">git pull</span><br><span class="line">git checkout master</span><br><span class="line">git pull </span><br><span class="line">git merge dev</span><br><span class="line">git push -u origin master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当master代码改动了，需要更新开发分支（dev）上的代码</span></span><br><span class="line"></span><br><span class="line">git checkout master </span><br><span class="line">git pull </span><br><span class="line">git checkout dev <span class="comment"># 这里默认dev 远端没有动</span></span><br><span class="line">git merge master </span><br><span class="line">git push -u origin dev</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考: <a href="https://blog.csdn.net/zl1zl2zl3/article/details/94019526" target="_blank" rel="noopener">git merge最简洁用法</a></p>
+</blockquote>
+<p>推荐一个 <code>git merge</code> 比较好的教程： <a href="https://www.jianshu.com/p/1a7e38cdbf76" target="_blank" rel="noopener">merge：合并 commits</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2020/01/12/git-skill-in-learning/" target="_blank" title="git 实战（持续更新）">http://ppsteven.github.io/2020/01/12/git-skill-in-learning/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/12/centos-install-introduction/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Centos 环境配置（持续总结）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/01/12/how-to-manage-multipul-git/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">如何配置多个git账号</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题一：新项目如何与远端同步？"><span class="nav-number">1.</span> <span class="nav-text">问题一：新项目如何与远端同步？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题二：如何修改上一次的提交？"><span class="nav-number">2.</span> <span class="nav-text">问题二：如何修改上一次的提交？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题三：服务器端强制同步远端-git-仓库？"><span class="nav-number">3.</span> <span class="nav-text">问题三：服务器端强制同步远端 git 仓库？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题四：为什么修改了-gitignore-文件，忽略项还是不起作用"><span class="nav-number">4.</span> <span class="nav-text">问题四：为什么修改了 .gitignore 文件，忽略项还是不起作用</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

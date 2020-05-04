@@ -5,9 +5,10 @@
 # Site
 title: 软微9133
 subtitle:   
-description: 分享一点学习记录
+description: 只争朝夕，不负韶华
 keywords:
 author: PPsteven
+# language 需要查看对应的主题的配置文件
 language: zh-CN
 timezone:
 
@@ -84,7 +85,8 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: Butterfly
+# theme: Butterfly hiker next
+theme: hiker
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

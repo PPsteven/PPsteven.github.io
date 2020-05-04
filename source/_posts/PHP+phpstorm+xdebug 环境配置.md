@@ -13,7 +13,6 @@ toc_number:
 copyright:
 ---
 
-## 前言
 php 环境搭建是一件相当麻烦的事情，本篇博客记录了在Mac 系统下的环境配置。
 
 Win上的php 环境搭建，建议使用XAMPP，一键搭建，而且自带xdebug.dll，用过就知道。Mac 上的php 环境，我一开始也使用了 XAMPP 作为环境，但是发现Mac 上的是阉割版的，也没有xdebug。
