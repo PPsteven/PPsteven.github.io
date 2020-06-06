@@ -30,10 +30,10 @@ Mac 上配置docker最为方便
 > 这里参考 [菜鸟教程:MacOS Docker 安装](https://www.runoob.com/docker/macos-docker-install.html) 
 
 ```bash
-$ brew cask install docker 
+brew cask install docker 
 # 查看是否安装成功
-$ docker info 
-$ docker -v 
+docker info 
+docker -v 
 ```
 **镜像加速**
 鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：http://hub-mirror.c.163.com。还有 https://registry.docker-cn.com 是官方的中国站点。这些站点存储的是docker hub 的官方热门镜像，如果是私人的镜像，还是需要去美国站点下载。
@@ -88,7 +88,51 @@ Registry Mirrors:
 
 ```
 
+### Centos docker
 
+#### 使用脚本安装
+
+docker 安装其实比较麻烦的，感谢 `图灵:Docker开发指南` 给的安装建议，我们可以直接用别人写好的脚本。
+
+```bash
+curl https://get.docker.com > install.sh
+chmod +x install.sh
+cat install.sh # 感兴趣的话，可以研究一下 shell 究竟写了啥
+./install.sh 
+# 安装完了，记得启动 docker 服务
+sudo systemctl start docker 
+```
+
+#### docker-compose(github 安装)
+
+> 有条件的话，参考 [docker官方教程](https://docs.docker.com/compose/install/) 
+> 这一种方法是官方推荐，但是鉴于中国墙，速度有可能非常感人
+
+##### 1. 从 github 上下载 docker-compose 命令
+
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+##### 2. 赋予可执行权限
+
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+##### 3. 验证是否安装成功
+
+```bash
+docker-compose --version
+```
+
+#### docker-compose(pip 安装)
+
+> 一般容易出问题的是 pip 的版本，如果是使用了conda作为包管理的话，可能主要注意pip的版本。我一开始是使用base环境的pip作下载，然后将安装的docker-compose 软连接至 `/usr/local/bin` 中
+
+```bash
+pip install docker-compose
+```
 
 ## Docker 镜像使用
 

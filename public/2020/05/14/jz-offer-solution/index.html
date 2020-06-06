@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>剑指 offer 归纳 | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="剑指Offer，刷题" />
+  
+  
+  
+  
+  <meta name="description" content="《剑指 Offer 》 刷题小计，主要记录别人解题的思路和方法。 以及题目的类型和重点">
+<meta name="keywords" content="剑指Offer，刷题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剑指 Offer 归纳">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;05&#x2F;14&#x2F;jz-offer-solution&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="《剑指 Offer 》 刷题小计，主要记录别人解题的思路和方法。 以及题目的类型和重点">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.nowcoder.com&#x2F;equation?tex=O(%E8%A1%8C%E9%AB%98%20%2B%20%E5%88%97%E5%AE%BD)&amp;preview=true">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.nowcoder.com&#x2F;equation?tex=O(1)&amp;preview=true">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200512123358.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200513113239.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200513113538.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200514215019.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200514214717.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200514215522.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200514220028.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200514220028.png">
+<meta property="og:updated_time" content="2020-05-15T10:36:53.793Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;www.nowcoder.com&#x2F;equation?tex=O(%E8%A1%8C%E9%AB%98%20%2B%20%E5%88%97%E5%AE%BD)&amp;preview=true">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-jz-offer-solution" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      剑指 Offer 归纳
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/05/14/jz-offer-solution/" class="article-date">
+	  <time datetime="2020-05-14T12:13:20.000Z" itemprop="datePublished">2020-05-14</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/%E5%88%B7%E9%A2%98/">刷题</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/jz-offer-solution.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>《剑指 Offer 》 刷题小计，主要记录别人解题的思路和方法。</p>
+<p>以及题目的类型和重点</p>
+<a id="more"></a>
+
+<h4 id="面试题04-二维数组中的查找"><a href="#面试题04-二维数组中的查找" class="headerlink" title="面试题04. 二维数组中的查找"></a>面试题04. 二维数组中的查找</h4><p>方法</p>
+<ul>
+<li><p>左上/右下 排除式查找</p>
+<p>时间复杂度：<img src="https://www.nowcoder.com/equation?tex=O(%E8%A1%8C%E9%AB%98%20%2B%20%E5%88%97%E5%AE%BD)&preview=true" alt="img"><br>空间复杂度：<img src="https://www.nowcoder.com/equation?tex=O(1)&preview=true" alt="img"></p>
+</li>
+<li><p>N行折半查找</p>
+<blockquote>
+<p><a href="https://blog.nowcoder.net/n/d332492753844d18aa4edc484e3c1318" target="_blank" rel="noopener">https://blog.nowcoder.net/n/d332492753844d18aa4edc484e3c1318</a></p>
+</blockquote>
+<p>二维数组分为上下左右四个边界top，bottom，left，right：</p>
+<ul>
+<li>根据上边界折半查找——确定 right 范围</li>
+<li>根据下边界折半查找——确定 left 范围</li>
+<li>根据左边界折半查找——确定 top 范围</li>
+<li>根据右边界折半查找——确定 bottom 范围</li>
+</ul>
+</li>
+</ul>
+<h4 id="面试题06-从尾到头打印链表"><a href="#面试题06-从尾到头打印链表" class="headerlink" title="面试题06. 从尾到头打印链表"></a>面试题06. 从尾到头打印链表</h4><ul>
+<li><p>递归法</p>
+<p>递归是由计算机帮助实现 “栈” 结构</p>
+</li>
+<li><p>数据结构——栈 </p>
+<p>先进后出</p>
+</li>
+</ul>
+<h4 id="面试题07-重建二叉树"><a href="#面试题07-重建二叉树" class="headerlink" title="面试题07. 重建二叉树"></a>面试题07. 重建二叉树</h4><ul>
+<li><p>数据结构——二叉树</p>
+<p>根据 pre 确定 根节点</p>
+<p>根据 vin 确定左右子树的大小</p>
+</li>
+<li><p>递归编程</p>
+</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200512123358.png" style="zoom:50%;" />
+
+
+
+<h4 id="面试题09-用两个栈实现一个队列"><a href="#面试题09-用两个栈实现一个队列" class="headerlink" title="面试题09. 用两个栈实现一个队列"></a>面试题09. 用两个栈实现一个队列</h4><ul>
+<li><p>栈是后进先出，队列是先进先出。<br>可以使用2个栈来表示，一个表示入栈，还有一个表示出栈，出栈的顺序与入栈的顺序相反。</p>
+</li>
+<li><p>第一个栈弹出后压入第二个栈就可以了</p>
+</li>
+<li><p>python 栈 &amp; 队列 实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 栈实现</span></span><br><span class="line">stack = []</span><br><span class="line">stack.append(<span class="number">1</span>) <span class="comment"># 入栈</span></span><br><span class="line">stack.pop() <span class="comment"># 出栈</span></span><br><span class="line"><span class="comment"># python 队列实现</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque </span><br><span class="line">queue = deque([<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>]) </span><br><span class="line">queue.append(<span class="string">'D'</span>) <span class="comment"># 入队</span></span><br><span class="line">queue.popleft() <span class="comment"># 出队</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="面试题11-旋转数组的最小数字"><a href="#面试题11-旋转数组的最小数字" class="headerlink" title="面试题11. 旋转数组的最小数字"></a>面试题11. 旋转数组的最小数字</h4><ul>
+<li><p>变形的二分查找，但是有一些坑</p>
+<p>a. 正确情况下的二分查找</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200513113239.png" style="zoom: 67%;" />
+
+<p>b. 特殊情况</p>
+<p>当出现重复数字情形的时候，<strong>直接缩小左边界（因为最小值总是在右侧出现）</strong></p>
+<p>情形4 可以适应非递增数列的最小值为队首元素的情形。最后的代码非常巧妙</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200513113538.png" style="zoom:67%;" />
+
+</li>
+</ul>
+<h4 id="面试题12-矩阵中的路径"><a href="#面试题12-矩阵中的路径" class="headerlink" title="面试题12. 矩阵中的路径"></a>面试题12. 矩阵中的路径</h4><ul>
+<li>DFS 深度搜索</li>
+</ul>
+<h4 id="面试题13-机器人的运动范围"><a href="#面试题13-机器人的运动范围" class="headerlink" title="面试题13. 机器人的运动范围"></a>面试题13. 机器人的运动范围</h4><ul>
+<li><p>DFS 深度搜索</p>
+</li>
+<li><p>BFS 广度搜索</p>
+</li>
+<li><p>剪枝优化</p>
+<ul>
+<li><p>通过分析发现，本题只考虑走 右、下两个方向即可</p>
+</li>
+<li><p>数位和的计算上，用数学公式进行优化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s_x + <span class="number">1</span> <span class="keyword">if</span> (x + <span class="number">1</span>) % <span class="number">10</span> <span class="keyword">else</span> s_x - <span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514215019.png" alt=""></p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514214717.png" alt=""></p>
+</li>
+</ul>
+<blockquote>
+<p>参考：<a href="https://krahets.gitee.io/" target="_blank" rel="noopener">Krahets’s Blog</a></p>
+<p>这个大神些的东西，真的比原书的作者写的解法好，而且是python版</p>
+</blockquote>
+<h4 id="面试题14-I-剪绳子"><a href="#面试题14-I-剪绳子" class="headerlink" title="面试题14- I. 剪绳子"></a>面试题14- I. 剪绳子</h4><blockquote>
+<p>参考：<a href="https://leetcode-cn.com/problems/jian-sheng-zi-lcof/solution/xiang-jie-bao-li-di-gui-ji-yi-hua-ji-zhu-dong-tai-/" target="_blank" rel="noopener">腐烂的橘子🍊</a></p>
+</blockquote>
+<ul>
+<li>暴力法</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514215522.png" style="zoom: 50%;" />
+
+<p>递归函数 $F(n)=max(i\times(n-i),i\times F(n-i)),i=1,2,…,n-2F(n)=max(i×(n−i),i×F(n−i)),i=1,2,…,n−2$</p>
+<ul>
+<li><p><strong>记忆化技术（自顶向下）</strong></p>
+<p>递归函数中存在大量重复的计算，记忆化技术，可以帮助缩小时间，通过计算机验证</p>
+</li>
+<li><p><strong>方法三：动态规划（自底向上）(推荐方法)</strong></p>
+<p>动态规划的核心是，设定边界条件 和 </p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514220028.png" alt=""></p>
+</li>
+<li><p>方法四：动态规划优化解法</p>
+<p>任何大于 33 的数都可以拆分为数字 1，2，31，2，3 的和，且它们对 33 的余数总是 0，1，20，1，2</p>
+<p>可以降低 空间利用率</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514220028.png" alt=""></p>
+</li>
+<li><p>方法五：数学推导</p>
+</li>
+</ul>
+<h4 id="面试题15-二进制中的1"><a href="#面试题15-二进制中的1" class="headerlink" title="面试题15-二进制中的1"></a>面试题15-二进制中的1</h4><ul>
+<li><p>python 二进制问题</p>
+<p>字符操作：</p>
+<p>n &amp; 1 验证最后一位是否是1</p>
+<p>n &amp; (n - 1) 消0</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2020/05/14/jz-offer-solution/" target="_blank" title="剑指 Offer 归纳">http://ppsteven.github.io/2020/05/14/jz-offer-solution/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%91%E6%8C%87Offer%EF%BC%8C%E5%88%B7%E9%A2%98/" rel="tag">剑指Offer，刷题</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/19/vmware-centos-environment-network/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          mac + VMware + Centos7 下的网络配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/03/several-tips-git-speed-up/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">提升 git 速度的几个加速方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题04-二维数组中的查找"><span class="nav-number">1.</span> <span class="nav-text">面试题04. 二维数组中的查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题06-从尾到头打印链表"><span class="nav-number">2.</span> <span class="nav-text">面试题06. 从尾到头打印链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题07-重建二叉树"><span class="nav-number">3.</span> <span class="nav-text">面试题07. 重建二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题09-用两个栈实现一个队列"><span class="nav-number">4.</span> <span class="nav-text">面试题09. 用两个栈实现一个队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题11-旋转数组的最小数字"><span class="nav-number">5.</span> <span class="nav-text">面试题11. 旋转数组的最小数字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题12-矩阵中的路径"><span class="nav-number">6.</span> <span class="nav-text">面试题12. 矩阵中的路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题13-机器人的运动范围"><span class="nav-number">7.</span> <span class="nav-text">面试题13. 机器人的运动范围</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题14-I-剪绳子"><span class="nav-number">8.</span> <span class="nav-text">面试题14- I. 剪绳子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面试题15-二进制中的1"><span class="nav-number">9.</span> <span class="nav-text">面试题15-二进制中的1</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

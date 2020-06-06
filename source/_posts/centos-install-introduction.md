@@ -57,6 +57,15 @@ $PWD 显示当前全路径
 
 ## 必要软件安装
 
+### ifconfig
+
+```bash
+$ yum search ifconfig
+============================== 匹配：ifconfig ============================================
+net-tools.x86_64 : Basic networking tools
+$ yum install net-tools.x86_64
+```
+
 ###  git
 
 ```bash
@@ -71,8 +80,8 @@ $ yum install -y wget
 
 ### 7z压缩
 
-```
-yum install p7zip
+```bash 
+$ yum install p7zip
 ```
 
 **使用方法**
@@ -91,16 +100,16 @@ yum install p7zip
 7za x test.7z
 ```
 
-#### sz, rz 
+### sz, rz 
 
 服务器上传，下载文件，除了使用FTP软件外，lrzsz是一个unix通信套件提供的X，Y，和ZModem文件传输协议,是一个非常强大的文件传输工具，安装方便，使用简单。
 
 rzsz 官网入口：[http://freecode.com/projects/lrzsz/](https://link.jianshu.com/?t=http://freecode.com/projects/lrzsz/)
 
-```
-yum -y install lrzsz
-sz filename //下载文件 filename
-rz //上传文件
+```bash
+$ yum -y install lrzsz
+sz filename # 下载文件 filename
+rz # 上传文件
 ```
 
 ### MiniConda
@@ -113,6 +122,7 @@ https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/
 
 ```bash
 $ wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda-latest-Linux-x86_64.sh
+$ yum -y install bzip2 # 下载解压软件
 $ bash Miniconda-latest-Linux-x86_64.sh
 # 添加环境变量
 $ echo "export PATH=/root/miniconda2/bin:$PATH" >> .bashrc
@@ -166,8 +176,39 @@ $ pip install numpy pandas jsonpath pymysql requests datetime dateutil
 
 > 参考来源：[Centos7安装Miniconda及配置jupyter](https://blog.51cto.com/loufeng/2342003)
 
+### shadowsocks
 
+shadowsocks 需要利用 `pip` 安装
 
+```bash
+$ sudo pip install shadowsocks
+```
+
+1. 创建配置文件ss.json
+
+   ```json
+   # vim ss.json
+   {
+       "server":"*.*.*.*",
+       "server_port":***,
+       "local_server":"0.0.0.0", # 默认127.0.0.1
+       "local_port":1081,
+       "password":"*****",
+       "timeout":600,
+       "method":"aes-256-cfb"
+   }
+   ```
+
+2. 启动ss隧道
+
+   ```bash
+   # 前台方式运行
+   /root/miniconda2/envs/base/bin/sslocal -c ss.json
+   # 后台运行
+   nohup /root/miniconda2/envs/base/bin/sslocal -c ss.json >> ss.log 1>2&
+   ```
+
+   
 
 ### mysql
 
@@ -268,7 +309,7 @@ set global validate_password.length=4;
 最后，修改为合适的密码
 
 ```
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
 ```
 
 如果我们安装的是 MySQL8.0 以上的版本，加密规则是mysql_native_password,而在mysql8之后,加密规则是caching_sha2_password。为了解决兼容性问题，一般来说，我选择把加密等级调低一点。

@@ -281,6 +281,385 @@
         
           <section id="main" style="float:none;">
   
+    <article id="post-linux-crontab-basic"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/02/19/linux-crontab-basic/">linux crontab 入门</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/02/19/linux-crontab-basic/" class="article-date">
+	  <time datetime="2020-02-18T16:18:48.000Z" itemprop="datePublished">2020-02-19</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>crontab 的作用是，执行 linux 上的定时任务。当我们需要运行一些诸如 <code>日志采集</code> 、<code>心跳检查</code> 这种任务的时候，需要用到。</p>
+<p>最近在做 linux 脚本检查 <code>python 爬虫脚本</code> 是否健康运行，故采用这个方法。</p>
+<blockquote>
+<p>只要是常驻的程序，对于程序的要求比较高，必须有很好的稳健性，可以面对各种情况。</p>
+</blockquote>
+<p>一个程序很难考虑到各种极端情况(死机，内存爆，网络问题等)，这时候我们必须要实时监控这些进程的方法。</p>
+<p>这里我准备采用的方法一：日记采集+监控， 方法二：定期检查并唤起。日志采集的东西准备放在下一篇讲。</p>
+<blockquote>
+<p>当安装完成操作系统之后，默认便会启动此任务调度命令。crond 命令每分锺会定期检查是否有要执行的工作，如果有要执行的工作便会自动执行该工作</p>
+</blockquote>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-mysql-bug-solution"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/02/11/mysql-bug-solution/">mysql error:Waiting for table metadata lock</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/02/11/mysql-bug-solution/" class="article-date">
+	  <time datetime="2020-02-11T15:57:07.000Z" itemprop="datePublished">2020-02-11</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>背景是，Navicat 在针对一张表格做删除操作的时候，会一直等待，无法进行任何操作。</p>
+<p>经过 <code>show PROCESSLIST</code> 发现是 <code>Waiting for table metadata lock</code> 错误。</p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-define-decorators-as-class"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/02/09/define-decorators-as-class/">Python装饰器：将装饰器定义为类</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/02/09/define-decorators-as-class/" class="article-date">
+	  <time datetime="2020-02-08T16:18:59.000Z" itemprop="datePublished">2020-02-09</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/python/">python</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在强化补齐 Python 的基础知识，向高阶玩家进发。主攻《Python CookBook 3rd》，上面的知识点比较多，我挑重点看这几个方面。</p>
+<ul>
+<li>yield + 协程</li>
+<li>装饰器</li>
+<li>多线程</li>
+<li>面向对象</li>
+</ul>
+<p>本篇博客讨论的主题是 <code>装饰器</code> ，装饰器其实也不是什么新鲜的用法，就是传入的参数是 <code>函数</code> ，这一点上，它更像是一个语法糖。装饰器的作用是可以给我们原本编写好的函数再一次的加上额外的功能（比如统计时间，打日志）。</p>
+<p>装饰器可以给我们的函数加上武器，使它们更加强大。如果是利用 <code>Python</code> 进行 <code>Web</code> 开发的小伙伴对装饰器并不陌生，在 <code>Flask</code> 和 <code>Django</code> 中 <code>@</code> 符号应该不少见了 </p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-how-to-import-module-in-python-project"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/01/26/how-to-import-module-in-python-project/">如何在python项目中使用import导入自编模块</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/01/26/how-to-import-module-in-python-project/" class="article-date">
+	  <time datetime="2020-01-26T09:06:02.000Z" itemprop="datePublished">2020-01-26</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/python/">python</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>背景是在python项目中导入模块时碰到的问题，当需要导入的模块是位于项目的不同层级的时候，导入文件就变成了一个非常麻烦的事情。</p>
+<p>下面举一个例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">. # 当前工作目录</span><br><span class="line">├── DB </span><br><span class="line">│   ├── MySQLClient.py</span><br><span class="line">│   └── RedisClient.py</span><br><span class="line">└── Util</span><br><span class="line">│    └── LogHandler.py</span><br><span class="line">├── Email</span><br><span class="line">│      └── SendEmail.py  # 本文件</span><br><span class="line">│      └── Email_setting.py  # 待导入文件</span><br></pre></td></tr></table></figure>
+
+<p>DB 和 Util 是我们经常使用到的模块，若是我们的工作目录位于项目文件的第一层的话，当我们导入 <code>Email_setting.py</code> 的时候，我们应该是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> DB.MySQLClient <span class="keyword">import</span> MySQLClass</span><br><span class="line"><span class="keyword">from</span> Util.LogHandler <span class="keyword">import</span> LogHandler</span><br><span class="line"><span class="keyword">from</span> Email_setting <span class="keyword">import</span> *  <span class="comment"># 这是错误的例子</span></span><br><span class="line"><span class="keyword">from</span> Email.Email_setting <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+
+<p>下面我们讨论一下如何在python中导入模块</p>
+<blockquote><p>参考自: <a href="http://www.blog.pythonlibrary.org/2016/03/01/python-101-all-about-imports/" target="_blank" rel="noopener">Python 101: All about imports</a></p>
+</blockquote>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-python编码规范"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/01/12/python%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Python编码规范</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/01/12/python%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" class="article-date">
+	  <time datetime="2020-01-12T09:37:56.000Z" itemprop="datePublished">2020-01-12</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80%E6%8A%80%E8%83%BD/">基础技能</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python编码规范</p>
+<p><a href="http://jb51.net/article/139495.htm" target="_blank" rel="noopener">Python 编码规范(Google Python Style Guide</a></p>
+<p>目前写了:</p>
+<ul>
+<li>函数、模块、变量等命名</li>
+<li>函数注释</li>
+<li>字符串编码规范</li>
+<li>TODO 模块的导入规范，项目的结构</li>
+</ul>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-centos-install-introduction"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/01/12/centos-install-introduction/">Centos 环境配置（持续总结）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/01/12/centos-install-introduction/" class="article-date">
+	  <time datetime="2020-01-12T08:35:50.000Z" itemprop="datePublished">2020-01-12</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/centos/">centos</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本章节收集一下配置一个centos 环境所需要的操作</p>
+<p>第一部分：必要软件的安装</p>
+<ul>
+<li>git</li>
+<li>wget</li>
+<li>MiniConda(python)</li>
+<li>mysql</li>
+</ul>
+<p>第二部分：Docker 服务</p>
+<ul>
+<li>web-vscode</li>
+<li>phpredisAdmin(redis web 管理工具)</li>
+</ul>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-git-skill-in-learning"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/01/12/git-skill-in-learning/">git 实战（持续更新）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/01/12/git-skill-in-learning/" class="article-date">
+	  <time datetime="2020-01-12T08:35:50.000Z" itemprop="datePublished">2020-01-12</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/git/">git</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主要记录 git 在实际使用中碰到的问题，会逐步慢慢积累</p>
+<h3 id="问题一：新项目如何与远端同步？"><a href="#问题一：新项目如何与远端同步？" class="headerlink" title="问题一：新项目如何与远端同步？"></a>问题一：新项目如何与远端同步？</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br><span class="line">$ git remote add origin git@e.coding.net:datamate/pujiangjiaoye.git <span class="comment"># 添加远端仓库</span></span><br><span class="line">$ git branch --<span class="built_in">set</span>-upstream-to=origin/master <span class="comment"># 设置分支对应关系</span></span><br><span class="line">$ git push --<span class="built_in">set</span>-upstream origin master <span class="comment"># 设置push 对应的远程仓库，建立本地分支的上游</span></span><br><span class="line">$ git remote -v <span class="comment"># 查看分支</span></span><br></pre></td></tr></table></figure>
+
+<p>当我们尝试push的时候又会出现一个问题</p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
     <article id="post-how-to-manage-multipul-git"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
@@ -426,364 +805,11 @@
 
 
   
-    <article id="post-PHP+phpstorm+xdebug 环境配置"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/12/14/PHP+phpstorm+xdebug%20%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">PHP+phpstorm+xdebug 环境配置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/12/14/PHP+phpstorm+xdebug%20%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="article-date">
-	  <time datetime="2019-12-14T15:19:51.000Z" itemprop="datePublished">2019-12-14</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/php/">php</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>php 环境搭建是一件相当麻烦的事情，本篇博客记录了在Mac 系统下的环境配置。</p>
-<p>Win上的php 环境搭建，建议使用XAMPP，一键搭建，而且自带xdebug.dll，用过就知道。Mac 上的php 环境，我一开始也使用了 XAMPP 作为环境，但是发现Mac 上的是阉割版的，也没有xdebug。</p>
-<p>目前介绍的环境搭建方法是: <strong>brew</strong> 和 <strong>pecl</strong> </p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-php协程笔记"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/12/07/php%E5%8D%8F%E7%A8%8B%E7%AC%94%E8%AE%B0/">php协程笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/12/07/php%E5%8D%8F%E7%A8%8B%E7%AC%94%E8%AE%B0/" class="article-date">
-	  <time datetime="2019-12-07T10:19:13.000Z" itemprop="datePublished">2019-12-07</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/php/">php</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在实习的过程中使用到了腾讯微服务平台（Tencent Service Framework，TSF）框架，tsf中经常看到 </p>
-<p><code>$ret = (yield func(a,b));</code></p>
-<p>这样的用法。<br>yield 外面包括号的用法并不常见，实际上这是yield的一种特殊的用法——<strong><em>协程</em></strong>。<br>这里我准备通读一下这一领域的经典教程，好好理解yield 和 协程 是如何在PHP 项目开发中起到作用的。</p>
-<blockquote>
-<p><a href="http://www.laruence.com/2015/05/28/3038.html" target="_blank" rel="noopener">在PHP中使用协程实现多任务调度| 风雪之隅</a></p>
-<p>作者背景：风雪之隅，PHP开发组核心成员，鸟叔，PHP7的主要开发者。本篇文章其实他对一篇英文教程的翻译之作。</p>
-</blockquote>
-<p>之所以标题起笔记，原因是原文理解起来稍有难度，所以我这里加上自己的理解。本篇可以在大家读原文的过程中做一个参考。</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-如何利用SSH连接家中的服务器"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/12/01/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8SSH%E8%BF%9E%E6%8E%A5%E5%AE%B6%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/">如何利用SSH连接家中的服务器:ngrok</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/12/01/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8SSH%E8%BF%9E%E6%8E%A5%E5%AE%B6%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="article-date">
-	  <time datetime="2019-12-01T05:23:30.000Z" itemprop="datePublished">2019-12-01</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200121011429.png" alt="来自新浪图片"></p>
-<p>家中闲置了一台电脑，准备用来当做服务器。一方面也是作为linux 学习练练手，二是可以运行一些爬虫小程序或者是网页服务。</p>
-<p>这里我用的manjaro，这是目前比较流行的linux 发行版，最热门的linux桌面发行版之一。</p>
-<p>我选择manjaro也是想作为替代windows 来用。manjaro拥有一个非常方便的软件仓库，利用pacman和yay等命令可以十分方便的安装软件。</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-docker-installation-and-basic-command"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/11/21/docker-installation-and-basic-command/">Docker安装及基础命令</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/11/21/docker-installation-and-basic-command/" class="article-date">
-	  <time datetime="2019-11-21T12:22:30.000Z" itemprop="datePublished">2019-11-21</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80%E6%8A%80%E8%83%BD/">基础技能</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近的工作</p>
-<ul>
-<li>php 学习，设计到LAMP的环境搭建。虽然是Mac上Apache 和 php 都是自带的，但是环境上还是不足，所以要用Docker。DAMP</li>
-<li>爬虫ip 池搭建，发现别人造好的轮子上需要如redis，flask等环境。而且配置完了，最终也是要部署到服务器上去的，所以docker 是必不可少的</li>
-</ul>
-<p>最近的工作，让我感到Docker的学习一定要提前了。因为只是先用起来，首先记录一些常用的命令，争取一天搞定。</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-github-search-tips"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/11/21/github-search-tips/">Github 搜索技巧</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/11/21/github-search-tips/" class="article-date">
-	  <time datetime="2019-11-21T12:12:42.000Z" itemprop="datePublished">2019-11-21</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80%E6%8A%80%E8%83%BD/">基础技能</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为最近手头上的东西很多，要最快的在很短的时间内完成一个项目，需要多多参考别人的优秀的代码。很多东西，在github 上都开源了，反复造轮子浪费时间，用好别人东西才是最高效的方法。</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-php学习笔记"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/11/19/php%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">PHP学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/11/19/php%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="article-date">
-	  <time datetime="2019-11-19T11:17:08.000Z" itemprop="datePublished">2019-11-19</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/php/">php</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>php 入门教程，主要来自于菜鸟教程，入门级别，日常学习笔记。<br>找了一个 <code>php</code> 的实习，必须马上掌握啊。</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-git-cheetsheet"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/11/14/git-cheetsheet/">git cheetsheet</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/11/14/git-cheetsheet/" class="article-date">
-	  <time datetime="2019-11-14T11:20:00.000Z" itemprop="datePublished">2019-11-14</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/cheetsheet/">cheetsheet</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="cheetsheet"><a href="#cheetsheet" class="headerlink" title="cheetsheet"></a>cheetsheet</h2><p>入门级别的git 基础操作，仅仅收录理解了的，常用的命令。负责的命令，在附录的大全里面可以找到</p>
-<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200216020515.png" alt=""> </p>
-<h3 id="git-config"><a href="#git-config" class="headerlink" title="git config"></a>git config</h3><p>Git 有三层的配置文件</p>
-<ol>
-<li>仓库级的配置文件：在仓库的 <code>.git/config</code> 目录下，只对本仓库有效</li>
-<li>全局级的配置文件：Mac在 <code>~/.gitconfig</code> 目录</li>
-<li>系统级的配置文件：在Git 的 安装目录下 (经过查找，我的目录为/usr/local/Cellar/git/2.23.0_1/.bottle/etc)</li>
-</ol>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
 
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&amp;laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页 &amp;raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&amp;laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页 &amp;raquo;</a>
   </nav>
 
 </section>

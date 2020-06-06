@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>提升 git 速度的几个加速方法 | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="git代理" />
+  
+  
+  
+  
+  <meta name="description" content="最近经常需要从github上拉代码下来，速度实在是太慢了。所以写这篇文件，来好好总结一下提速的方法。 总的来说，方法有 替换 镜像源&#x2F;修改hosts&#x2F;使用国内托管平台&#x2F;使用代理 经过实验下来，使用代理的效果最好">
+<meta name="keywords" content="git,代理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提升 git 速度的几个加速方法">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;05&#x2F;03&#x2F;several-tips-git-speed-up&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="最近经常需要从github上拉代码下来，速度实在是太慢了。所以写这篇文件，来好好总结一下提速的方法。 总的来说，方法有 替换 镜像源&#x2F;修改hosts&#x2F;使用国内托管平台&#x2F;使用代理 经过实验下来，使用代理的效果最好">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200507235526.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200508005806.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200508183725.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200508190504.png">
+<meta property="og:updated_time" content="2020-05-14T13:22:33.727Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200507235526.png">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-several-tips-git-speed-up" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      提升 git 速度的几个加速方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/05/03/several-tips-git-speed-up/" class="article-date">
+	  <time datetime="2020-05-03T12:07:16.000Z" itemprop="datePublished">2020-05-03</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/git/">git</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/several-tips-git-speed-up.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近经常需要从github上拉代码下来，速度实在是太慢了。所以写这篇文件，来好好总结一下提速的方法。</p>
+<p>总的来说，方法有 替换 <strong>镜像源/修改hosts/使用国内托管平台/使用代理</strong></p>
+<p>经过实验下来，使用代理的效果最好</p>
+<a id="more"></a>
+
+<h2 id="使用镜像源-推荐"><a href="#使用镜像源-推荐" class="headerlink" title="使用镜像源(推荐)"></a>使用镜像源(推荐)</h2><blockquote>
+<p>参考 <a href="https://www.zhihu.com/question/27159393" target="_blank" rel="noopener">知乎Don.hub</a></p>
+</blockquote>
+<p>替换 github 镜像网站，把 <code>github.com</code> 替换成 <code>github.com.cnpmjs.org</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/graykode/nlp-tutorial</span><br><span class="line">https://github.com.cnpmjs.org/graykode/nlp-tutorial</span><br></pre></td></tr></table></figure>
+
+<p>这个方法最简单，提速效果还是很明显的。当然缺点也是很明显的，就是如果是一些不知名的项目，就没有对应的镜像源可以用了。</p>
+<h2 id="修改hosts（不推荐）"><a href="#修改hosts（不推荐）" class="headerlink" title="修改hosts（不推荐）"></a>修改hosts（不推荐）</h2><p>DNS污染是GFW的一个重要手段，通过修改 hosts 文件来直接绕过DNS解析是一个不错的方法。这是一个主流的解决方法，但是实测下来效果并不显著。</p>
+<p><strong>第一步: 找到以下两个域名对应最快的 ip 地址</strong></p>
+<p>查 ip 地址： <a href="https://www.ipaddress.com" target="_blank" rel="noopener">https://www.ipaddress.com</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">github.global.ssl.fastly.net  </span><br><span class="line">github.com</span><br></pre></td></tr></table></figure>
+
+<p><strong>第二步: 将找到的对应的 ip 添加至 hosts ( 地址: /etc/hosts)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 举个例子</span><br><span class="line">213.54.23.32 github.global.ssl.fastly.net  </span><br><span class="line">212.44.53.42 github.com</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用国内托管平台"><a href="#使用国内托管平台" class="headerlink" title="使用国内托管平台"></a>使用国内托管平台</h2><p>通过国内托管平台，如码云 <code>gitee/阿里云/oschaina</code> 等作为中转，将代码 fork 到自己的仓库下。然后去 clone 对应仓库的repo，基本可以到达满速。</p>
+<p>搬运教程：<a href="https://zhuanlan.zhihu.com/p/111697412" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/111697412</a></p>
+<p>这也是一个不错的方法，就是稍微有点烦。而且对于小白来说，还容易碰到一个问题是，在使用 SSH 方式拉代码的话，需要碰到多个秘钥管理的麻烦事情。</p>
+<h2 id="代理服务器（选择方案）"><a href="#代理服务器（选择方案）" class="headerlink" title="代理服务器（选择方案）"></a>代理服务器（选择方案）</h2><p>最后我采用的是这个方案，参考 <a href="https://zhuanlan.zhihu.com/p/87559002" target="_blank" rel="noopener">这篇教程</a>。如果你手里有一台海外的VPS，就非常简单。</p>
+<h3 id="本地代理加速"><a href="#本地代理加速" class="headerlink" title="本地代理加速"></a>本地代理加速</h3><p><strong>第一步: 查看你的连接工具的监听端口</strong></p>
+<p>连接 VPS 的工具各不相同，这里以最常使用的 <code>shadowssocks</code> 为例，选择 <code>偏好设置-&gt;高级</code> 就可以查看 socks5 监听的端口。</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200507235526.png" style="zoom:50%;" />
+
+<p><strong>第二步：设置代理转发的端口</strong></p>
+<p><strong>设置全局代理</strong></p>
+<p>全局代理设置后，所有 git 的 http/https 都会走我们的代理端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SOCKS5 协议，1080 端口修改成自己的本地 SOCKS5 代理端口</span></span><br><span class="line">git config --global http.proxy socks5://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy socks5://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 协议，1081 端口修改成自己的本地 HTTP 代理端口</span></span><br><span class="line">git config --global http.proxy http://127.0.0.1:1081</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1081</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置局部代理</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SOCKS5 协议，1080 端口修改成自己的本地 SOCKS5 代理端口</span></span><br><span class="line">git config --global http.https://github.com.proxy socks5://127.0.0.1:1080</span><br><span class="line">git config --global https.https://github.com.proxy socks5://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 协议，1081 端口修改成自己的本地 HTTP 代理端口</span></span><br><span class="line">git config --global http.https://github.com.proxy https://127.0.0.1:1081</span><br><span class="line">git config --global https.https://github.com.proxy https://127.0.0.1:1081</span><br></pre></td></tr></table></figure>
+
+<p>设置后，我们可以打开 <code>~/.gitconfig</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[http &quot;https://github.com&quot;]</span><br><span class="line">        proxy = socks5://127.0.0.1:1080</span><br><span class="line">[https &quot;https://github.com&quot;]</span><br><span class="line">        proxy = socks5://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p>或者 <code>git config --global -l</code> 查看配置是否生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http.https://github.com.proxy=socks5://127.0.0.1:1080</span><br><span class="line">https.https://github.com.proxy=socks5://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p><strong>取消代理</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 取消局部代理</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.https://github.com.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.https://github.com.proxy</span><br><span class="line"><span class="comment"># 取消全局代理</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+
+<h3 id="远程代理加速"><a href="#远程代理加速" class="headerlink" title="远程代理加速"></a>远程代理加速</h3><p>本地代理的话，对于在个人电脑上开发是很有帮助的。但是如果服务器也要 <code>git加速</code> 的话就比较麻烦了，还要在服务器上配置一遍本地代理。与其这样做，不如直接在服务器端开一个代理来的方便。</p>
+<h4 id="服务器端的基本配置"><a href="#服务器端的基本配置" class="headerlink" title="服务器端的基本配置"></a>服务器端的基本配置</h4><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 安装 shadowsocks</span><br><span class="line">sudo pip install shadowsocks</span><br><span class="line"># 创建配置文件</span><br><span class="line">&#123;</span><br><span class="line">    "server":"*.*.*.*",</span><br><span class="line">    "server_port":***,</span><br><span class="line"><span class="addition">+    "local_server":"0.0.0.0", # 默认127.0.0.1</span></span><br><span class="line">    "local_port":1081,</span><br><span class="line">    "password":"<span class="comment">*****",</span></span><br><span class="line"><span class="comment">    "timeout":600,</span></span><br><span class="line"><span class="comment">    "method":"aes-256-cfb"</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line"><span class="comment">nohup /root/miniconda2/envs/base/bin/sslocal -c ss.json &gt;&gt; ss.log 1&gt;2&amp;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意: 这里需要添加一行配置，<code>0.0.0.0</code> 表示监听所有端口，原先默认 <code>127.0.0.1</code> 只监听本地端口</p>
+<p>P.S. 查看服务器绑定端口的命令:  <code>netstat -tunlp</code><br><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508005806.png" alt=""></p>
+</blockquote>
+<p>有了远端代理，所有东西突然就方便了很多。所有的配置都只要走 <code>x.x.x.x:1081</code> 转发一下就可以了。因为我们本地的代理并不是会一直开着的，而远端的代理是一直存在的。(我于是把 <a href="chrome-extension://padekgcemlokbadohgkifijomclgjgif/options.html#!/about" target="_blank" rel="noopener">SwitchyOmega</a> 、git 这些地方都加上了远端的代理)</p>
+<h3 id="Baacloud-加速"><a href="#Baacloud-加速" class="headerlink" title="Baacloud 加速"></a>Baacloud 加速</h3><p>由于我是用的我弟弟的 Baacloud，这种FQ工具提供的不是一台机器，而是多台机器的地址。由于有很多人用，所以每个节点拥挤程度不同。我自己编了一个小脚本，获取每个节点的 PING 值，选择延时最低的节点连接。</p>
+<p>具体的文章后续更新</p>
+<ul>
+<li><input disabled="" type="checkbox"> Baacloud 优化方法</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>经过测试下来，我的 github 拉代码的速度从 4kb 一下子提到了 100+ kb/s。有人觉得这个速度也并不快，但是实际上已经达到了速度的上线了。</p>
+<p>我远端服务器使用的是国内腾讯云的服务器 (学生优惠时候办的)，但是只有 1M 的小水管 (带宽的上限制也就是125kb/s) ，所以 git 也到达满速了。</p>
+<p>经过这个事情，我比较了一下国内外VPS的价格，发现除了考虑 硬盘/内存 以外，国内外的VPS带宽的差距是真的打。国内的带宽普遍是1/2M的小水管，国外的都能到达 1G。</p>
+<p>后续我可能考虑找一个稳定的海外VPS重新搞一下。</p>
+<h2 id="Socks5-http-https代理的区别"><a href="#Socks5-http-https代理的区别" class="headerlink" title="Socks5/http/https代理的区别"></a>Socks5/http/https代理的区别</h2><blockquote>
+<p>作者：黎明<br>链接：<a href="https://www.zhihu.com/question/65960461/answer/505625432" target="_blank" rel="noopener">https://www.zhihu.com/question/65960461/answer/505625432</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<p>知乎上看到一个回答</p>
+<p> HTTP 代理是基于 HTTP 协议的，属于<strong>应用层协议</strong>，一般只会代理转发 HTTP 请求，也可以通过CONNECT 方法来实现一般 TCP 的代理转发。</p>
+<p>而 Socks5 代理则相对底层一些，属于 <strong>会话层协议</strong> ，它直接通过协议握手来进行连接，并直接修改报头来实现转发，所以速度非常快，并且支持对 FTP 甚至是 UDP 进行代理转发，功能比 HTTP 代理要强大很多。</p>
+<p>两个代理在 OSI 模型中的位置：</p>
+<p><strong>物理层 &lt; 数据链路层 &lt; 网络层 &lt; 传输层 &lt; 会话层[socks5] &lt; 表示层 &lt; 应用层[http]</strong></p>
+<p>实际使用时，一般建议是在支持的时候使用 Socks5，不支持 Socks5 的话就用 HTTP。</p>
+<h2 id="腾讯云被封"><a href="#腾讯云被封" class="headerlink" title="腾讯云被封"></a>腾讯云被封</h2><p>博客写好没一天，我的这个远程代理就被腾讯云检测到了。不知道是哪个”用户”举报的我。为了解决这个方法，我感觉最好的还是买一个国外的VPS。</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508183725.png" style="zoom:50%;" />
+
+<h3 id="方案流程图"><a href="#方案流程图" class="headerlink" title="方案流程图"></a>方案流程图</h3><p>为了不让腾讯云发现的话，可以选择使用 frp 代理，在腾讯云上做一个端口转发，发到我家里闲置的电脑上，然后在本地搭代理。这样饶了一圈，会特别烦，但是应该可以躲避腾讯云的监控（虽然我不知道怎么被发现的）。</p>
+<p>此外，socks5 代理开启的时候，最好要加上演验证策略。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508190504.png" alt=""></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://zhuanlan.zhihu.com/p/87559002" target="_blank" rel="noopener">Git 命令行加速</a></p>
+<p><a href="https://www.zhihu.com/question/65960461/answer/505625432" target="_blank" rel="noopener">Socks5/http/https代理的区别</a></p>
+<p>知乎上还有一位大佬深入整理了一套代理的技术文章</p>
+<p><a href="https://zhuanlan.zhihu.com/p/28645864" target="_blank" rel="noopener">由浅入深写代理(3) -socks5 代理</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2020/05/03/several-tips-git-speed-up/" target="_blank" title="提升 git 速度的几个加速方法">http://ppsteven.github.io/2020/05/03/several-tips-git-speed-up/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/14/jz-offer-solution/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          剑指 Offer 归纳
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/05/python-multiprocessing-basic/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Python并发编程——多进程编程 multiprocessing 模块</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用镜像源-推荐"><span class="nav-number">1.</span> <span class="nav-text">使用镜像源(推荐)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改hosts（不推荐）"><span class="nav-number">2.</span> <span class="nav-text">修改hosts（不推荐）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用国内托管平台"><span class="nav-number">3.</span> <span class="nav-text">使用国内托管平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理服务器（选择方案）"><span class="nav-number">4.</span> <span class="nav-text">代理服务器（选择方案）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本地代理加速"><span class="nav-number">4.1.</span> <span class="nav-text">本地代理加速</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程代理加速"><span class="nav-number">4.2.</span> <span class="nav-text">远程代理加速</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务器端的基本配置"><span class="nav-number">4.2.1.</span> <span class="nav-text">服务器端的基本配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Baacloud-加速"><span class="nav-number">4.3.</span> <span class="nav-text">Baacloud 加速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺点"><span class="nav-number">5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Socks5-http-https代理的区别"><span class="nav-number">6.</span> <span class="nav-text">Socks5/http/https代理的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#腾讯云被封"><span class="nav-number">7.</span> <span class="nav-text">腾讯云被封</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方案流程图"><span class="nav-number">7.1.</span> <span class="nav-text">方案流程图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

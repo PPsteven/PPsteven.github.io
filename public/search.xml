@@ -1,6 +1,827 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>python并发编程——多线程编程 threading 协程</title>
+    <url>/2020/06/07/python-threading-basic/</url>
+    <content><![CDATA[<p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 <strong>多进程编程 multiprocessing</strong> 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，稍稍简单了点。</p>
+<p>本章主要介绍</p>
+<ul>
+<li>多线程threading 的基本使用方法</li>
+<li>GIL锁概念</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="threading-库使用"><a href="#threading-库使用" class="headerlink" title="threading 库使用"></a>threading 库使用</h2><p>基本使用方法和 multiprocessing 一样</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(name)</span>:</span></span><br><span class="line">    print(<span class="string">"线程 %s 正在运行"</span> % name)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        t = threading.Thread(target=worker, args=(i,))</span><br><span class="line">        t.start() <span class="comment">#启动线程，即让线程开始执行</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">threading</span>.<span class="title">Thread</span><span class="params">(group=None, target=None, name=None, args=<span class="params">()</span>, kwargs=&#123;&#125;, *, daemon=None)</span>¶</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>group 兼容逻辑，始终设置为默认 None</li>
+<li>target 目标函数</li>
+<li>args 传入tuple参数</li>
+<li>kwargs 传入字典参数</li>
+<li>name 线程名称，默认会自动起一个 <code>Thread-N</code> 的名字</li>
+<li>daemon 守护线程</li>
+</ul>
+<h4 id="属性-amp-方法"><a href="#属性-amp-方法" class="headerlink" title="属性 &amp; 方法"></a>属性 &amp; 方法</h4><ul>
+<li><p>ident 线程标识符<br>get_ident() </p>
+</li>
+<li><p>name &amp; get_name() &amp; setName() 获取/设置进程名</p>
+</li>
+<li><p>daemon &amp; isDaemon() &amp; setDaemon() 设置/判断 守护进程</p>
+</li>
+<li><p>is_alive() &amp; isAlive() 线程是否存活</p>
+</li>
+<li><p>join([timeout]) 线程阻塞</p>
+</li>
+<li><p>start() 和 run() 启动线程</p>
+<p>如同进程一样，线程也有两种构造方法。</p>
+<p>a. 通过 start() 启动线程，此方法每个线程对象只能调用一次。start()会调用run()方法。</p>
+<p>​    标准的run() 方法会执行 target 函数，并使用 args, kwargs参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">t = threading.Thread(target=worker, args=(i,))</span><br><span class="line">t.start() #启动线程，即让线程开始执行</span><br></pre></td></tr></table></figure>
+
+<p>b. 通过继承 <code>threading.Thread</code> 的子类重写 <code>run</code> 方法实现我们上面的功能</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThreading</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        super(MyThreading, self).__init__() <span class="comment"># 有两种方法调用父类，注意self的区别</span></span><br><span class="line">        <span class="comment"># threading.Thread.__init__(self)</span></span><br><span class="line">        self.args = args</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"线程 %s 正在运行"</span> % self.args)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        t = MyThreading(i)</span><br><span class="line">        t.start()</span><br></pre></td></tr></table></figure>
+
+<p>或者，更加通用一点</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThreading</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, group=None, target=None, name=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 args=<span class="params">()</span>, kwargs=None, *, daemon=None)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self, group=<span class="literal">None</span>, target=<span class="literal">None</span>, name=<span class="literal">None</span>,</span><br><span class="line">                 args=(), kwargs=<span class="literal">None</span>, daemon=<span class="literal">None</span>)</span><br><span class="line">        self.args = args</span><br><span class="line">        self.kwargs = kwargs</span><br><span class="line">        self.func = target</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.func(*self.args)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        t = MyThreading(target=worker, args=(i,))</span><br><span class="line">        t.start() <span class="comment">#启动线程，即让线程开始执行</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h4><ul>
+<li><p>threading.active_count() 当前存活的线程数目</p>
+<p>len(threading.enumerate()) 也可以计算出相同的结果</p>
+</li>
+<li><p>threading.current_thread()  当前正在执行的线程对象</p>
+</li>
+<li><p>threading.enumerate() 当前活着的线程列表</p>
+</li>
+<li><p>threading.main_thread() 主线程</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&gt;&gt; threading.enumerate())</span><br><span class="line">[&lt;_MainThread(MainThread, started <span class="number">4573310400</span>)&gt;, &lt;MyThreading(Thread<span class="number">-1</span>, started <span class="number">123145406984192</span>)&gt;, &lt;MyThreading(Thread<span class="number">-2</span>, started <span class="number">123145412239360</span>)&gt;, &lt;MyThreading(Thread<span class="number">-3</span>, started <span class="number">123145417494528</span>)&gt;, &lt;MyThreading(Thread<span class="number">-4</span>, started <span class="number">123145422749696</span>)&gt;, &lt;MyThreading(Thread<span class="number">-5</span>, started <span class="number">123145428004864</span>)&gt;]</span><br><span class="line">&gt;&gt; threading.main_thread()</span><br><span class="line">&lt;_MainThread(MainThread, started <span class="number">4573310400</span>)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们有一个主线程和程序运行中自主创建的5个子线程</p>
+</li>
+</ul>
+<blockquote>
+<p>线程 threading 和 mutiprocessing 异同</p>
+<ul>
+<li><p>没有线程池</p>
+</li>
+<li><p>线程间共享全局变量，没有多进程间复杂的沟通方式</p>
+</li>
+<li><p>共享全局变量依旧会存在冲突的问题，使用的方法为互斥锁</p>
+<p>Lock, RLock, Condtion, Semaphore, Event. Barrier<br>这一部分和 mutiprocessing一样</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="GIL-锁"><a href="#GIL-锁" class="headerlink" title="GIL 锁"></a>GIL 锁</h2><h3 id="GIL的基本概念"><a href="#GIL的基本概念" class="headerlink" title="GIL的基本概念"></a>GIL的基本概念</h3><blockquote>
+<p>In CPython, the global interpreter lock, or GIL, is a mutex that prevents multiple native threads from executing Python bytecodes at once. This lock is necessary mainly because CPython’s memory management is not thread-safe. (However, since the GIL exists, other features have grown to depend on the guarantees that it enforces.)</p>
+</blockquote>
+<p><strong>GIL(Global Interpreter Lock)，中文译为全局解释器锁。</strong></p>
+<p>Python 虽然是近年来非常火的一个语言，但是它并不是一个新语言，1991年第一个Python编译器诞生。那时候的计算机大多是单核CPU，也就不存在并行计算的问题。随着CPU性能的提升，单核CPU逐渐被多核CPU替代。随着而来的问题是，如何保持数据间的一致性。解决的最简单的方法是加锁，只是Python的这把锁太大了点。</p>
+<p>GIL本质上类似操作系统的 Mutex。GIL 的功能是：在 CPython 解释器中执行的每一个 Python 线程，都会先锁住自己，以阻止别的线程执行。</p>
+<h3 id="GIL的工作原理"><a href="#GIL的工作原理" class="headerlink" title="GIL的工作原理"></a>GIL的工作原理</h3><p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200607024751.png" alt="GIL工作原理"></p>
+<p>可以看到 Thread 1 和 Thread 3 并不是一次性执行完的，而是线程会主动释放。这里的原因是CPython中存在一个叫做 <code>间隔式检查（check_interval）</code> 的机制。CPython 解释器会轮询线程，每隔一段时间，CPython 就会强制当前线程释放GIL锁。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200607030558.png" alt=""></p>
+<p><strong>这和CPU时间片的概念一样</strong> 在Python3 中，“时间片”大致为15毫秒。 </p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="使用-multiprocessing-替代-threading"><a href="#使用-multiprocessing-替代-threading" class="headerlink" title="使用 multiprocessing 替代 threading"></a>使用 multiprocessing 替代 threading</h3><blockquote>
+<p>multiprocessing库的出现很大程度上是为了弥补thread库因为GIL而低效的缺陷。它完整的复制了一套thread所提供的接口方便迁移。唯一的不同就是它使用了多进程而不是多线程。每个进程有自己的独立的GIL，因此也不会出现进程之间的GIL争抢。</p>
+<p>– 作者：rookieyu<br>– 链接：<a href="https://www.jianshu.com/p/756c505ab828" target="_blank" rel="noopener">https://www.jianshu.com/p/756c505ab828</a></p>
+</blockquote>
+<p>multiprocessing 的问题在于，其占用的资源是高于多线程的。而且由于进程间不能读取对方的地址空间，导致了多进程沟通是较为复杂的，这个额外的成本使得原本就非常复杂的多线程编程变得更加困难了点。</p>
+<p>不过 threading 也并非是一无是处，虽然在CPU 利用率上表现的不尽人意，但是在高I/O操作的时候就非常方便。</p>
+<p><strong>总结：高CPU使用multiprocessing，高I/O使用threading</strong></p>
+<h3 id="改用其他编译器"><a href="#改用其他编译器" class="headerlink" title="改用其他编译器"></a>改用其他编译器</h3><p>使用JPython 或者 IronPython 编译器，可以解决这类问题</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p> <a href="https://docs.python.org/zh-cn/3/library/threading.html#threading.Thread.run" target="_blank" rel="noopener">threading— 基于线程的并行</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/38147045" target="_blank" rel="noopener">食之无味，弃之可惜—Python threading——线程对象</a></p>
+<p><a href="http://c.biancheng.net/view/5537.html" target="_blank" rel="noopener">Python GIL全局解释器锁详解（深度剖析）</a></p>
+<p><a href="https://www.jianshu.com/p/756c505ab828" target="_blank" rel="noopener">rookieyu 简书– GIL</a></p>
+]]></content>
+      <tags>
+        <tag>python</tag>
+        <tag>threading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mac + VMware + Centos7 下的网络配置</title>
+    <url>/2020/05/19/vmware-centos-environment-network/</url>
+    <content><![CDATA[<p>本文介绍，如何在 mac 系统下配置一个 无图形化的 centos 环境，难点在于网络配置</p>
+<p>教程参考:  <a href="https://www.bilibili.com/video/BV1bA411b7vs" target="_blank" rel="noopener">个人专属多节点Linux环境打造，Linux操作系统学习实验环境安装配置视频教程</a></p>
+<p>用到的工具</p>
+<ul>
+<li><p>centos 系统 </p>
+<blockquote>
+<p>阿里云站点: <a href="http://mirrors.aliyun.com/centos/7/isos/x86_64/" target="_blank" rel="noopener">http://mirrors.aliyun.com/centos/7/isos/x86_64/</a></p>
+<p>各个版本的ISO镜像文件说明：</p>
+<p>CentOS-7-x86_64-DVD-1708.iso        标准安装版（推荐）</p>
+<p>CentOS-7-x86_64-Everything-1708.iso    完整版，集成所有软件（以用来补充系统的软件或者填充本地镜像）</p>
+<p>CentOS-7-x86_64-LiveGNOME-1708.iso     GNOME桌面版  </p>
+<p>CentOS-7-x86_64-LiveKDE-1708.iso      KDE桌面版  </p>
+<p>CentOS-7-x86_64-Minimal-1708.iso      精简版，自带的软件最少</p>
+<p>CentOS-7-x86_64-NetInstall-1708.iso    网络安装版（从网络安装或者救援系统）</p>
+<p>作者：Ada54<br>链接：<a href="https://www.jianshu.com/p/a63f47e096e8" target="_blank" rel="noopener">https://www.jianshu.com/p/a63f47e096e8</a></p>
+</blockquote>
+<p>这里 <code>CentOS-7-x86_64-DVD-1708.iso</code> 是标准安装版，如果选择最小安装，和 <code>CentOS-7-x86_64-Minimal-1708.iso</code> (无界面版本)一样。</p>
+</li>
+<li><p>vmware 或者 virtualbox </p>
+</li>
+<li><p>finalShell/terminal</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<p>安装完 Linux 后的网络是默认不通的，为了使网络连通</p>
+<h2 id="设置桥接模式"><a href="#设置桥接模式" class="headerlink" title="设置桥接模式"></a>设置桥接模式</h2><p>在虚拟机挂机的情况下</p>
+<blockquote>
+<p>虚拟机 -&gt; 网络适配器 -&gt; 桥接模式 -&gt; 勾选 Wi-Fi 模式</p>
+</blockquote>
+<p>勾选完毕后，我们就可以看到 IP 和 子网 掩码，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200519012620.png" alt=""></p>
+<p>这个 ip 和 子网掩码 同样也是 <code>宿主机</code> 的 ip 和 子网掩码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200519013251.png" alt=""></p>
+<h2 id="分配静态地址"><a href="#分配静态地址" class="headerlink" title="分配静态地址"></a>分配静态地址</h2><p>由于虚拟机默认的是走的 DHCP，我们需要主动请求去获取 ip 地址。我们在使用虚拟机的时候肯定是希望一个固定的 ip。</p>
+<p>利用 <code>dhclient</code> 命令可以主动向 DHCP 服务器获取一个 ip 地址</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@192 ~]<span class="comment"># dhclient</span></span><br><span class="line">[root@192 ~]<span class="comment"># ip addr</span></span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:45:4d:90 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.1.8/24 brd 192.168.1.255 scope global noprefixroute ens33</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 2409:8a1e:5e7a:f280:c9ed:976f:94f1:9901/64 scope global noprefixroute dynamic </span><br><span class="line">       valid_lft 209430sec preferred_lft 123030sec</span><br><span class="line">    inet6 fe80::9f8c:26f6:3c23:c4d3/64 scope link noprefixroute </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<p>我们获得了一个 ip 地址 <code>192.168.1.8</code></p>
+<h2 id="设置固定-ip"><a href="#设置固定-ip" class="headerlink" title="设置固定 ip"></a>设置固定 ip</h2><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><blockquote>
+<ol>
+<li>如果你上面的静态 ip 没有主动分配的话，直接在本小节中修改配置也是可以的。<br>但是这样做的话，你需要设置一个比较大的 ip，如 192.168.0.20。这是因为在同一个局域网下，可能有别的设备（手机，平板）占用了某个 ip 地址，你需要去避开这一点。</li>
+<li>需要切换成 root 账号去操作</li>
+</ol>
+</blockquote>
+<h3 id="配置文件修改"><a href="#配置文件修改" class="headerlink" title="配置文件修改"></a>配置文件修改</h3><figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"># vi /etc/sysconfig/network-scripts/ifcfg-ens33 </span><br><span class="line">TYPE=Ethernet</span><br><span class="line">PROXY_METHOD=none </span><br><span class="line">BROWSER_ONLY=no</span><br><span class="line"><span class="deletion">- BOOTPROTO=dhcp</span></span><br><span class="line"><span class="addition">+ BOOTPROTO=static # 默认是 dhcp</span></span><br><span class="line">DEFROUTE=yes</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=yes</span><br><span class="line">IPV6_AUTOCONF=yes</span><br><span class="line">IPV6_DEFROUTE=yes</span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">IPV6_ADDR_GEN_MODE=stable-privacy</span><br><span class="line">NAME=ens33</span><br><span class="line">UUID=5bf952f3-8b37-4ded-b5bc-79ce0676e69d</span><br><span class="line">DEVICE=ens33</span><br><span class="line"><span class="deletion">- ONBOOT=no # 默认是no</span></span><br><span class="line"><span class="addition">+ ONBOOT=yes # 默认是no</span></span><br><span class="line"><span class="addition">+ IPADDR=192.168.1.8 # 填写刚刚分配给我们的 ip地址</span></span><br><span class="line"><span class="addition">+ NETMASK=255.255.255.0 # 填写刚刚查到的 子网掩码</span></span><br><span class="line"><span class="addition">+ GATEWAY=192.168.1.1 # 子网掩码 + ip 可得</span></span><br><span class="line"><span class="addition">+ DNS1=192.168.1.1 # 这里填写的 mac 上的 dns 服务器 mac-&gt;网络偏好设置-&gt;高级-&gt;DNS 可以查到</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="DNS服务器地址"><a href="#DNS服务器地址" class="headerlink" title="DNS服务器地址"></a>DNS服务器地址</h3><p>打开【系统偏好设置】-【网络】- 选中【Wi-Fi】项（如果您是WIFI上网请选择此项）- 点右侧【高级】<br>选择【TCP/IP】选项卡，记录好【子网掩码】、【路由器】地址、DNS选项卡下的DNS服务器地址（如果DNS服务器地址没有配置，也可以给配置个8.8.8.8）</p>
+<h2 id="网络重启"><a href="#网络重启" class="headerlink" title="网络重启"></a>网络重启</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart network.service</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看是否连通"><a href="#查看是否连通" class="headerlink" title="查看是否连通"></a>查看是否连通</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@192 ~]<span class="comment"># ping www.baidu.com</span></span><br><span class="line">PING www.a.shifen.com (36.152.44.95) 56(84) bytes of data.</span><br><span class="line">64 bytes from 36.152.44.95 (36.152.44.95): icmp_seq=1 ttl=56 time=11.3 ms</span><br><span class="line">64 bytes from 36.152.44.95 (36.152.44.95): icmp_seq=2 ttl=56 time=11.2 ms</span><br><span class="line">64 bytes from 36.152.44.95 (36.152.44.95): icmp_seq=3 ttl=56 time=65.8 ms</span><br><span class="line">^C</span><br><span class="line">--- www.a.shifen.com ping statistics ---</span><br><span class="line">3 packets transmitted, 3 received, 0% packet loss, time 2003ms</span><br><span class="line">rtt min/avg/max/mdev = 11.281/29.502/65.882/25.724 ms</span><br></pre></td></tr></table></figure>
+
+<h2 id="有界面版如果切换成无界面"><a href="#有界面版如果切换成无界面" class="headerlink" title="有界面版如果切换成无界面"></a>有界面版如果切换成无界面</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ systemctl <span class="built_in">set</span>-default multi-user.target (关闭图形界面) <span class="comment"># 执行以后,输入命令 reboot 重启机器就可以</span></span><br><span class="line">$ systemctl <span class="built_in">set</span>-default graphical.target (开启图形界面) <span class="comment"># 执行以后,输入命令 reboot 重启机器就可以</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://segmentfault.com/a/1190000015227575" target="_blank" rel="noopener">https://segmentfault.com/a/1190000015227575</a></p>
+]]></content>
+      <categories>
+        <category>centos</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>剑指 Offer 归纳</title>
+    <url>/2020/05/14/jz-offer-solution/</url>
+    <content><![CDATA[<p>《剑指 Offer 》 刷题小计，主要记录别人解题的思路和方法。</p>
+<p>以及题目的类型和重点</p>
+<a id="more"></a>
+
+<h4 id="面试题04-二维数组中的查找"><a href="#面试题04-二维数组中的查找" class="headerlink" title="面试题04. 二维数组中的查找"></a>面试题04. 二维数组中的查找</h4><p>方法</p>
+<ul>
+<li><p>左上/右下 排除式查找</p>
+<p>时间复杂度：<img src="https://www.nowcoder.com/equation?tex=O(%E8%A1%8C%E9%AB%98%20%2B%20%E5%88%97%E5%AE%BD)&preview=true" alt="img"><br>空间复杂度：<img src="https://www.nowcoder.com/equation?tex=O(1)&preview=true" alt="img"></p>
+</li>
+<li><p>N行折半查找</p>
+<blockquote>
+<p><a href="https://blog.nowcoder.net/n/d332492753844d18aa4edc484e3c1318" target="_blank" rel="noopener">https://blog.nowcoder.net/n/d332492753844d18aa4edc484e3c1318</a></p>
+</blockquote>
+<p>二维数组分为上下左右四个边界top，bottom，left，right：</p>
+<ul>
+<li>根据上边界折半查找——确定 right 范围</li>
+<li>根据下边界折半查找——确定 left 范围</li>
+<li>根据左边界折半查找——确定 top 范围</li>
+<li>根据右边界折半查找——确定 bottom 范围</li>
+</ul>
+</li>
+</ul>
+<h4 id="面试题06-从尾到头打印链表"><a href="#面试题06-从尾到头打印链表" class="headerlink" title="面试题06. 从尾到头打印链表"></a>面试题06. 从尾到头打印链表</h4><ul>
+<li><p>递归法</p>
+<p>递归是由计算机帮助实现 “栈” 结构</p>
+</li>
+<li><p>数据结构——栈 </p>
+<p>先进后出</p>
+</li>
+</ul>
+<h4 id="面试题07-重建二叉树"><a href="#面试题07-重建二叉树" class="headerlink" title="面试题07. 重建二叉树"></a>面试题07. 重建二叉树</h4><ul>
+<li><p>数据结构——二叉树</p>
+<p>根据 pre 确定 根节点</p>
+<p>根据 vin 确定左右子树的大小</p>
+</li>
+<li><p>递归编程</p>
+</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200512123358.png" style="zoom:50%;" />
+
+
+
+<h4 id="面试题09-用两个栈实现一个队列"><a href="#面试题09-用两个栈实现一个队列" class="headerlink" title="面试题09. 用两个栈实现一个队列"></a>面试题09. 用两个栈实现一个队列</h4><ul>
+<li><p>栈是后进先出，队列是先进先出。<br>可以使用2个栈来表示，一个表示入栈，还有一个表示出栈，出栈的顺序与入栈的顺序相反。</p>
+</li>
+<li><p>第一个栈弹出后压入第二个栈就可以了</p>
+</li>
+<li><p>python 栈 &amp; 队列 实现</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># python 栈实现</span></span><br><span class="line">stack = []</span><br><span class="line">stack.append(<span class="number">1</span>) <span class="comment"># 入栈</span></span><br><span class="line">stack.pop() <span class="comment"># 出栈</span></span><br><span class="line"><span class="comment"># python 队列实现</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque </span><br><span class="line">queue = deque([<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>]) </span><br><span class="line">queue.append(<span class="string">'D'</span>) <span class="comment"># 入队</span></span><br><span class="line">queue.popleft() <span class="comment"># 出队</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="面试题11-旋转数组的最小数字"><a href="#面试题11-旋转数组的最小数字" class="headerlink" title="面试题11. 旋转数组的最小数字"></a>面试题11. 旋转数组的最小数字</h4><ul>
+<li><p>变形的二分查找，但是有一些坑</p>
+<p>a. 正确情况下的二分查找</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200513113239.png" style="zoom: 67%;" />
+
+<p>b. 特殊情况</p>
+<p>当出现重复数字情形的时候，<strong>直接缩小左边界（因为最小值总是在右侧出现）</strong></p>
+<p>情形4 可以适应非递增数列的最小值为队首元素的情形。最后的代码非常巧妙</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200513113538.png" style="zoom:67%;" />
+
+</li>
+</ul>
+<h4 id="面试题12-矩阵中的路径"><a href="#面试题12-矩阵中的路径" class="headerlink" title="面试题12. 矩阵中的路径"></a>面试题12. 矩阵中的路径</h4><ul>
+<li>DFS 深度搜索</li>
+</ul>
+<h4 id="面试题13-机器人的运动范围"><a href="#面试题13-机器人的运动范围" class="headerlink" title="面试题13. 机器人的运动范围"></a>面试题13. 机器人的运动范围</h4><ul>
+<li><p>DFS 深度搜索</p>
+</li>
+<li><p>BFS 广度搜索</p>
+</li>
+<li><p>剪枝优化</p>
+<ul>
+<li><p>通过分析发现，本题只考虑走 右、下两个方向即可</p>
+</li>
+<li><p>数位和的计算上，用数学公式进行优化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s_x + <span class="number">1</span> <span class="keyword">if</span> (x + <span class="number">1</span>) % <span class="number">10</span> <span class="keyword">else</span> s_x - <span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514215019.png" alt=""></p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514214717.png" alt=""></p>
+</li>
+</ul>
+<blockquote>
+<p>参考：<a href="https://krahets.gitee.io/" target="_blank" rel="noopener">Krahets’s Blog</a></p>
+<p>这个大神些的东西，真的比原书的作者写的解法好，而且是python版</p>
+</blockquote>
+<h4 id="面试题14-I-剪绳子"><a href="#面试题14-I-剪绳子" class="headerlink" title="面试题14- I. 剪绳子"></a>面试题14- I. 剪绳子</h4><blockquote>
+<p>参考：<a href="https://leetcode-cn.com/problems/jian-sheng-zi-lcof/solution/xiang-jie-bao-li-di-gui-ji-yi-hua-ji-zhu-dong-tai-/" target="_blank" rel="noopener">腐烂的橘子🍊</a></p>
+</blockquote>
+<ul>
+<li>暴力法</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514215522.png" style="zoom: 50%;" />
+
+<p>递归函数 $F(n)=max(i\times(n-i),i\times F(n-i)),i=1,2,…,n-2F(n)=max(i×(n−i),i×F(n−i)),i=1,2,…,n−2$</p>
+<ul>
+<li><p><strong>记忆化技术（自顶向下）</strong></p>
+<p>递归函数中存在大量重复的计算，记忆化技术，可以帮助缩小时间，通过计算机验证</p>
+</li>
+<li><p><strong>方法三：动态规划（自底向上）(推荐方法)</strong></p>
+<p>动态规划的核心是，设定边界条件 和 </p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514220028.png" alt=""></p>
+</li>
+<li><p>方法四：动态规划优化解法</p>
+<p>任何大于 33 的数都可以拆分为数字 1，2，31，2，3 的和，且它们对 33 的余数总是 0，1，20，1，2</p>
+<p>可以降低 空间利用率</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200514220028.png" alt=""></p>
+</li>
+<li><p>方法五：数学推导</p>
+</li>
+</ul>
+<h4 id="面试题15-二进制中的1"><a href="#面试题15-二进制中的1" class="headerlink" title="面试题15-二进制中的1"></a>面试题15-二进制中的1</h4><ul>
+<li><p>python 二进制问题</p>
+<p>字符操作：</p>
+<p>n &amp; 1 验证最后一位是否是1</p>
+<p>n &amp; (n - 1) 消0</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>刷题</category>
+      </categories>
+      <tags>
+        <tag>剑指Offer，刷题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>提升 git 速度的几个加速方法</title>
+    <url>/2020/05/03/several-tips-git-speed-up/</url>
+    <content><![CDATA[<p>最近经常需要从github上拉代码下来，速度实在是太慢了。所以写这篇文件，来好好总结一下提速的方法。</p>
+<p>总的来说，方法有 替换 <strong>镜像源/修改hosts/使用国内托管平台/使用代理</strong></p>
+<p>经过实验下来，使用代理的效果最好</p>
+<a id="more"></a>
+
+<h2 id="使用镜像源-推荐"><a href="#使用镜像源-推荐" class="headerlink" title="使用镜像源(推荐)"></a>使用镜像源(推荐)</h2><blockquote>
+<p>参考 <a href="https://www.zhihu.com/question/27159393" target="_blank" rel="noopener">知乎Don.hub</a></p>
+</blockquote>
+<p>替换 github 镜像网站，把 <code>github.com</code> 替换成 <code>github.com.cnpmjs.org</code> </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https://github.com/graykode/nlp-tutorial</span><br><span class="line">https://github.com.cnpmjs.org/graykode/nlp-tutorial</span><br></pre></td></tr></table></figure>
+
+<p>这个方法最简单，提速效果还是很明显的。当然缺点也是很明显的，就是如果是一些不知名的项目，就没有对应的镜像源可以用了。</p>
+<h2 id="修改hosts（不推荐）"><a href="#修改hosts（不推荐）" class="headerlink" title="修改hosts（不推荐）"></a>修改hosts（不推荐）</h2><p>DNS污染是GFW的一个重要手段，通过修改 hosts 文件来直接绕过DNS解析是一个不错的方法。这是一个主流的解决方法，但是实测下来效果并不显著。</p>
+<p><strong>第一步: 找到以下两个域名对应最快的 ip 地址</strong></p>
+<p>查 ip 地址： <a href="https://www.ipaddress.com" target="_blank" rel="noopener">https://www.ipaddress.com</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">github.global.ssl.fastly.net  </span><br><span class="line">github.com</span><br></pre></td></tr></table></figure>
+
+<p><strong>第二步: 将找到的对应的 ip 添加至 hosts ( 地址: /etc/hosts)</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 举个例子</span><br><span class="line">213.54.23.32 github.global.ssl.fastly.net  </span><br><span class="line">212.44.53.42 github.com</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用国内托管平台"><a href="#使用国内托管平台" class="headerlink" title="使用国内托管平台"></a>使用国内托管平台</h2><p>通过国内托管平台，如码云 <code>gitee/阿里云/oschaina</code> 等作为中转，将代码 fork 到自己的仓库下。然后去 clone 对应仓库的repo，基本可以到达满速。</p>
+<p>搬运教程：<a href="https://zhuanlan.zhihu.com/p/111697412" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/111697412</a></p>
+<p>这也是一个不错的方法，就是稍微有点烦。而且对于小白来说，还容易碰到一个问题是，在使用 SSH 方式拉代码的话，需要碰到多个秘钥管理的麻烦事情。</p>
+<h2 id="代理服务器（选择方案）"><a href="#代理服务器（选择方案）" class="headerlink" title="代理服务器（选择方案）"></a>代理服务器（选择方案）</h2><p>最后我采用的是这个方案，参考 <a href="https://zhuanlan.zhihu.com/p/87559002" target="_blank" rel="noopener">这篇教程</a>。如果你手里有一台海外的VPS，就非常简单。</p>
+<h3 id="本地代理加速"><a href="#本地代理加速" class="headerlink" title="本地代理加速"></a>本地代理加速</h3><p><strong>第一步: 查看你的连接工具的监听端口</strong></p>
+<p>连接 VPS 的工具各不相同，这里以最常使用的 <code>shadowssocks</code> 为例，选择 <code>偏好设置-&gt;高级</code> 就可以查看 socks5 监听的端口。</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200507235526.png" style="zoom:50%;" />
+
+<p><strong>第二步：设置代理转发的端口</strong></p>
+<p><strong>设置全局代理</strong></p>
+<p>全局代理设置后，所有 git 的 http/https 都会走我们的代理端口</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># SOCKS5 协议，1080 端口修改成自己的本地 SOCKS5 代理端口</span></span><br><span class="line">git config --global http.proxy socks5://127.0.0.1:1080</span><br><span class="line">git config --global https.proxy socks5://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 协议，1081 端口修改成自己的本地 HTTP 代理端口</span></span><br><span class="line">git config --global http.proxy http://127.0.0.1:1081</span><br><span class="line">git config --global https.proxy https://127.0.0.1:1081</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置局部代理</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># SOCKS5 协议，1080 端口修改成自己的本地 SOCKS5 代理端口</span></span><br><span class="line">git config --global http.https://github.com.proxy socks5://127.0.0.1:1080</span><br><span class="line">git config --global https.https://github.com.proxy socks5://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 协议，1081 端口修改成自己的本地 HTTP 代理端口</span></span><br><span class="line">git config --global http.https://github.com.proxy https://127.0.0.1:1081</span><br><span class="line">git config --global https.https://github.com.proxy https://127.0.0.1:1081</span><br></pre></td></tr></table></figure>
+
+<p>设置后，我们可以打开 <code>~/.gitconfig</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[http &quot;https://github.com&quot;]</span><br><span class="line">        proxy = socks5://127.0.0.1:1080</span><br><span class="line">[https &quot;https://github.com&quot;]</span><br><span class="line">        proxy = socks5://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p>或者 <code>git config --global -l</code> 查看配置是否生效</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http.https://github.com.proxy=socks5://127.0.0.1:1080</span><br><span class="line">https.https://github.com.proxy=socks5://127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p><strong>取消代理</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 取消局部代理</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.https://github.com.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.https://github.com.proxy</span><br><span class="line"><span class="comment"># 取消全局代理</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
+
+<h3 id="远程代理加速"><a href="#远程代理加速" class="headerlink" title="远程代理加速"></a>远程代理加速</h3><p>本地代理的话，对于在个人电脑上开发是很有帮助的。但是如果服务器也要 <code>git加速</code> 的话就比较麻烦了，还要在服务器上配置一遍本地代理。与其这样做，不如直接在服务器端开一个代理来的方便。</p>
+<h4 id="服务器端的基本配置"><a href="#服务器端的基本配置" class="headerlink" title="服务器端的基本配置"></a>服务器端的基本配置</h4><figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"># 安装 shadowsocks</span><br><span class="line">sudo pip install shadowsocks</span><br><span class="line"># 创建配置文件</span><br><span class="line">&#123;</span><br><span class="line">    "server":"*.*.*.*",</span><br><span class="line">    "server_port":***,</span><br><span class="line"><span class="addition">+    "local_server":"0.0.0.0", # 默认127.0.0.1</span></span><br><span class="line">    "local_port":1081,</span><br><span class="line">    "password":"<span class="comment">*****",</span></span><br><span class="line"><span class="comment">    "timeout":600,</span></span><br><span class="line"><span class="comment">    "method":"aes-256-cfb"</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line"><span class="comment">nohup /root/miniconda2/envs/base/bin/sslocal -c ss.json &gt;&gt; ss.log 1&gt;2&amp;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意: 这里需要添加一行配置，<code>0.0.0.0</code> 表示监听所有端口，原先默认 <code>127.0.0.1</code> 只监听本地端口</p>
+<p>P.S. 查看服务器绑定端口的命令:  <code>netstat -tunlp</code><br><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508005806.png" alt=""></p>
+</blockquote>
+<p>有了远端代理，所有东西突然就方便了很多。所有的配置都只要走 <code>x.x.x.x:1081</code> 转发一下就可以了。因为我们本地的代理并不是会一直开着的，而远端的代理是一直存在的。(我于是把 <a href="chrome-extension://padekgcemlokbadohgkifijomclgjgif/options.html#!/about" target="_blank" rel="noopener">SwitchyOmega</a> 、git 这些地方都加上了远端的代理)</p>
+<h3 id="Baacloud-加速"><a href="#Baacloud-加速" class="headerlink" title="Baacloud 加速"></a>Baacloud 加速</h3><p>由于我是用的我弟弟的 Baacloud，这种FQ工具提供的不是一台机器，而是多台机器的地址。由于有很多人用，所以每个节点拥挤程度不同。我自己编了一个小脚本，获取每个节点的 PING 值，选择延时最低的节点连接。</p>
+<p>具体的文章后续更新</p>
+<ul>
+<li><input disabled="" type="checkbox"> Baacloud 优化方法</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>经过测试下来，我的 github 拉代码的速度从 4kb 一下子提到了 100+ kb/s。有人觉得这个速度也并不快，但是实际上已经达到了速度的上线了。</p>
+<p>我远端服务器使用的是国内腾讯云的服务器 (学生优惠时候办的)，但是只有 1M 的小水管 (带宽的上限制也就是125kb/s) ，所以 git 也到达满速了。</p>
+<p>经过这个事情，我比较了一下国内外VPS的价格，发现除了考虑 硬盘/内存 以外，国内外的VPS带宽的差距是真的打。国内的带宽普遍是1/2M的小水管，国外的都能到达 1G。</p>
+<p>后续我可能考虑找一个稳定的海外VPS重新搞一下。</p>
+<h2 id="Socks5-http-https代理的区别"><a href="#Socks5-http-https代理的区别" class="headerlink" title="Socks5/http/https代理的区别"></a>Socks5/http/https代理的区别</h2><blockquote>
+<p>作者：黎明<br>链接：<a href="https://www.zhihu.com/question/65960461/answer/505625432" target="_blank" rel="noopener">https://www.zhihu.com/question/65960461/answer/505625432</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<p>知乎上看到一个回答</p>
+<p> HTTP 代理是基于 HTTP 协议的，属于<strong>应用层协议</strong>，一般只会代理转发 HTTP 请求，也可以通过CONNECT 方法来实现一般 TCP 的代理转发。</p>
+<p>而 Socks5 代理则相对底层一些，属于 <strong>会话层协议</strong> ，它直接通过协议握手来进行连接，并直接修改报头来实现转发，所以速度非常快，并且支持对 FTP 甚至是 UDP 进行代理转发，功能比 HTTP 代理要强大很多。</p>
+<p>两个代理在 OSI 模型中的位置：</p>
+<p><strong>物理层 &lt; 数据链路层 &lt; 网络层 &lt; 传输层 &lt; 会话层[socks5] &lt; 表示层 &lt; 应用层[http]</strong></p>
+<p>实际使用时，一般建议是在支持的时候使用 Socks5，不支持 Socks5 的话就用 HTTP。</p>
+<h2 id="腾讯云被封"><a href="#腾讯云被封" class="headerlink" title="腾讯云被封"></a>腾讯云被封</h2><p>博客写好没一天，我的这个远程代理就被腾讯云检测到了。不知道是哪个”用户”举报的我。为了解决这个方法，我感觉最好的还是买一个国外的VPS。</p>
+<img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508183725.png" style="zoom:50%;" />
+
+<h3 id="方案流程图"><a href="#方案流程图" class="headerlink" title="方案流程图"></a>方案流程图</h3><p>为了不让腾讯云发现的话，可以选择使用 frp 代理，在腾讯云上做一个端口转发，发到我家里闲置的电脑上，然后在本地搭代理。这样饶了一圈，会特别烦，但是应该可以躲避腾讯云的监控（虽然我不知道怎么被发现的）。</p>
+<p>此外，socks5 代理开启的时候，最好要加上演验证策略。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508190504.png" alt=""></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://zhuanlan.zhihu.com/p/87559002" target="_blank" rel="noopener">Git 命令行加速</a></p>
+<p><a href="https://www.zhihu.com/question/65960461/answer/505625432" target="_blank" rel="noopener">Socks5/http/https代理的区别</a></p>
+<p>知乎上还有一位大佬深入整理了一套代理的技术文章</p>
+<p><a href="https://zhuanlan.zhihu.com/p/28645864" target="_blank" rel="noopener">由浅入深写代理(3) -socks5 代理</a></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>代理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python并发编程——多进程编程 multiprocessing 模块</title>
+    <url>/2020/04/05/python-multiprocessing-basic/</url>
+    <content><![CDATA[<p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。前两者是由于操作系统控制的，协程是由用户控制。所以在多进程的编程上，不同操作系统的效果不一样。如果是为了学习多进程编辑，建议在Mac Os 或者 Linux 上。</p>
+<p>本篇介绍基于进程的并行操作，主要用到的模块是 <code>multiprocessing</code> </p>
+<a id="more"></a>
+
+<h2 id="简单多进程编程"><a href="#简单多进程编程" class="headerlink" title="简单多进程编程"></a>简单多进程编程</h2><p>简单多进程用 <code>Process</code>  和 <code>Pool</code> 两个基础类就可以实现</p>
+<h3 id="Process"><a href="#Process" class="headerlink" title="Process"></a>Process</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(name)</span>:</span></span><br><span class="line">    print(<span class="string">'hello'</span>, name)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    p = Process(target=f, args=(<span class="string">'bob'</span>,))</span><br><span class="line">    p.start()  <span class="comment"># 启动进程</span></span><br><span class="line">    p.join()  <span class="comment"># 阻塞进程，只有当本次进程完成后才运行下一进程。进程同步逻辑。</span></span><br></pre></td></tr></table></figure>
+
+<p>下面我们可以详细看看 Process 类的属性，构造方法和方法</p>
+<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">multiprocessing</span>.<span class="title">Process</span><span class="params">(group=None, target=None, name=None, args=<span class="params">()</span>, kwargs=&#123;&#125;, *, daemon=None)</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><em>group</em>    兼容逻辑，始终设置为None</p>
+</li>
+<li><p><em>target</em>     目标函数</p>
+</li>
+<li><p><em>args, kwargs</em>    传入目标函数的参数，列表参数和字典参数</p>
+</li>
+<li><p><em>name</em>   进程名称</p>
+</li>
+<li><p><em>daemon</em>  后台运行，守护进程。若 daemon =True，该进程会一直存在于主进程中，伴随着父进程终止而终止。</p>
+<blockquote>
+<p>Tips： 守护进程</p>
+<p>主进程结束后，子进程不一定会运行结束。如果我们需要让父进程终止的时候，可以设置子进程为守护进程。注意的是，守护进程不能够再创造子进程了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">multiprocessing.Process(group=<span class="literal">None</span>, target=<span class="literal">None</span>, name=<span class="literal">None</span>, args=(), kwargs=&#123;&#125;, *, daemon=<span class="literal">True</span>) <span class="comment"># 创建Process类时设置</span></span><br><span class="line">p.daemon = <span class="literal">True</span> <span class="comment"># 主动设置deemon 属性</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><em>pid</em>  进程ID</li>
+<li><em>name</em>  进程名</li>
+<li><em>deamon</em> 设置后台守护进程</li>
+<li><em>exitcode</em> 子进程退出代码。如果进程尚未终止，这将是 <code>None</code> 。负值 <em>-N</em> 表示孩子被信号 <em>N</em> 终止。</li>
+</ul>
+<p>我们可以轻松的通过访问任一 Process 类的变量获取基本信息</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">multiprocessing.current_process().pid</span><br><span class="line">multiprocessing.current_process().name</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><p>run()  进程活动的方法</p>
+<blockquote>
+<p>通过重载 run 方法实现进程</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyProcess</span><span class="params">(multiprocessing.Process)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        name = multiprocessing.current_process().name</span><br><span class="line">        pid = multiprocessing.current_process().pid</span><br><span class="line">        print(<span class="string">f'name:<span class="subst">&#123;name&#125;</span>, pid:<span class="subst">&#123;pid&#125;</span>'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">     p = MyProcess()</span><br><span class="line">     p.start()</span><br><span class="line">     p.join()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意的是，尽管我们修改的是 run 方法。我们启动进程的方法还是 p.start</p>
+</blockquote>
+</li>
+<li><p>start()   启动进程</p>
+</li>
+<li><p>join([timeout]) 进程阻塞，直到进程终止。</p>
+<p>timeout 是阻塞的时间，默认None，一直阻塞直到进程终止。</p>
+</li>
+<li><p>is_alive()  进程存在返回 True， 否则 False</p>
+</li>
+<li><p>terminate()/kill() 在Unix上，这是使用 <code>SIGTERM</code> 信号完成的</p>
+</li>
+<li><p>close() 关闭 <code>Process</code>对象，释放与之关联的所有资源</p>
+</li>
+</ul>
+<h3 id="Pool"><a href="#Pool" class="headerlink" title="Pool"></a>Pool</h3><p>如果需要运行多个子进程，采用进程池 <code>Pool</code> 的方式可以节省程序开销。进程的创建和销毁都是需要操作系统资源的。</p>
+<h4 id="进程池Pool-vs-Process"><a href="#进程池Pool-vs-Process" class="headerlink" title="进程池Pool vs Process"></a>进程池Pool vs Process</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(msg)</span>:</span></span><br><span class="line">    print(<span class="string">"%s is now running, process id: %s"</span> % (msg, os.getpid()))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    po = multiprocessing.Pool(<span class="number">4</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        po.apply_async(worker, args=(i,))</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"main process starting...."</span>)</span><br><span class="line">    po.close()</span><br><span class="line">    po.join()</span><br><span class="line">    print(<span class="string">"main process stoping...."</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">''' 输出</span></span><br><span class="line"><span class="string">main process starting....</span></span><br><span class="line"><span class="string">0 is now running, process id: 3436</span></span><br><span class="line"><span class="string">1 is now running, process id: 3437</span></span><br><span class="line"><span class="string">2 is now running, process id: 3438</span></span><br><span class="line"><span class="string">4 is now running, process id: 3436</span></span><br><span class="line"><span class="string">3 is now running, process id: 3439</span></span><br><span class="line"><span class="string">5 is now running, process id: 3437</span></span><br><span class="line"><span class="string">6 is now running, process id: 3438</span></span><br><span class="line"><span class="string">7 is now running, process id: 3436</span></span><br><span class="line"><span class="string">8 is now running, process id: 3437</span></span><br><span class="line"><span class="string">9 is now running, process id: 3439</span></span><br><span class="line"><span class="string">main process stoping....</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+
+<p>使用进程池的优点提现在</p>
+<ul>
+<li><p>限制同一时间进程并行的数目<br>多进程可以提高程序运行的效率，但是过多的进程切换反而会降低效率。原因是a.进程会占用计算机资源，资源决定了进程不能开启过多。b.进程的切换开销比较大，占用过多CPU资源。</p>
+</li>
+<li><p>进程池减少不必要的创建，销毁过程。</p>
+<p>程序中，Pool(4) 的进程号只有 3436，3437，3438，3439 这四个进程号。证明进程池省去了创建和销毁的过程。</p>
+</li>
+</ul>
+<p>当进程数和计算机的内核数一致的时候，效率最高。我们可以先看看自己计算机的内核个数，使用 <code>os.cpu_count()</code> 或者 <code>multiprocess.cpu_count()</code> 来查看内核个数。<br>如果不填写内核参数，Pool 默认采取机器的内核个数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Pool</span><br><span class="line">p = Pool(<span class="number">4</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">    p.apply_async(f, args=(i,))  <span class="comment"># 异步调用</span></span><br><span class="line">    p.apply(f, args=(i,)) <span class="comment"># 同步调用</span></span><br><span class="line">p.close()</span><br><span class="line">p.join()</span><br></pre></td></tr></table></figure>
+
+<h4 id="构造方法-1"><a href="#构造方法-1" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">multiprocessing</span>.<span class="title">pool</span>.<span class="title">Pool</span><span class="params">([processes[, initializer[, initargs[, maxtasksperchild[, context]]]]])</span></span></span><br><span class="line"><span class="class"># 一个进程池对象，它控制可以提交作业的工作进程池。它支持带有超时和回调的异步结果，以及一个并行的 <span class="title">map</span> 实现。</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>processes 进程数，默认采用 <code>os.cpu_count()</code></li>
+<li>initializer(*initargs) 进程池调用前的初始化方法</li>
+</ul>
+<h4 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><p>apply(<em>func</em>[, <em>args</em>[, <em>kwds</em>]]) </p>
+<p>返回结果前阻塞。这种情况下，<a href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#multiprocessing.pool.Pool.apply_async" target="_blank" rel="noopener"><code>apply_async()</code></a> 更适合并行化工作。另外 <em>func</em> 只会在一个进程池中的一个工作进程中执行。</p>
+</li>
+<li><p>apply_async(<em>func</em>[, <em>args</em>[, <em>kwds</em>[, <em>callback</em>[, <em>error_callback</em>]]]])  非阻塞操作</p>
+<p>callback 是一个只接受一个参数的可调用对象。成功则执行callback，失败执行 error_callback</p>
+</li>
+<li><p>map(<em>func</em>, <em>iterable</em>[, <em>chunksize</em>]) </p>
+<p>内置函数 <code>map</code> 的并行版本，map会 <strong>保持阻塞</strong> 直到获得结果。</p>
+<p><em>iterable</em> 可以切分成多块运行，chunksize 指定块的大小。</p>
+<p>当 iterable 太大的时候，为了节省内存，可以使用 imap 和 imap_unordered</p>
+</li>
+<li><p>map_async(<em>func</em>, <em>iterable</em>[, <em>chunksize</em>[, <em>callback</em>[, <em>error_callback</em>]]]) </p>
+<p>map 的对应的<strong>异步</strong>回调方法</p>
+</li>
+<li><p>imap(<em>func</em>, <em>iterable</em>[, <em>chunksize</em>] 需要显式的设置 chunksize，可以极大的加快 map  的速度。原先map中的默认值为1。</p>
+</li>
+<li><p>imap_unordered    imap 的无序版本</p>
+</li>
+</ul>
+<blockquote>
+<p>apply_async 和 map_async 除了是异步执行的以外，它们还会放回一个 <strong>AsyncResult</strong> 对象，它有如下方法</p>
+</blockquote>
+<ul>
+<li>get([<em>timeout</em>]) 获取执行的结果</li>
+<li>wait([<em>timeout</em>]) 阻塞，直到返回结果</li>
+<li>ready 是否已完成结果</li>
+<li>successful 是否已完成且没有发生异常</li>
+</ul>
+<h2 id="进程间通信——数据传递"><a href="#进程间通信——数据传递" class="headerlink" title="进程间通信——数据传递"></a>进程间通信——数据传递</h2><p>multiprocessing  支持两种通信方式：Queue(队列) , Pipe(管道) </p>
+<h3 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">q = Queue(maxsize=<span class="number">4</span>)</span><br><span class="line">q.put(obj, block=<span class="literal">True</span>, timeout=<span class="literal">None</span>) <span class="comment"># 存入队列中</span></span><br><span class="line">q.get(obj, block=<span class="literal">False</span>) <span class="comment"># 读取队列</span></span><br><span class="line"><span class="comment"># block: 是否主动阻塞，阻塞的时间为timeout。timeout=None 代表一直阻塞。block为 False 的时候，会主动抛出 queue.Full 和 queue.Empty 的错误。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Pipe 建立的是一个双全工的连接</span></span><br><span class="line">parent_conn, child_conn = Pipe()</span><br><span class="line">parent_conn.send([<span class="number">42</span>, <span class="literal">None</span>, <span class="string">'hello'</span>]) <span class="comment"># 发送</span></span><br><span class="line">parent_conn.close() <span class="comment"># 关闭 一端的连接，关闭后不可以再次进行 send 和 recv 操作</span></span><br><span class="line">child_conn.recv() <span class="comment"># 接收</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看出，Pipe 是只能在两个进程进行通信，而 Queue 可以支持多个队列。Pipe 解决了进程之间的通信问题，Queue 还加上了一个缓冲区的作用。</p>
+</blockquote>
+<p>那么multiprocessing.Queue 和 标准库中的 queue 的区别是什么？</p>
+<ol>
+<li>需要注意的是这里是多进程编程，进程是资源分配的最小单位。不同的进程是无法获取对方堆栈的。Queue 可以解决这一个数据共享的问题。如果我们现在采用的是多线程编程，那么就可以直接采用标准库的queue 来替代。</li>
+<li>multiprocessing 中的 Queue 实现了标准库中的 queue 中的所有方法，除了<code>task_done</code> 和 <code>join</code> 方法</li>
+</ol>
+<h3 id="Pipe-的使用"><a href="#Pipe-的使用" class="headerlink" title="Pipe 的使用"></a>Pipe 的使用</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conn1, conn2 = multiprocessing.Pipe([duplex])</span><br><span class="line"><span class="comment"># 返回 Connection 对象 conn1,conn2 分别代表管道的两端。Connection 类型</span></span><br><span class="line"><span class="keyword">while</span> conn1.poll():</span><br><span class="line">   conn1.recv()</span><br></pre></td></tr></table></figure>
+
+<p>duplex: True 代表双全工，即管道的两端是可以双向的通信的。False 代表单向， <code>conn1</code> 只能用于接收消息，而 <code>conn2</code> 仅能用于发送消息。</p>
+<p><strong>Connect 对象的方法有</strong></p>
+<ul>
+<li><p>send/recv 发送的对象必须是可序列化的</p>
+</li>
+<li><p>send_bytes(<em>buffer</em>[, <em>offset</em>[, <em>size<em>]]) / recv_bytes([</em>maxlength<em>]) / <code>recv_bytes_into</code>(</em>buffer</em>[, <em>offset</em>]) </p>
+<p>发送 和 接受 <a href="https://docs.python.org/zh-cn/3.7/glossary.html#term-bytes-like-object" target="_blank" rel="noopener">bytes-like object</a> 字节类对象</p>
+</li>
+<li><p>poll([<em>timeout</em>]) 返回连接对象中是否有可以读取的数据</p>
+</li>
+<li><p>close() 关闭</p>
+</li>
+</ul>
+<blockquote>
+<p>注意的一点是，Connect 的仅仅支持少量数据的发送，对于多大的对象（32M+），可能会引发异常</p>
+</blockquote>
+<h3 id="Queue-的使用"><a href="#Queue-的使用" class="headerlink" title="Queue 的使用"></a>Queue 的使用</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">multiprocessing</span>.<span class="title">Queue</span><span class="params">([maxsize])</span></span></span><br></pre></td></tr></table></figure>
+
+<p>主要实现了如下属性&amp;方法，基本和 queue 一样</p>
+<ul>
+<li><p>qsize 队列大小，由于是多进程的上下文，这个数字不是很可靠，而且在Mac OS X 上可能存在异常。</p>
+</li>
+<li><p>empty 是否为空</p>
+</li>
+<li><p>full 是否为满</p>
+</li>
+<li><p>put(<em>obj</em>[, <em>block</em>[, <em>timeout</em>]])  当没有可用缓冲槽的时，抛出 <a href="https://docs.python.org/zh-cn/3.7/library/queue.html#queue.Empty" target="_blank" rel="noopener"><code>queue.Empty</code></a> 异常</p>
+<p>put_nowait(<em>obj</em>) 等价于 put(obj, False)</p>
+</li>
+<li><p>get([<em>block</em>[, <em>timeout</em>]]) 当没有可取用对象时，抛出 <a href="https://docs.python.org/zh-cn/3.7/library/queue.html#queue.Empty" target="_blank" rel="noopener"><code>queue.Empty</code></a> 异常</p>
+<p>get_nowait() 等价于 get(False)</p>
+</li>
+<li><p>close() 指示当前进程将不会再往队列中放入对象</p>
+</li>
+</ul>
+<h3 id="Queue的几种变形"><a href="#Queue的几种变形" class="headerlink" title="Queue的几种变形"></a>Queue的几种变形</h3><ol>
+<li><p>multiprocessing.SimpleQueue() 简化的队列，其只具有empty、get、put3个方法。</p>
+<p>这个队列实际上是用 Pipe 实现的</p>
+</li>
+<li><p>multiprocessing.JoinableQueue(maxsize=0)  建立<strong>可阻塞的队列实例</strong>，采用一般队列的方式访问。加上了 <code>join</code>  和 <code>task_done</code> 两个方法。</p>
+</li>
+</ol>
+<h2 id="进程间通信——数据共享"><a href="#进程间通信——数据共享" class="headerlink" title="进程间通信——数据共享"></a>进程间通信——数据共享</h2><p>进程间的通信 Pipe 和 Queue 能解决小批量数据的传输，如 <strong>Pipe.send() 方法发送的数据一般不超过 32M</strong>。对于大量的数据，可以借助 <code>共享内存</code> 和 <code>Manager 类</code>实现。<code>Manager</code>实现了两个重要的类型 <code>list</code> 和 <code>dict</code>。</p>
+<h3 id="Manager-类（共享进程）"><a href="#Manager-类（共享进程）" class="headerlink" title="Manager 类（共享进程）"></a>Manager 类（共享进程）</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(list, x)</span>:</span></span><br><span class="line">    print(list, x)</span><br><span class="line">    list.append(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">     manager = multiprocessing.Manager()</span><br><span class="line">     mag_list = manager.list([]) </span><br><span class="line">     </span><br><span class="line"></span><br><span class="line">     <span class="keyword">with</span> multiprocessing.Pool(<span class="number">4</span>) <span class="keyword">as</span> p:</span><br><span class="line">         <span class="keyword">for</span> item <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]:</span><br><span class="line">            p.apply(f, args=(mag_list, item))</span><br><span class="line">         p.close()</span><br><span class="line">     print(mag_list)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output: </span></span><br><span class="line"><span class="comment"># [] 1</span></span><br><span class="line"><span class="comment"># [1] 2</span></span><br><span class="line"><span class="comment"># [1, 2] 3</span></span><br><span class="line"><span class="comment"># [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以尝试 mag_list=[] ,最后的结果是不会发生任何变化</span></span><br><span class="line"><span class="comment"># [] 1</span></span><br><span class="line"><span class="comment"># [] 2</span></span><br><span class="line"><span class="comment"># [] 3</span></span><br><span class="line"><span class="comment"># []</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Value-Array（共享内存）"><a href="#Value-Array（共享内存）" class="headerlink" title="Value, Array（共享内存）"></a>Value, Array（共享内存）</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">multiprocessing.Value(typecode_or_type, *args, lock=<span class="literal">True</span>)</span><br><span class="line">multiprocessing.Array(typecode_or_type, size_or_initializer, *, lock=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>typecode_or_type  类型码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200406150352.png" alt=""></p>
+</li>
+<li><p>size_or_initializer 大小，或者初始化操作</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">multiprocessing.Array(<span class="string">'i'</span>, <span class="number">3</span>) <span class="comment"># 结果 [0,0,0]</span></span><br><span class="line">multiprocessing.Array(<span class="string">'i'</span>, range(<span class="number">3</span>)) <span class="comment"># 结果 [0,1,2]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Lock 锁操作，在修改访问数据的时候，通过设置为 True 能锁定资源，阻塞其他进程的访问。</p>
+</li>
+</ul>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">v = multiprocessing.Value(<span class="string">'d'</span>, <span class="number">10</span>, lock=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">with</span> v.get_lock(): <span class="comment"># 修改值前，加锁</span></span><br><span class="line">    v.value += <span class="number">1</span>  <span class="comment"># 属性 value 取值</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="数据进程锁"><a href="#数据进程锁" class="headerlink" title="数据进程锁"></a>数据进程锁</h2><p>上一部分解决了进程间共享数据的操作。但是不同进程若是需要对于共享数据进行修改，可能会发生冲突。解决这一类问题的方式就是在 重要数据修改的时候加上锁，修改完毕再释放。</p>
+<p>multiprocessing 的 互斥&amp;同步操作有： <code>Lock</code>,  <code>Semaphore</code> , <code>Event</code> 和 <code>Barrier</code></p>
+<h3 id="Lock-原始锁"><a href="#Lock-原始锁" class="headerlink" title="Lock 原始锁"></a>Lock 原始锁</h3><p>原始锁（非递归锁）对象，一旦一个进程或者线程拿到了锁，后续的任何其他进程或线程的其他请求都会被阻塞直到锁被释放。<strong>任何进程或线程都可以释放锁。</strong></p>
+<blockquote>
+<p>Lock 一般只针对一个资源同步访问</p>
+</blockquote>
+<h3 id="RLock-递归锁"><a href="#RLock-递归锁" class="headerlink" title="RLock 递归锁"></a>RLock 递归锁</h3><p><strong>递归锁必须由持有线程、进程亲自释放。</strong>递归锁和原始锁的区别是，一个进程可以多次加锁，每次加锁，锁加一。每次释放，锁减一。所以当获得锁和释放锁的数量相等的时候，才能释放锁住的资源。使用方法和Lock 一样。</p>
+<h3 id="Semaphore-信号量"><a href="#Semaphore-信号量" class="headerlink" title="Semaphore 信号量"></a>Semaphore 信号量</h3><p>Semaphore 一般是针对多个(有限)资源的访问的，它的操作和Lock一样。只是初始化的时候，需要给出型号量的初始值。可以认为Semaphore(1) 和 RLock是相同的。</p>
+<blockquote>
+<p>上面三个锁的使用方法都可以使用 acquire/release 操作</p>
+</blockquote>
+<h3 id="Barrier-屏障"><a href="#Barrier-屏障" class="headerlink" title="Barrier 屏障"></a>Barrier 屏障</h3><p>当若干个进程没有到达屏障点的时候，会自动阻塞，一旦到达屏障点，将会自动解除阻塞并启动运行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200406020450.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">threading</span>.<span class="title">Barrier</span><span class="params">(parties, action=None, timeout=None)</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>parties  栅栏的个数</li>
+<li>action  当突破栅栏后，会在被释放的其中一个进程中运行</li>
+</ul>
+<h4 id="属性-1"><a href="#属性-1" class="headerlink" title="属性"></a>属性</h4><ul>
+<li>n_waiting  当前时刻正在栅栏中阻塞的线程数量。</li>
+<li>broken  值为 <code>True</code> 表明栅栏为破损态。</li>
+</ul>
+<h4 id="方法-2"><a href="#方法-2" class="headerlink" title="方法"></a>方法</h4><ul>
+<li>wait(<em>timeout=None</em>) 阻塞操作，函数会返回一个范围在 0~parties-1 内的整数。当为0 的时候，代表栅栏破裂</li>
+<li>reset() 重置为初始状态</li>
+<li>abort() 与reset() 相反，设置为破损状态</li>
+</ul>
+<h3 id="Event-事件锁"><a href="#Event-事件锁" class="headerlink" title="Event 事件锁"></a>Event 事件锁</h3><p>这是线程之间通信的最简单机制之一：一个线程发出事件信号，而其他线程等待该信号。</p>
+<h4 id="方法-3"><a href="#方法-3" class="headerlink" title="方法"></a>方法</h4><ul>
+<li>is_set()   判断内部标识位是否为True</li>
+<li>set()  设置内部标识位为True</li>
+<li>clear()  设置内部标识位为False</li>
+<li>wait()  阻塞线程直到内部变量为true。如果调用时内部标志为true，将立即返回。否则将阻塞线程，</li>
+</ul>
+<h4 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h4><p>由于之前没有接触过Event，这里自己练手写了一个Event 的小例子。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">car</span><span class="params">(e, car_id)</span>:</span></span><br><span class="line">    print(<span class="string">f'car <span class="subst">&#123;car_id&#125;</span> is coming '</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> e.is_set():</span><br><span class="line">        print(<span class="string">f'car <span class="subst">&#123;car_id&#125;</span> is waiting'</span>)</span><br><span class="line">        e.wait()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> e.is_set():</span><br><span class="line">        print(<span class="string">f'car <span class="subst">&#123;car_id&#125;</span> pass the cross road'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">traffic_light</span><span class="params">(e)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    红绿灯切换的时候，e.clear 和 e.set 是成队出现的。</span></span><br><span class="line"><span class="string">    因为红绿本省就是相互同步的一个操作</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>: <span class="comment"># 每5秒切换一次红绿灯</span></span><br><span class="line">        <span class="keyword">if</span> e.is_set():</span><br><span class="line">            time.sleep(<span class="number">2</span>)</span><br><span class="line">            print(<span class="string">'&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; green to red &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;'</span>)</span><br><span class="line">            e.clear()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> e.is_set():</span><br><span class="line">            time.sleep(<span class="number">2</span>)</span><br><span class="line">            print(<span class="string">'&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; red to green &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;'</span>)</span><br><span class="line">            e.set()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    event = multiprocessing.Event()</span><br><span class="line">    event.clear()  <span class="comment"># 默认设置红灯</span></span><br><span class="line">    cars = [multiprocessing.Process(target=car, args=(event,car_id)) <span class="keyword">for</span> car_id <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line">    lights = multiprocessing.Process(target=traffic_light, args=(event,))</span><br><span class="line">    lights.daemon = <span class="literal">True</span>  <span class="comment"># 设置完这一步，可以在小汽车都开走后，结束整个程序。</span></span><br><span class="line">    lights.start()</span><br><span class="line">    <span class="keyword">for</span> each <span class="keyword">in</span> cars:</span><br><span class="line">        each.start()</span><br><span class="line">        time.sleep(<span class="number">1</span>) <span class="comment"># 间隔一秒钟发车</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> each <span class="keyword">in</span> cars:</span><br><span class="line">        each.join()</span><br><span class="line">    <span class="comment"># 当 each.join 执行完毕，此时 traffic_light 还在后台运行</span></span><br><span class="line">    <span class="comment"># 但是由于没有添加 traffic_light.join() 所以此时 mian 结束，带着守护进程 traffic_light一起结束</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果如下</span></span><br><span class="line">car <span class="number">0</span> <span class="keyword">is</span> coming </span><br><span class="line">car <span class="number">0</span> <span class="keyword">is</span> waiting</span><br><span class="line">car <span class="number">1</span> <span class="keyword">is</span> coming </span><br><span class="line">car <span class="number">1</span> <span class="keyword">is</span> waiting</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; red to green &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">....</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; green to red &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">car <span class="number">8</span> <span class="keyword">is</span> coming </span><br><span class="line">car <span class="number">8</span> <span class="keyword">is</span> waiting</span><br><span class="line">car <span class="number">9</span> <span class="keyword">is</span> coming </span><br><span class="line">car <span class="number">9</span> <span class="keyword">is</span> waiting</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; red to green &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">car <span class="number">8</span> <span class="keyword">pass</span> the cross road</span><br><span class="line">car <span class="number">9</span> <span class="keyword">pass</span> the cross road</span><br></pre></td></tr></table></figure>
+
+<p>如果我们不启动守护进程，而是一直让程序在后台运行。这样我们可以感受到  <strong>守护进程</strong>  的作用</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"> cars = [multiprocessing.Process(target=car, args=(event,car_id)) for car_id in range(10)]</span><br><span class="line"> lights = multiprocessing.Process(target=traffic_light, args=(event,))</span><br><span class="line"><span class="deletion">-   lights.daemon = True  # 设置完这一步，可以在小汽车都开走后，结束整个程序。</span></span><br><span class="line">    lights.start()</span><br><span class="line">    for each in cars:</span><br><span class="line">        each.start()</span><br><span class="line">        time.sleep(1) # 间隔一秒钟发车</span><br><span class="line"></span><br><span class="line">    for each in cars:</span><br><span class="line">        each.join()</span><br><span class="line"><span class="addition">+   lights.join() # </span></span><br><span class="line"># 输出结果如下</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; red to green &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">car 9 pass the cross road</span><br><span class="line">car 8 pass the cross road</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; green to red &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; red to green &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; green to red &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; red to green &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Condition-条件锁"><a href="#Condition-条件锁" class="headerlink" title="Condition 条件锁"></a>Condition 条件锁</h3><h3 id="几种方法的比较"><a href="#几种方法的比较" class="headerlink" title="几种方法的比较"></a>几种方法的比较</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lock</td>
+<td>原始锁</td>
+<td>当多个进程需要访问共享资源的时候，、</td>
+</tr>
+<tr>
+<td>RLock</td>
+<td>递归锁</td>
+<td>Lock 的升级</td>
+</tr>
+<tr>
+<td>Semaphore</td>
+<td>信号量（计数器锁）</td>
+<td>Semaphore用来控制对共享资源的访问数量，例如池的最大连接数。</td>
+</tr>
+<tr>
+<td>Barrier</td>
+<td>时间锁</td>
+<td>进程间同步通信</td>
+</tr>
+<tr>
+<td>Barrier</td>
+<td>障碍锁</td>
+<td>等待足够资源启动</td>
+</tr>
+</tbody></table>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://docs.python.org/zh-cn/3.7/library/multiprocessing.html#cleanup" target="_blank" rel="noopener">python官方文档</a></p>
+<p><a href="https://www.bilibili.com/video/BV1pJ411h7YS?p=17" target="_blank" rel="noopener">B站【李兴华编程训练营】Python并发编程</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/46798399" target="_blank" rel="noopener">知乎python并行计算（上）：multiprocessing、multiprocess模块</a></p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>multiprocessing</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mysql 常用命令</title>
+    <url>/2020/03/01/mysql-freq-command/</url>
+    <content><![CDATA[<p>慢慢总结常用的的mysql 命令，看做是平时工作的“缓存”</p>
+<a id="more"></a>
+
+<h2 id="修改密码强度"><a href="#修改密码强度" class="headerlink" title="修改密码强度"></a>修改密码强度</h2><p>修改密码强度一般是mysql5.7 升级到 mysql8.0，或者是刚刚安装mysql8.0时候很容易碰到的问题。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 查看密码需要满足的条件</span><br><span class="line">SHOW VARIABLES LIKE &apos;validate_password%&apos;; </span><br><span class="line"></span><br><span class="line"># validate_password_policy代表密码策略，默认是1：符合长度，且必须含有数字，小写或大写字母，特殊字符。设置为0判断密码的标准就基于密码的长度了。一定要先修改两个参数再修改密码</span><br><span class="line">set global validate_password.policy=0;</span><br><span class="line"></span><br><span class="line"># validate_password_length代表密码长度，最小值为4</span><br><span class="line">set global validate_password.length=4;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="创建新的用户"><a href="#创建新的用户" class="headerlink" title="创建新的用户"></a>创建新的用户</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建新用户 reader01， 赋予密码&apos;onlyread@123&apos;</span><br><span class="line">CREATE USER `reader01`@`%` IDENTIFIED by &apos;onlyread@123&apos;;</span><br><span class="line"># 赋予 select 权限， 赋予nongwei_syn所有数据表的访问权限</span><br><span class="line">GRANT SELECT ON `nongwei_syn`.* TO `reader01`@`%` ;</span><br><span class="line"># 降低 mysql 加密规则</span><br><span class="line">ALTER USER `reader01`@`%` IDENTIFIED WITH mysql_native_password BY &apos;onlyread@123&apos;;</span><br><span class="line"># 刷新一下权限</span><br><span class="line">flush privileges;</span><br><span class="line"># 查看用户的权限</span><br><span class="line">show grants for reader01;</span><br><span class="line">GRANT USAGE ON *.* TO `reader01`@`%`</span><br><span class="line">GRANT SELECT ON `nongwei_syn`.* TO `reader01`@`%`</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="数据字典显示"><a href="#数据字典显示" class="headerlink" title="数据字典显示"></a>数据字典显示</h2><p><strong>显示字段的详细信息（包含COMMENT）</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show full columns from d_dbname.t_table_name</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200322184343.png" alt=""></p>
+<p>建议每次建表的时候，都带上COMMENT</p>
+<p>如果你一开始并没有这样做的话，需要借助 <code>alter</code> 来添加 <code>COMMENT</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alter table `d_dbname`.`t_table_name` modify column foodtype   varchar(20)                              COMMENT &apos;品种&apos;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>显示建表的SQL</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show create table  `d_dbname`.`t_table_name`</span><br><span class="line"></span><br><span class="line"># output:</span><br><span class="line">CREATE TABLE `t_vegnet_price_202003` (</span><br><span class="line">  `id` int NOT NULL AUTO_INCREMENT COMMENT &apos;序号&apos;,</span><br><span class="line">  `foodtype` varchar(20) DEFAULT NULL COMMENT &apos;品种&apos;,</span><br><span class="line">  `market` varchar(30) DEFAULT NULL COMMENT &apos;批发市场&apos;,</span><br><span class="line">  `lprice` float(10,2) DEFAULT NULL COMMENT &apos;最低价&apos;,</span><br><span class="line">  `hprice` float(10,2) DEFAULT NULL COMMENT &apos;最高价&apos;,</span><br><span class="line">  `avgprice` float(10,2) DEFAULT NULL COMMENT &apos;平均价&apos;,</span><br><span class="line">  `unit` varchar(20) DEFAULT NULL COMMENT &apos;计量单位&apos;,</span><br><span class="line">  `date` varchar(10) DEFAULT NULL COMMENT &apos;日期&apos;,</span><br><span class="line">  `pagenum` int DEFAULT NULL COMMENT &apos;页码&apos;,</span><br><span class="line">  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT &apos;创建时间&apos;,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  UNIQUE KEY `date` (`date`,`foodtype`,`market`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=42501 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>mysql</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【转载】 mysql触发器trigger 实例详解</title>
+    <url>/2020/03/01/%E8%BD%AC%E8%BD%BD/mysql%E8%A7%A6%E5%8F%91%E5%99%A8trigger%20%E5%AE%9E%E4%BE%8B%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="mysql触发器trigger-实例详解"><a href="#mysql触发器trigger-实例详解" class="headerlink" title="mysql触发器trigger 实例详解"></a><a href="https://www.cnblogs.com/phpper/p/7587031.html" target="_blank" rel="noopener">mysql触发器trigger 实例详解</a></h1><p>MySQL好像从5.0.2版本就开始支持触发器的功能了，本次博客就来介绍一下触发器，首先还是谈下概念性的东西吧：</p>
+<h2 id="什么是触发器"><a href="#什么是触发器" class="headerlink" title="什么是触发器"></a>什么是触发器</h2><p>触发器是与表有关的数据库对象，在满足定义条件时触发，并执行触发器中定义的语句集合。触发器的这种特性可以协助应用在数据库端确保数据的完整性。</p>
+<p>举个例子，比如你现在有两个表【用户表】和【日志表】，当一个用户被创建的时候，就需要在日志表中插入创建的log日志，如果在不使用触发器的情况下，你需要编写程序语言逻辑才能实现，但是如果你定义了一个触发器，触发器的作用就是当你在用户表中插入一条数据的之后帮你在日志表中插入一条日志信息。当然触发器并不是只能进行插入操作，还能执行修改，删除。</p>
+<a id="more"></a>
+
+<h2 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h2><p>创建触发器的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TRIGGER trigger_name trigger_time trigger_event ON tb_name FOR EACH ROW trigger_stmt</span><br><span class="line">trigger_name：触发器的名称</span><br><span class="line">tirgger_time：触发时机，为BEFORE或者AFTER</span><br><span class="line">trigger_event：触发事件，为INSERT、DELETE或者UPDATE</span><br><span class="line">tb_name：表示建立触发器的表明，就是在哪张表上建立触发器</span><br><span class="line">trigger_stmt：触发器的程序体，可以是一条SQL语句或者是用BEGIN和END包含的多条语句</span><br><span class="line">所以可以说MySQL创建以下六种触发器：</span><br><span class="line">BEFORE INSERT,BEFORE DELETE,BEFORE UPDATE</span><br><span class="line">AFTER INSERT,AFTER DELETE,AFTER UPDATE</span><br></pre></td></tr></table></figure>
+
+<p>其中，触发器名参数指要创建的触发器的名字</p>
+<p>BEFORE和AFTER参数指定了触发执行的时间，在事件之前或是之后</p>
+<p>FOR EACH ROW表示任何一条记录上的操作满足触发事件都会触发该触发器</p>
+<h5 id="创建有多个执行语句的触发器"><a href="#创建有多个执行语句的触发器" class="headerlink" title="创建有多个执行语句的触发器"></a>创建有多个执行语句的触发器</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TRIGGER 触发器名 BEFORE|AFTER 触发事件</span><br><span class="line">ON 表名 FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">    执行语句列表</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
+<p>其中，BEGIN与END之间的执行语句列表参数表示需要执行的多个语句，不同语句用分号隔开</p>
+<p><strong>tips：</strong>一般情况下，mysql默认是以 ; 作为结束执行语句，与触发器中需要的分行起冲突</p>
+<p>　　  为解决此问题可用DELIMITER，如：DELIMITER ||，可以将结束符号变成||</p>
+<p>　　  当触发器创建完成后，可以用DELIMITER ;来将结束符号变成;</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; DELIMITER ||</span><br><span class="line">mysql&gt; CREATE TRIGGER demo BEFORE DELETE</span><br><span class="line">    -&gt; ON users FOR EACH ROW</span><br><span class="line">    -&gt; BEGIN</span><br><span class="line">    -&gt; INSERT INTO logs VALUES(NOW());</span><br><span class="line">    -&gt; INSERT INTO logs VALUES(NOW());</span><br><span class="line">    -&gt; END</span><br><span class="line">    -&gt; ||</span><br><span class="line">Query OK, 0 rows affected (0.06 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<p>上面的语句中，开头将结束符号定义为||，中间定义一个触发器，一旦有满足条件的删除操作</p>
+<p>就会执行BEGIN和END中的语句，接着使用||结束</p>
+<p>最后使用DELIMITER ; 将结束符号还原</p>
+<p>tigger_event：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200301023456.png" alt=""></p>
+<p>load data语句是将文件的内容插入到表中，相当于是insert语句，而replace语句在一般的情况下和insert差不多，但是如果表中存在primary 或者unique索引的时候，如果插入的数据和原来的primary key或者unique相同的时候，会删除原来的数据，然后增加一条新的数据，所以有的时候执行一条replace语句相当于执行了一条delete和insert语句。</p>
+<p>触发器可以是一条SQL语句，也可以是多条SQL代码块，那如何创建呢？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DELIMITER $  #将语句的分隔符改为$</span><br><span class="line">BEGIN</span><br><span class="line">sql1;</span><br><span class="line">sql2;</span><br><span class="line">...</span><br><span class="line">sqln</span><br><span class="line">END $</span><br><span class="line">DELIMITER ;  #将语句的分隔符改回原来的分号&quot;;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在BEGIN…END语句中也可以定义变量，但是只能在BEGIN…END内部使用：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DECLARE var_name var_type [DEFAULT value] #定义变量，可指定默认值</span><br><span class="line">SET var_name = value  #给变量赋值</span><br></pre></td></tr></table></figure>
+
+<p>NEW和OLD的使用:</p>
+<p> <img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200301023524.png" alt=""></p>
+<p> 根据以上的表格，可以使用一下格式来使用相应的数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NEW.columnname：新增行的某列数据</span><br><span class="line">OLD.columnname：删除行的某列数据</span><br></pre></td></tr></table></figure>
+
+<p>说了这么多现在我们来创建一个触发器吧！</p>
+<p>现在有表如下：<br>用户users表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `users` (</span><br><span class="line">  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,</span><br><span class="line">  `add_time` int(11) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  KEY `name` (`name`(250)) USING BTREE</span><br><span class="line">) ENGINE=MyISAM AUTO_INCREMENT=1000001 DEFAULT CHARSET=latin1;</span><br></pre></td></tr></table></figure>
+
+<p>日志logs表：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `logs` (</span><br><span class="line">  `Id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `log` varchar(255) DEFAULT NULL COMMENT &apos;日志说明&apos;,</span><br><span class="line">  PRIMARY KEY (`Id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT=&apos;日志表&apos;;</span><br></pre></td></tr></table></figure>
+
+<p>需求是：当在users中插入一条数据，就会在logs中生成一条日志信息。</p>
+<p>创建触发器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DELIMITER $</span><br><span class="line">CREATE TRIGGER user_log AFTER INSERT ON users FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">DECLARE s1 VARCHAR(40)character set utf8;</span><br><span class="line">DECLARE s2 VARCHAR(20) character set utf8;#后面发现中文字符编码出现乱码，这里设置字符集</span><br><span class="line">SET s2 = &quot; is created&quot;;</span><br><span class="line">SET s1 = CONCAT(NEW.name,s2);     #函数CONCAT可以将字符串连接</span><br><span class="line">INSERT INTO logs(log) values(s1);</span><br><span class="line">END $</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<p>这里我用的navicat:<br><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200301023620.png" alt=""></p>
+<h4 id="查看触发器"><a href="#查看触发器" class="headerlink" title="查看触发器"></a>查看触发器</h4><h5 id="SHOW-TRIGGERS语句查看触发器信息"><a href="#SHOW-TRIGGERS语句查看触发器信息" class="headerlink" title="SHOW TRIGGERS语句查看触发器信息"></a>SHOW TRIGGERS语句查看触发器信息</h5><p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200301023711.png" alt=""></p>
+<p>Tip:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">上面我用的navicat直接创建，如果大家用的mysql front，name这里会有个区别，我们删除刚才的触发器，在Mysql front中测试</span><br><span class="line">drop trigger  user_log;#删除触发器</span><br></pre></td></tr></table></figure>
+
+<p>打开Mysql Front：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200301023752.png" alt=""></p>
+<p>mysql front在编译sql时，不用定义结尾分隔符，修改后的sql直接这样既可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#DELIMITER $</span><br><span class="line">CREATE TRIGGER user_log AFTER INSERT ON users FOR EACH ROW</span><br><span class="line">BEGIN</span><br><span class="line">DECLARE s1 VARCHAR(40)character set utf8;</span><br><span class="line">DECLARE s2 VARCHAR(20) character set utf8;</span><br><span class="line">SET s2 = &quot; is created&quot;;</span><br><span class="line">SET s1 = CONCAT(NEW.name,s2);     #函数CONCAT可以将字符串连接</span><br><span class="line">INSERT INTO logs(log) values(s1);</span><br><span class="line">END #$</span><br><span class="line">#DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200301023832.png" alt=""></p>
+<p>这里再啰嗦几句：</p>
+<p><strong>tips：</strong>SHOW TRIGGERS语句无法查询指定的触发器</p>
+<h5 id="在triggers表中查看触发器信息"><a href="#在triggers表中查看触发器信息" class="headerlink" title="在triggers表中查看触发器信息"></a>在triggers表中查看触发器信息</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM information_schema.triggers;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://images2017.cnblogs.com/blog/1102222/201709/1102222-20170924123529415-704881400.png" alt="img"></p>
+<p>结果显示了所有触发器的详细信息，同时，该方法可以查询制定触发器的详细信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM information_schema.triggers WHERE TRIGGER_NAME=&apos;user_log&apos;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>tips：</strong>所有触发器信息都存储在information_schema数据库下的triggers表中</p>
+<p>　　  可以使用SELECT语句查询，如果触发器信息过多，最好通过TRIGGER_NAME字段指定查询</p>
+<p>回到上面,我们创建好了触发器,继续在users中插入数据并查看数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">insert into users(name,add_time) values(&apos;周伯通&apos;,now());</span><br></pre></td></tr></table></figure>
+
+<p>好吧，我们再来查看一下logs表吧！</p>
+<p><img src="https://images2017.cnblogs.com/blog/1102222/201709/1102222-20170924134754837-519590854.png" alt="img"></p>
+<p>通过上面的例子，可以看到只需要在users中插入用户的信息，日志会自动记录到logs表中，这也许就是触发器给我带来的便捷吧！</p>
+<h2 id="限制和注意事项"><a href="#限制和注意事项" class="headerlink" title="限制和注意事项"></a>限制和注意事项</h2><p>触发器会有以下两种限制：</p>
+<p>1.触发程序不能调用将数据返回客户端的存储程序，也不能使用采用CALL语句的动态SQL语句，但是允许存储程序通过参数将数据返回触发程序，也就是存储过程或者函数通过OUT或者INOUT类型的参数将数据返回触发器是可以的，但是不能调用直接返回数据的过程。</p>
+<p>2.不能再触发器中使用以显示或隐式方式开始或结束事务的语句，如START TRANS-ACTION,COMMIT或ROLLBACK。</p>
+<p>注意事项：MySQL的触发器是按照BEFORE触发器、行操作、AFTER触发器的顺序执行的，其中任何一步发生错误都不会继续执行剩下的操作，如果对事务表进行的操作，如果出现错误，那么将会被回滚，如果是对非事务表进行操作，那么就无法回滚了，数据可能会出错。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>触发器是基于行触发的，所以删除、新增或者修改操作可能都会激活触发器，所以不要编写过于复杂的触发器，也不要增加过得的触发器，这样会对数据的插入、修改或者删除带来比较严重的影响，同时也会带来可移植性差的后果，所以在设计触发器的时候一定要有所考虑。</p>
+<p>触发器是一种特殊的存储过程，它在插入，删除或修改特定表中的数据时触发执行，它比数据库本身标准的功能有更精细和更复杂的数据控制能力。</p>
+<p>数据库触发器有以下的作用：</p>
+<p>1.安全性。可以基于数据库的值使用户具有操作数据库的某种权利。</p>
+<p> # 可以基于时间限制用户的操作，例如不允许下班后和节假日修改数据库数据。</p>
+<p> # 可以基于数据库中的数据限制用户的操作，例如不允许股票的价格的升幅一次超过10%。</p>
+<p>2.审计。可以跟踪用户对数据库的操作。  </p>
+<p> # 审计用户操作数据库的语句。</p>
+<p> # 把用户对数据库的更新写入审计表。</p>
+<p>3.实现复杂的数据完整性规则</p>
+<p> # 实现非标准的数据完整性检查和约束。触发器可产生比规则更为复杂的限制。与规则不同，触发器可以引用列或数据库对象。例如，触发器可回退任何企图吃进超过自己保证金的期货。</p>
+<p> # 提供可变的缺省值。</p>
+<p>4.实现复杂的非标准的数据库相关完整性规则。触发器可以对数据库中相关的表进行连环更新。例如，在auths表author_code列上的删除触发器可导致相应删除在其它表中的与之匹配的行。</p>
+<p> # 在修改或删除时级联修改或删除其它表中的与之匹配的行。</p>
+<p> # 在修改或删除时把其它表中的与之匹配的行设成NULL值。</p>
+<p> # 在修改或删除时把其它表中的与之匹配的行级联设成缺省值。</p>
+<p> # 触发器能够拒绝或回退那些破坏相关完整性的变化，取消试图进行数据更新的事务。当插入一个与其主健不匹配的外部键时，这种触发器会起作用。例如，可以在books.author_code 列上生成一个插入触发器，如果新值与auths.author_code列中的某值不匹配时，插入被回退。</p>
+<p>5.同步实时地复制表中的数据。</p>
+<p>6.自动计算数据值，如果数据的值达到了一定的要求，则进行特定的处理。例如，如果公司的帐号上的资金低于5万元则立即给财务人员发送警告数据。</p>
+<p>无论从事什么行业，只要做好两件事就够了，一个是你的专业、一个是你的人品，专业决定了你的存在，人品决定了你的人脉，剩下的就是坚持，用善良專業和真诚赢取更多的信任。</p>
+<p>分类: <a href="https://www.cnblogs.com/phpper/category/944100.html" target="_blank" rel="noopener">mysql笔记</a></p>
+<p>标签: <a href="https://www.cnblogs.com/phpper/tag/mysql/" target="_blank" rel="noopener">mysql</a></p>
+]]></content>
+      <categories>
+        <category>mysql</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+        <tag>转载</tag>
+        <tag>数据库同步</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker搭建elasticsearch+kibana</title>
     <url>/2020/02/25/docker-elasticsearch-Kibana-installation/</url>
     <content><![CDATA[<p>工作中需要对公司的es服务器进行配置，小白不敢直接在公司的开发机上直接修改。故需要在测试机上临时搭建一个es+kibana环境。</p>
@@ -773,13 +1594,24 @@
 <blockquote>
 <p>参考资料：<a href="https://www.cnblogs.com/gered/p/11364053.html" target="_blank" rel="noopener">linux下显示完整路径，linux下显示绝对路径</a></p>
 </blockquote>
-<h2 id="必要软件安装"><a href="#必要软件安装" class="headerlink" title="必要软件安装"></a>必要软件安装</h2><h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install -y git</span><br></pre></td></tr></table></figure>
+<h2 id="必要软件安装"><a href="#必要软件安装" class="headerlink" title="必要软件安装"></a>必要软件安装</h2><h3 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum search ifconfig</span><br><span class="line">============================== 匹配：ifconfig ============================================</span><br><span class="line">net-tools.x86_64 : Basic networking tools</span><br><span class="line">$ yum install net-tools.x86_64</span><br></pre></td></tr></table></figure>
+
+<h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install -y git</span><br></pre></td></tr></table></figure>
 
 <h3 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install -y wget</span><br></pre></td></tr></table></figure>
 
+<h3 id="7z压缩"><a href="#7z压缩" class="headerlink" title="7z压缩"></a>7z压缩</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install p7zip</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用方法</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">7za <span class="built_in">test</span> -t7z -r test.7z <span class="built_in">test</span></span><br><span class="line"><span class="comment">#a  代表添加文件／文件夹到压缩包</span></span><br><span class="line">-t 是指定压缩类型，这里定为7z，可不指定，因为7za默认压缩类型就是7z。</span><br><span class="line">-r 表示递归所有的子文件夹</span><br><span class="line">7za x test.7z -r -o./</span><br><span class="line"><span class="comment"># x  代表解压缩文件，并且是按原始目录树解压（还有个参数 e 也是解压缩文件，但其会将所有文件都解压到根下，而不是自己原有的文件夹下）</span></span><br><span class="line"><span class="comment"># -r 表示递归解压缩所有的子文件夹</span></span><br><span class="line"><span class="comment"># -o 是指定解压到的目录，-o后是没有空格的，直接接目录。这一点需要注意。</span></span><br><span class="line"><span class="comment"># FRE COMMAND</span></span><br><span class="line">7za <span class="built_in">test</span> test.7z</span><br><span class="line">7za x test.7z</span><br></pre></td></tr></table></figure>
+
+<h3 id="sz-rz"><a href="#sz-rz" class="headerlink" title="sz, rz"></a>sz, rz</h3><p>服务器上传，下载文件，除了使用FTP软件外，lrzsz是一个unix通信套件提供的X，Y，和ZModem文件传输协议,是一个非常强大的文件传输工具，安装方便，使用简单。</p>
+<p>rzsz 官网入口：<a href="https://link.jianshu.com/?t=http://freecode.com/projects/lrzsz/" target="_blank" rel="noopener">http://freecode.com/projects/lrzsz/</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum -y install lrzsz</span><br><span class="line">sz filename <span class="comment"># 下载文件 filename</span></span><br><span class="line">rz <span class="comment"># 上传文件</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="MiniConda"><a href="#MiniConda" class="headerlink" title="MiniConda"></a>MiniConda</h3><h4 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h4><p><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/" target="_blank" rel="noopener">https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/</a></p>
 <p>下载最新的版本，一般来说是 <code>Miniconda-latest-Linux</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda-latest-Linux-x86_64.sh</span><br><span class="line">$ bash Miniconda-latest-Linux-x86_64.sh</span><br><span class="line"><span class="comment"># 添加环境变量</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=/root/miniconda2/bin:<span class="variable">$PATH</span>"</span> &gt;&gt; .bashrc</span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="comment"># 检查是否成功安装</span></span><br><span class="line">$ /root/miniconda2/bin/conda -V</span><br><span class="line">conda 4.0.5</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda-latest-Linux-x86_64.sh</span><br><span class="line">$ yum -y install bzip2 <span class="comment"># 下载解压软件</span></span><br><span class="line">$ bash Miniconda-latest-Linux-x86_64.sh</span><br><span class="line"><span class="comment"># 添加环境变量</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=/root/miniconda2/bin:<span class="variable">$PATH</span>"</span> &gt;&gt; .bashrc</span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="comment"># 检查是否成功安装</span></span><br><span class="line">$ /root/miniconda2/bin/conda -V</span><br><span class="line">conda 4.0.5</span><br></pre></td></tr></table></figure>
 
 <h4 id="配置-Anaconda-仓库镜像源"><a href="#配置-Anaconda-仓库镜像源" class="headerlink" title="配置 Anaconda 仓库镜像源"></a>配置 Anaconda 仓库镜像源</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/</span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
 
@@ -793,6 +1625,20 @@
 <blockquote>
 <p>参考来源：<a href="https://blog.51cto.com/loufeng/2342003" target="_blank" rel="noopener">Centos7安装Miniconda及配置jupyter</a></p>
 </blockquote>
+<h3 id="shadowsocks"><a href="#shadowsocks" class="headerlink" title="shadowsocks"></a>shadowsocks</h3><p>shadowsocks 需要利用 <code>pip</code> 安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ sudo pip install shadowsocks</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>创建配置文件ss.json</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"># vim ss.json</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"server"</span>:<span class="string">"*.*.*.*"</span>,</span><br><span class="line">    <span class="attr">"server_port"</span>:***,</span><br><span class="line">    "local_server":"0.0.0.0", # 默认127.0.0.1</span><br><span class="line">    "local_port":1081,</span><br><span class="line">    "password":"*****",</span><br><span class="line">    "timeout":600,</span><br><span class="line">    "method":"aes-256-cfb"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动ss隧道</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 前台方式运行</span></span><br><span class="line">/root/miniconda2/envs/base/bin/sslocal -c ss.json</span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line">nohup /root/miniconda2/envs/base/bin/sslocal -c ss.json &gt;&gt; ss.log 1&gt;2&amp;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
 <h3 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h3><p>MariaDB 是由 MySQL 开发的 MySQL的替代版本。如果我们直接在 Centos 上 <code>yum install mysql</code> </p>
 <h4 id="第零步：查看系统版本号"><a href="#第零步：查看系统版本号" class="headerlink" title="第零步：查看系统版本号"></a>第零步：查看系统版本号</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ cat /etc/redhat-release</span><br><span class="line">CentOS Linux release 7.6.1810 (Core)</span><br></pre></td></tr></table></figure>
 
@@ -838,6 +1684,19 @@
 <blockquote>
 <p>参考资料:<br><a href="https://www.cnblogs.com/zipxzf/p/10718544.html" target="_blank" rel="noopener">CentOS7 安装并配置MySQL8.0</a><br><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-centos-7" target="_blank" rel="noopener">How To Install MySQL on CentOS 7</a></p>
 </blockquote>
+<h3 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用yum 安装</span></span><br><span class="line">$ yum install -y redis</span><br></pre></td></tr></table></figure>
+
+<p>默认是不设置密码的，我们需要在上面进行更进一步的<strong>安全策略配置</strong>。之前腾讯云上的一台服务器，由于暴露了无密码的redis接口，就中了 <strong>挖矿木马</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># /etc/redis.conf</span></span><br><span class="line"><span class="comment"># bind：绑定主机IP，默认值为127.0.0.1</span></span><br><span class="line"><span class="string">bind</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="comment"># 将这一行指注释掉，可以运行远程访问。不注释，只运行本地访问，安全性很高</span></span><br><span class="line"><span class="comment"># daemonize：是否以后台进程运行，默认为no。Windows下不支持修改 。Linux平台下可以改为yes，这样就不用为了启动Redis而单独保留一个shell窗口。</span></span><br><span class="line"><span class="comment"># pidfile：如以后台进程运行，则需指定一个pid，默认为/var/run/redis.pid。Windows下不支持修改。</span></span><br><span class="line"><span class="string">daemonize</span> <span class="literal">yes</span></span><br><span class="line"></span><br><span class="line"><span class="string">port</span> <span class="number">6379</span> <span class="comment"># 监听端口，默认为6379</span></span><br><span class="line"><span class="string">timeout</span> <span class="number">300</span> <span class="comment"># 超时时间，设置为300（秒）</span></span><br><span class="line"></span><br><span class="line"><span class="string">dbfilename</span> <span class="string">dump.rdb</span> <span class="comment"># 本地数据库文件名，默认值为dump.rdb</span></span><br><span class="line"><span class="string">dir</span> <span class="string">/var/lib/redis</span> <span class="comment"># 本地数据库存放路径，默认值为 /var/lib/redis</span></span><br><span class="line"><span class="string">requirepass</span> <span class="string">ABCD123</span> <span class="comment"># 强烈建议设置 连接密码</span></span><br><span class="line"></span><br><span class="line"><span class="string">appendonly</span> <span class="literal">yes</span> <span class="comment"># 是否在每次更新操作后进行日志记录，如果不开启，可能会在断电时导致一段时间内的数据丢失。因为redis本身同步数据文件是按上面save条件来同步的，所以有的数据会在一段时间内只存在于内存中。默认值为no</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每个配置选项前都有详细的英文注释，如有需要可自行查阅配置。</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>以上只是选择了我认为的一些常用的设置，参考来源：<a href="https://www.jianshu.com/p/e90317668ae2" target="_blank" rel="noopener">邻居小黑</a> 和 <a href="https://www.runoob.com/redis/redis-conf.html" target="_blank" rel="noopener">redis 菜鸟教程</a><br>更多的安全策略，可以借鉴 <a href="https://help.aliyun.com/knowledge_detail/37447.html?spm=a2c4g.11186631.2.2.828c1848kuRv6p" target="_blank" rel="noopener">Redis服务安全加固</a></p>
+</blockquote>
+<p>yum 安装下来的服务，已经帮我们创建好了服务。我们直接使用重启就可以了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ systemctl restart redis </span><br><span class="line">● redis.service - Redis persistent key-value database</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/redis.service; disabled; vendor preset: disabled)</span><br><span class="line">  Drop-In: /etc/systemd/system/redis.service.d</span><br><span class="line">           └─limit.conf</span><br><span class="line">   Active: active (running) since 六 2020-03-07 13:39:44 CST; 35s ago</span><br><span class="line"> Main PID: 12655 (redis-server)</span><br><span class="line">    Tasks: 3</span><br><span class="line">   Memory: 1.0M</span><br><span class="line">   CGroup: /system.slice/redis.service</span><br><span class="line">           └─12655 /usr/bin/redis-server 127.0.0.1:6379</span><br><span class="line">$ redis-cli</span><br><span class="line">127.0.0.1:6379&gt; get abc</span><br><span class="line">(error) NOAUTH Authentication required.</span><br><span class="line"><span class="comment"># 再一次的运行 redis-cli 发现已经需要了密码</span></span><br><span class="line">127.0.0.1:6379&gt; auth YOURPASSWORD</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><p>docker 安装其实比较麻烦的，感谢 <code>图灵:Docker开发指南</code> 给的安装建议，我们可以直接用别人写好的脚本。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl https://get.docker.com &gt; install.sh</span><br><span class="line">chmod +x install.sh</span><br><span class="line">cat install.sh <span class="comment"># 感兴趣的话，可以研究一下 shell 究竟写了啥</span></span><br><span class="line">./install.sh </span><br><span class="line"><span class="comment"># 安装完了，记得启动 docker 服务</span></span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
 
@@ -865,10 +1724,11 @@
 </blockquote>
 <h4 id="安装selenium"><a href="#安装selenium" class="headerlink" title="安装selenium"></a>安装selenium</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install selenium</span><br></pre></td></tr></table></figure>
 
-<h4 id="安装chrome-browser"><a href="#安装chrome-browser" class="headerlink" title="安装chrome-browser"></a>安装chrome-browser</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm --no-check-certificate</span><br><span class="line">yum install ./google-chrome-stable_current_x86_64.rpm</span><br><span class="line"><span class="comment"># 安装后，注意要查看一下 chrome 的版本号</span></span><br><span class="line">$ google-chrome --version</span><br><span class="line">Google Chrome 80.0.3987.87</span><br></pre></td></tr></table></figure>
+<h4 id="安装chrome-browser"><a href="#安装chrome-browser" class="headerlink" title="安装chrome-browser"></a>安装chrome-browser</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm --no-check-certificate</span><br><span class="line">yum install ./google-chrome-stable_current_x86_64.rpm</span><br><span class="line"><span class="comment"># 或者直接使用yum 安装</span></span><br><span class="line">yum install google-chrome</span><br><span class="line"><span class="comment"># 安装后，注意要查看一下 chrome 的版本号</span></span><br><span class="line">$ google-chrome --version</span><br><span class="line">Google Chrome 80.0.3987.87</span><br></pre></td></tr></table></figure>
 
 <h4 id="下载chromedriver"><a href="#下载chromedriver" class="headerlink" title="下载chromedriver"></a>下载chromedriver</h4><blockquote>
 <p>建议到 <a href="http://npm.taobao.org/mirrors/chromedriver/" target="_blank" rel="noopener">淘宝镜像</a>下载</p>
+<p>更全一点的话，有 <a href="http://chromedriver.storage.googleapis.com/index.html" target="_blank" rel="noopener">官方镜像</a></p>
 </blockquote>
 <p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200206175541.png" alt=""></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ wget https://npm.taobao.org/mirrors/chromedriver/80.0.3987.16/chromedriver_linux64.zip</span><br><span class="line"><span class="comment"># 解压此文件，并将文件移动到/usr/bin目录下</span></span><br><span class="line">unzip chromedriver_linx64.zip</span><br><span class="line"><span class="comment"># 移到 /usr/bin 下后，之后运行的时候就不必特意制定 chromedriver 路径了</span></span><br><span class="line">mv chromedriver /usr/bin/</span><br></pre></td></tr></table></figure>
@@ -893,11 +1753,7 @@
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull erikdubbelboer/phpredisadmin</span><br><span class="line">docker run --rm -itd -e REDIS_1_HOST=redis -e REDIS_1_NAME=myredis  -p 8015:80  --link redis-test:redis --name redisadmin erikdubbelboer/phpredisadmin</span><br><span class="line"><span class="comment"># 需要注意的是 REDIS_1_HOST 填写的是自己 redis 服务器的地址</span></span><br><span class="line"><span class="comment"># 这里我采用的是容器链接的方式</span></span><br></pre></td></tr></table></figure>
 
-<p>因为服务器地址是会变的，所以我这里就直接写一个 <code>docker-compose.yml</code> 作为启动的脚本</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># phpredisadmin.yml</span></span><br><span class="line"><span class="attr">phpredisadmin:</span></span><br><span class="line"><span class="attr">  image:</span> <span class="string">erikdubbelboer/phpredisadmin</span></span><br><span class="line"><span class="attr">  environment:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ADMIN_USER=admin</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">ADMIN_PASS=admin</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">REDIS_1_HOST=127.0.0.1/172.17.0.1</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">REDIS_1_PORT=6379</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"8011:80"</span></span><br></pre></td></tr></table></figure>
-
-<p>每次使用直接</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker-compose -f phpredisadmin up -d <span class="comment"># 启动(以后台方式)</span></span><br><span class="line">docker-compose down <span class="comment"># 关闭</span></span><br></pre></td></tr></table></figure>
+<h3 id="redis-amp-redis可视化工具"><a href="#redis-amp-redis可视化工具" class="headerlink" title="redis &amp; redis可视化工具"></a>redis &amp; redis可视化工具</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull redis</span><br><span class="line">docker run -p 127.0.0.1:6379:6379 -d --name redis redis --requirepass &quot;mypassword&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看redis的ip地址 172.17.0.2</span><br><span class="line">docker inspect redis | grep -ai &apos;ipa&apos;</span><br><span class="line">docker run --rm -it -e REDIS_1_HOST=172.17.0.2 -e REDIS_1_NAME=redis -p 80:80 erikdubbelboer/phpredisadmin</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -1766,7 +2622,7 @@ id = "myiframe"
 <blockquote>
 <p>这里参考 <a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">菜鸟教程:MacOS Docker 安装</a> </p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ brew cask install docker </span><br><span class="line"><span class="comment"># 查看是否安装成功</span></span><br><span class="line">$ docker info </span><br><span class="line">$ docker -v</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">brew cask install docker </span><br><span class="line"><span class="comment"># 查看是否安装成功</span></span><br><span class="line">docker info </span><br><span class="line">docker -v</span><br></pre></td></tr></table></figure>
 <p><strong>镜像加速</strong><br>鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：<a href="http://hub-mirror.c.163.com。还有" target="_blank" rel="noopener">http://hub-mirror.c.163.com。还有</a> <a href="https://registry.docker-cn.com" target="_blank" rel="noopener">https://registry.docker-cn.com</a> 是官方的中国站点。这些站点存储的是docker hub 的官方热门镜像，如果是私人的镜像，还是需要去美国站点下载。</p>
 <p>在任务栏点击 Docker for mac 应用图标 -&gt; Perferences… -&gt; Daemon -&gt; Registry mirrors。在列表中填写加速器地址即可。修改完成之后，点击 Apply &amp; Restart 按钮，Docker 就会重启并应用配置的镜像地址了。<br><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20191124001923.png" alt=""></p>
 <h3 id="Manjaro-docker-安装"><a href="#Manjaro-docker-安装" class="headerlink" title="Manjaro docker 安装"></a>Manjaro docker 安装</h3><p>Manjaro 也拥有非常强大的包管理软件 pacman 和 yay<br>这里我们使用pacman，这里面的软件都是来自官方库</p>
@@ -1776,7 +2632,22 @@ id = "myiframe"
 <p><strong>Linux 镜像加速</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 新建配置文件</span></span><br><span class="line">$ sudo touch /etc/docker/daemon.json </span><br><span class="line"><span class="comment"># 添加国内站点</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"registry-mirrors"</span>: [<span class="string">"https://registry.docker-cn.com"</span>,<span class="string">"http://hub-mirror.c.163.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启docker daemon</span></span><br><span class="line">$ sudo systemctl restart docker </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看是否有修改成功</span></span><br><span class="line">$ docker info </span><br><span class="line"><span class="comment"># 查看Register Mirrors的信息</span></span><br><span class="line">Registry Mirrors:</span><br><span class="line">  https://registry.docker-cn.com/</span><br><span class="line">  http://hub-mirror.c.163.com/</span><br></pre></td></tr></table></figure>
 
+<h3 id="Centos-docker"><a href="#Centos-docker" class="headerlink" title="Centos docker"></a>Centos docker</h3><h4 id="使用脚本安装"><a href="#使用脚本安装" class="headerlink" title="使用脚本安装"></a>使用脚本安装</h4><p>docker 安装其实比较麻烦的，感谢 <code>图灵:Docker开发指南</code> 给的安装建议，我们可以直接用别人写好的脚本。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl https://get.docker.com &gt; install.sh</span><br><span class="line">chmod +x install.sh</span><br><span class="line">cat install.sh <span class="comment"># 感兴趣的话，可以研究一下 shell 究竟写了啥</span></span><br><span class="line">./install.sh </span><br><span class="line"><span class="comment"># 安装完了，记得启动 docker 服务</span></span><br><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></figure>
 
+<h4 id="docker-compose-github-安装"><a href="#docker-compose-github-安装" class="headerlink" title="docker-compose(github 安装)"></a>docker-compose(github 安装)</h4><blockquote>
+<p>有条件的话，参考 <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">docker官方教程</a><br>这一种方法是官方推荐，但是鉴于中国墙，速度有可能非常感人</p>
+</blockquote>
+<h5 id="1-从-github-上下载-docker-compose-命令"><a href="#1-从-github-上下载-docker-compose-命令" class="headerlink" title="1. 从 github 上下载 docker-compose 命令"></a>1. 从 github 上下载 docker-compose 命令</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo curl -L <span class="string">"https://github.com/docker/compose/releases/download/1.25.3/docker-compose-<span class="variable">$(uname -s)</span>-<span class="variable">$(uname -m)</span>"</span> -o /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-赋予可执行权限"><a href="#2-赋予可执行权限" class="headerlink" title="2. 赋予可执行权限"></a>2. 赋予可执行权限</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo chmod +x /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-验证是否安装成功"><a href="#3-验证是否安装成功" class="headerlink" title="3. 验证是否安装成功"></a>3. 验证是否安装成功</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker-compose --version</span><br></pre></td></tr></table></figure>
+
+<h4 id="docker-compose-pip-安装"><a href="#docker-compose-pip-安装" class="headerlink" title="docker-compose(pip 安装)"></a>docker-compose(pip 安装)</h4><blockquote>
+<p>一般容易出问题的是 pip 的版本，如果是使用了conda作为包管理的话，可能主要注意pip的版本。我一开始是使用base环境的pip作下载，然后将安装的docker-compose 软连接至 <code>/usr/local/bin</code> 中</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install docker-compose</span><br></pre></td></tr></table></figure>
 
 <h2 id="Docker-镜像使用"><a href="#Docker-镜像使用" class="headerlink" title="Docker 镜像使用"></a>Docker 镜像使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出本地的镜像 images</span></span><br><span class="line"><span class="variable">$docker</span> images</span><br><span class="line"><span class="variable">$docker</span> image ls </span><br><span class="line">REPOSITORY       TAG     IMAGE ID      CREATED             SIZE</span><br><span class="line">ubuntu          latest   775349758637  2 weeks ago         64.2MB</span><br><span class="line"><span class="comment"># 标签的含义</span></span><br><span class="line">- REPOSTITORY：表示镜像的仓库源</span><br><span class="line">- TAG：镜像的标签</span><br><span class="line">- IMAGE ID：镜像ID</span><br><span class="line">- CREATED：镜像创建时间</span><br><span class="line">- SIZE：镜像大小</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取镜像</span></span><br><span class="line"><span class="variable">$docker</span> pull ubuntu:13.10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找镜像</span></span><br><span class="line"><span class="variable">$docker</span> search ubuntu</span><br><span class="line">- NAME:镜像仓库源的名称</span><br><span class="line">- DESCRIPTION:镜像的描述</span><br><span class="line">- OFFICIAL:是否docker官方发布</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除镜像</span></span><br><span class="line"><span class="variable">$docker</span> rmi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有镜像</span></span><br></pre></td></tr></table></figure>
 

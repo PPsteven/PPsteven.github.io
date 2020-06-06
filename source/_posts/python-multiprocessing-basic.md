@@ -1,5 +1,5 @@
 ---
-title: Python并发编程：多进程编程 multiprocessing 模块笔记
+title: Python并发编程——多进程编程 multiprocessing 模块
 tags: [python, multiprocessing]
 comments: false
 date: 2020-04-05 12:27:57
@@ -84,7 +84,7 @@ multiprocessing.current_process().name
 
 - run()  进程活动的方法
 
-  在面向对象编程中，子类中可以重载该方法
+  > 通过重载 run 方法实现进程
 
   ```python
   import multiprocessing
@@ -109,7 +109,7 @@ multiprocessing.current_process().name
 
 - start()   启动进程
 
-- join([*timeout*]) 进程阻塞，直到进程终止。
+- join([timeout]) 进程阻塞，直到进程终止。
 
   timeout 是阻塞的时间，默认None，一直阻塞直到进程终止。
 
@@ -121,9 +121,55 @@ multiprocessing.current_process().name
 
 ### Pool
 
-如果需要运行多个子进程，相比于一个个创建 `Process` 类，采用进程池 `Pool` 的方式比较方便。
+如果需要运行多个子进程，采用进程池 `Pool` 的方式可以节省程序开销。进程的创建和销毁都是需要操作系统资源的。
 
-我们可以先看看自己计算机的内核个数，使用 `os.cpu_count()` 或者 `multiprocess.cpu_count()` 来查看内核个数。如果不填写内核参数，Pool 默认采取机器的内核个数。
+#### 进程池Pool vs Process
+
+```python
+import multiprocessing
+import os
+
+
+def worker(msg):
+    print("%s is now running, process id: %s" % (msg, os.getpid()))
+
+if __name__ == "__main__":
+    po = multiprocessing.Pool(4)
+    for i in range(10):
+        po.apply_async(worker, args=(i,))
+
+    print("main process starting....")
+    po.close()
+    po.join()
+    print("main process stoping....")
+
+''' 输出
+main process starting....
+0 is now running, process id: 3436
+1 is now running, process id: 3437
+2 is now running, process id: 3438
+4 is now running, process id: 3436
+3 is now running, process id: 3439
+5 is now running, process id: 3437
+6 is now running, process id: 3438
+7 is now running, process id: 3436
+8 is now running, process id: 3437
+9 is now running, process id: 3439
+main process stoping....
+'''
+```
+
+使用进程池的优点提现在
+
+- 限制同一时间进程并行的数目
+  多进程可以提高程序运行的效率，但是过多的进程切换反而会降低效率。原因是a.进程会占用计算机资源，资源决定了进程不能开启过多。b.进程的切换开销比较大，占用过多CPU资源。
+
+- 进程池减少不必要的创建，销毁过程。
+
+  程序中，Pool(4) 的进程号只有 3436，3437，3438，3439 这四个进程号。证明进程池省去了创建和销毁的过程。
+
+当进程数和计算机的内核数一致的时候，效率最高。我们可以先看看自己计算机的内核个数，使用 `os.cpu_count()` 或者 `multiprocess.cpu_count()` 来查看内核个数。
+如果不填写内核参数，Pool 默认采取机器的内核个数。
 
 ```python
 from multiprocessing import Pool
@@ -184,7 +230,7 @@ class multiprocessing.pool.Pool([processes[, initializer[, initargs[, maxtaskspe
 
 multiprocessing  支持两种通信方式：Queue(队列) , Pipe(管道) 
 
-基础用法如下
+### 基础用法
 
 ```python
 q = Queue(maxsize=4)

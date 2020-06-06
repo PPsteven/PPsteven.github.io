@@ -281,6 +281,366 @@
         
           <section id="main" style="float:none;">
   
+    <article id="post-python-threading-basic"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/06/07/python-threading-basic/">python并发编程——多线程编程 threading 协程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/06/07/python-threading-basic/" class="article-date">
+	  <time datetime="2020-06-06T16:33:20.000Z" itemprop="datePublished">2020-06-07</time>
+	</a>
+
+      
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 <strong>多进程编程 multiprocessing</strong> 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，稍稍简单了点。</p>
+<p>本章主要介绍</p>
+<ul>
+<li>多线程threading 的基本使用方法</li>
+<li>GIL锁概念</li>
+</ul>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-vmware-centos-environment-network"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/05/19/vmware-centos-environment-network/">mac + VMware + Centos7 下的网络配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/05/19/vmware-centos-environment-network/" class="article-date">
+	  <time datetime="2020-05-18T17:11:18.000Z" itemprop="datePublished">2020-05-19</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/centos/">centos</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文介绍，如何在 mac 系统下配置一个 无图形化的 centos 环境，难点在于网络配置</p>
+<p>教程参考:  <a href="https://www.bilibili.com/video/BV1bA411b7vs" target="_blank" rel="noopener">个人专属多节点Linux环境打造，Linux操作系统学习实验环境安装配置视频教程</a></p>
+<p>用到的工具</p>
+<ul>
+<li><p>centos 系统 </p>
+<blockquote>
+<p>阿里云站点: <a href="http://mirrors.aliyun.com/centos/7/isos/x86_64/" target="_blank" rel="noopener">http://mirrors.aliyun.com/centos/7/isos/x86_64/</a></p>
+<p>各个版本的ISO镜像文件说明：</p>
+<p>CentOS-7-x86_64-DVD-1708.iso        标准安装版（推荐）</p>
+<p>CentOS-7-x86_64-Everything-1708.iso    完整版，集成所有软件（以用来补充系统的软件或者填充本地镜像）</p>
+<p>CentOS-7-x86_64-LiveGNOME-1708.iso     GNOME桌面版  </p>
+<p>CentOS-7-x86_64-LiveKDE-1708.iso      KDE桌面版  </p>
+<p>CentOS-7-x86_64-Minimal-1708.iso      精简版，自带的软件最少</p>
+<p>CentOS-7-x86_64-NetInstall-1708.iso    网络安装版（从网络安装或者救援系统）</p>
+<p>作者：Ada54<br>链接：<a href="https://www.jianshu.com/p/a63f47e096e8" target="_blank" rel="noopener">https://www.jianshu.com/p/a63f47e096e8</a></p>
+</blockquote>
+<p>这里 <code>CentOS-7-x86_64-DVD-1708.iso</code> 是标准安装版，如果选择最小安装，和 <code>CentOS-7-x86_64-Minimal-1708.iso</code> (无界面版本)一样。</p>
+</li>
+<li><p>vmware 或者 virtualbox </p>
+</li>
+<li><p>finalShell/terminal</p>
+</li>
+</ul>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-jz-offer-solution"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/05/14/jz-offer-solution/">剑指 Offer 归纳</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/05/14/jz-offer-solution/" class="article-date">
+	  <time datetime="2020-05-14T12:13:20.000Z" itemprop="datePublished">2020-05-14</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/%E5%88%B7%E9%A2%98/">刷题</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>《剑指 Offer 》 刷题小计，主要记录别人解题的思路和方法。</p>
+<p>以及题目的类型和重点</p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-several-tips-git-speed-up"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/05/03/several-tips-git-speed-up/">提升 git 速度的几个加速方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/05/03/several-tips-git-speed-up/" class="article-date">
+	  <time datetime="2020-05-03T12:07:16.000Z" itemprop="datePublished">2020-05-03</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/git/">git</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近经常需要从github上拉代码下来，速度实在是太慢了。所以写这篇文件，来好好总结一下提速的方法。</p>
+<p>总的来说，方法有 替换 <strong>镜像源/修改hosts/使用国内托管平台/使用代理</strong></p>
+<p>经过实验下来，使用代理的效果最好</p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-python-multiprocessing-basic"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/04/05/python-multiprocessing-basic/">Python并发编程——多进程编程 multiprocessing 模块</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/04/05/python-multiprocessing-basic/" class="article-date">
+	  <time datetime="2020-04-05T04:27:57.000Z" itemprop="datePublished">2020-04-05</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/python/">python</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。前两者是由于操作系统控制的，协程是由用户控制。所以在多进程的编程上，不同操作系统的效果不一样。如果是为了学习多进程编辑，建议在Mac Os 或者 Linux 上。</p>
+<p>本篇介绍基于进程的并行操作，主要用到的模块是 <code>multiprocessing</code> </p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-mysql-freq-command"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/03/01/mysql-freq-command/">mysql 常用命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/03/01/mysql-freq-command/" class="article-date">
+	  <time datetime="2020-03-01T14:38:46.000Z" itemprop="datePublished">2020-03-01</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>慢慢总结常用的的mysql 命令，看做是平时工作的“缓存”</p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
+    <article id="post-转载/mysql触发器trigger 实例详解"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2020/03/01/%E8%BD%AC%E8%BD%BD/mysql%E8%A7%A6%E5%8F%91%E5%99%A8trigger%20%E5%AE%9E%E4%BE%8B%E8%AF%A6%E8%A7%A3/">【转载】 mysql触发器trigger 实例详解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/03/01/%E8%BD%AC%E8%BD%BD/mysql%E8%A7%A6%E5%8F%91%E5%99%A8trigger%20%E5%AE%9E%E4%BE%8B%E8%AF%A6%E8%A7%A3/" class="article-date">
+	  <time datetime="2020-02-29T17:35:50.000Z" itemprop="datePublished">2020-03-01</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>
+
+      
+      
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="mysql触发器trigger-实例详解"><a href="#mysql触发器trigger-实例详解" class="headerlink" title="mysql触发器trigger 实例详解"></a><a href="https://www.cnblogs.com/phpper/p/7587031.html" target="_blank" rel="noopener">mysql触发器trigger 实例详解</a></h1><p>MySQL好像从5.0.2版本就开始支持触发器的功能了，本次博客就来介绍一下触发器，首先还是谈下概念性的东西吧：</p>
+<h2 id="什么是触发器"><a href="#什么是触发器" class="headerlink" title="什么是触发器"></a>什么是触发器</h2><p>触发器是与表有关的数据库对象，在满足定义条件时触发，并执行触发器中定义的语句集合。触发器的这种特性可以协助应用在数据库端确保数据的完整性。</p>
+<p>举个例子，比如你现在有两个表【用户表】和【日志表】，当一个用户被创建的时候，就需要在日志表中插入创建的log日志，如果在不使用触发器的情况下，你需要编写程序语言逻辑才能实现，但是如果你定义了一个触发器，触发器的作用就是当你在用户表中插入一条数据的之后帮你在日志表中插入一条日志信息。当然触发器并不是只能进行插入操作，还能执行修改，删除。</p>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+
+  
     <article id="post-docker-elasticsearch-Kibana-installation"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
@@ -490,390 +850,11 @@
 
 
   
-    <article id="post-linux-crontab-basic"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/02/19/linux-crontab-basic/">linux crontab 入门</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/02/19/linux-crontab-basic/" class="article-date">
-	  <time datetime="2020-02-18T16:18:48.000Z" itemprop="datePublished">2020-02-19</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>crontab 的作用是，执行 linux 上的定时任务。当我们需要运行一些诸如 <code>日志采集</code> 、<code>心跳检查</code> 这种任务的时候，需要用到。</p>
-<p>最近在做 linux 脚本检查 <code>python 爬虫脚本</code> 是否健康运行，故采用这个方法。</p>
-<blockquote>
-<p>只要是常驻的程序，对于程序的要求比较高，必须有很好的稳健性，可以面对各种情况。</p>
-</blockquote>
-<p>一个程序很难考虑到各种极端情况(死机，内存爆，网络问题等)，这时候我们必须要实时监控这些进程的方法。</p>
-<p>这里我准备采用的方法一：日记采集+监控， 方法二：定期检查并唤起。日志采集的东西准备放在下一篇讲。</p>
-<blockquote>
-<p>当安装完成操作系统之后，默认便会启动此任务调度命令。crond 命令每分锺会定期检查是否有要执行的工作，如果有要执行的工作便会自动执行该工作</p>
-</blockquote>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-mysql-bug-solution"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/02/11/mysql-bug-solution/">mysql error:Waiting for table metadata lock</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/02/11/mysql-bug-solution/" class="article-date">
-	  <time datetime="2020-02-11T15:57:07.000Z" itemprop="datePublished">2020-02-11</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/mysql/">mysql</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>背景是，Navicat 在针对一张表格做删除操作的时候，会一直等待，无法进行任何操作。</p>
-<p>经过 <code>show PROCESSLIST</code> 发现是 <code>Waiting for table metadata lock</code> 错误。</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-define-decorators-as-class"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/02/09/define-decorators-as-class/">Python装饰器：将装饰器定义为类</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/02/09/define-decorators-as-class/" class="article-date">
-	  <time datetime="2020-02-08T16:18:59.000Z" itemprop="datePublished">2020-02-09</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/python/">python</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在强化补齐 Python 的基础知识，向高阶玩家进发。主攻《Python CookBook 3rd》，上面的知识点比较多，我挑重点看这几个方面。</p>
-<ul>
-<li>yield + 协程</li>
-<li>装饰器</li>
-<li>多线程</li>
-<li>面向对象</li>
-</ul>
-<p>本篇博客讨论的主题是 <code>装饰器</code> ，装饰器其实也不是什么新鲜的用法，就是传入的参数是 <code>函数</code> ，这一点上，它更像是一个语法糖。装饰器的作用是可以给我们原本编写好的函数再一次的加上额外的功能（比如统计时间，打日志）。</p>
-<p>装饰器可以给我们的函数加上武器，使它们更加强大。如果是利用 <code>Python</code> 进行 <code>Web</code> 开发的小伙伴对装饰器并不陌生，在 <code>Flask</code> 和 <code>Django</code> 中 <code>@</code> 符号应该不少见了 </p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-how-to-import-module-in-python-project"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/01/26/how-to-import-module-in-python-project/">如何在python项目中使用import导入自编模块</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/01/26/how-to-import-module-in-python-project/" class="article-date">
-	  <time datetime="2020-01-26T09:06:02.000Z" itemprop="datePublished">2020-01-26</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/python/">python</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>背景是在python项目中导入模块时碰到的问题，当需要导入的模块是位于项目的不同层级的时候，导入文件就变成了一个非常麻烦的事情。</p>
-<p>下面举一个例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">. # 当前工作目录</span><br><span class="line">├── DB </span><br><span class="line">│   ├── MySQLClient.py</span><br><span class="line">│   └── RedisClient.py</span><br><span class="line">└── Util</span><br><span class="line">│    └── LogHandler.py</span><br><span class="line">├── Email</span><br><span class="line">│      └── SendEmail.py  # 本文件</span><br><span class="line">│      └── Email_setting.py  # 待导入文件</span><br></pre></td></tr></table></figure>
-
-<p>DB 和 Util 是我们经常使用到的模块，若是我们的工作目录位于项目文件的第一层的话，当我们导入 <code>Email_setting.py</code> 的时候，我们应该是</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> DB.MySQLClient <span class="keyword">import</span> MySQLClass</span><br><span class="line"><span class="keyword">from</span> Util.LogHandler <span class="keyword">import</span> LogHandler</span><br><span class="line"><span class="keyword">from</span> Email_setting <span class="keyword">import</span> *  <span class="comment"># 这是错误的例子</span></span><br><span class="line"><span class="keyword">from</span> Email.Email_setting <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
-
-<p>下面我们讨论一下如何在python中导入模块</p>
-<blockquote><p>参考自: <a href="http://www.blog.pythonlibrary.org/2016/03/01/python-101-all-about-imports/" target="_blank" rel="noopener">Python 101: All about imports</a></p>
-</blockquote>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-python编码规范"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/01/12/python%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Python编码规范</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/01/12/python%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" class="article-date">
-	  <time datetime="2020-01-12T09:37:56.000Z" itemprop="datePublished">2020-01-12</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80%E6%8A%80%E8%83%BD/">基础技能</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Python编码规范</p>
-<p><a href="http://jb51.net/article/139495.htm" target="_blank" rel="noopener">Python 编码规范(Google Python Style Guide</a></p>
-<p>目前写了:</p>
-<ul>
-<li>函数、模块、变量等命名</li>
-<li>函数注释</li>
-<li>字符串编码规范</li>
-<li>TODO 模块的导入规范，项目的结构</li>
-</ul>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-centos-install-introduction"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/01/12/centos-install-introduction/">Centos 环境配置（持续总结）</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/01/12/centos-install-introduction/" class="article-date">
-	  <time datetime="2020-01-12T08:35:50.000Z" itemprop="datePublished">2020-01-12</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/centos/">centos</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本章节收集一下配置一个centos 环境所需要的操作</p>
-<p>第一部分：必要软件的安装</p>
-<ul>
-<li>git</li>
-<li>wget</li>
-<li>MiniConda(python)</li>
-<li>mysql</li>
-</ul>
-<p>第二部分：Docker 服务</p>
-<ul>
-<li>web-vscode</li>
-<li>phpredisAdmin(redis web 管理工具)</li>
-</ul>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
-    <article id="post-git-skill-in-learning"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/01/12/git-skill-in-learning/">git 实战（持续更新）</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2020/01/12/git-skill-in-learning/" class="article-date">
-	  <time datetime="2020-01-12T08:35:50.000Z" itemprop="datePublished">2020-01-12</time>
-	</a>
-
-      
-    <a class="article-category-link" href="/categories/git/">git</a>
-
-      
-      
-
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>主要记录 git 在实际使用中碰到的问题，会逐步慢慢积累</p>
-<h3 id="问题一：新项目如何与远端同步？"><a href="#问题一：新项目如何与远端同步？" class="headerlink" title="问题一：新项目如何与远端同步？"></a>问题一：新项目如何与远端同步？</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br><span class="line">$ git remote add origin git@e.coding.net:datamate/pujiangjiaoye.git <span class="comment"># 添加远端仓库</span></span><br><span class="line">$ git branch --<span class="built_in">set</span>-upstream-to=origin/master <span class="comment"># 设置分支对应关系</span></span><br><span class="line">$ git push --<span class="built_in">set</span>-upstream origin master <span class="comment"># 设置push 对应的远程仓库，建立本地分支的上游</span></span><br><span class="line">$ git remote -v <span class="comment"># 查看分支</span></span><br></pre></td></tr></table></figure>
-
-<p>当我们尝试push的时候又会出现一个问题</p>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-
-  
 
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页 &amp;raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页 &amp;raquo;</a>
   </nav>
 
 </section>

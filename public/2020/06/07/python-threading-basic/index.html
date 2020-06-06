@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python并发编程——多线程编程 threading 协程 | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="pythonthreading" />
+  
+  
+  
+  
+  <meta name="description" content="Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 多进程编程 multiprocessing 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager&#x2F;Array&#x2F;Values 这种进程间通信的方法，稍稍简单了点。 本章主要介绍  多线程threadin">
+<meta name="keywords" content="python,threading">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python并发编程——多线程编程 threading 协程">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;python-threading-basic&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 多进程编程 multiprocessing 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager&#x2F;Array&#x2F;Values 这种进程间通信的方法，稍稍简单了点。 本章主要介绍  多线程threadin">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200607024751.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200607030558.png">
+<meta property="og:updated_time" content="2020-06-06T19:12:46.805Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200607024751.png">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-python-threading-basic" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      python并发编程——多线程编程 threading 协程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/06/07/python-threading-basic/" class="article-date">
+	  <time datetime="2020-06-06T16:33:20.000Z" itemprop="datePublished">2020-06-07</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/python-threading-basic.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 <strong>多进程编程 multiprocessing</strong> 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，稍稍简单了点。</p>
+<p>本章主要介绍</p>
+<ul>
+<li>多线程threading 的基本使用方法</li>
+<li>GIL锁概念</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="threading-库使用"><a href="#threading-库使用" class="headerlink" title="threading 库使用"></a>threading 库使用</h2><p>基本使用方法和 multiprocessing 一样</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(name)</span>:</span></span><br><span class="line">    print(<span class="string">"线程 %s 正在运行"</span> % name)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        t = threading.Thread(target=worker, args=(i,))</span><br><span class="line">        t.start() <span class="comment">#启动线程，即让线程开始执行</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">threading</span>.<span class="title">Thread</span><span class="params">(group=None, target=None, name=None, args=<span class="params">()</span>, kwargs=&#123;&#125;, *, daemon=None)</span>¶</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>group 兼容逻辑，始终设置为默认 None</li>
+<li>target 目标函数</li>
+<li>args 传入tuple参数</li>
+<li>kwargs 传入字典参数</li>
+<li>name 线程名称，默认会自动起一个 <code>Thread-N</code> 的名字</li>
+<li>daemon 守护线程</li>
+</ul>
+<h4 id="属性-amp-方法"><a href="#属性-amp-方法" class="headerlink" title="属性 &amp; 方法"></a>属性 &amp; 方法</h4><ul>
+<li><p>ident 线程标识符<br>get_ident() </p>
+</li>
+<li><p>name &amp; get_name() &amp; setName() 获取/设置进程名</p>
+</li>
+<li><p>daemon &amp; isDaemon() &amp; setDaemon() 设置/判断 守护进程</p>
+</li>
+<li><p>is_alive() &amp; isAlive() 线程是否存活</p>
+</li>
+<li><p>join([timeout]) 线程阻塞</p>
+</li>
+<li><p>start() 和 run() 启动线程</p>
+<p>如同进程一样，线程也有两种构造方法。</p>
+<p>a. 通过 start() 启动线程，此方法每个线程对象只能调用一次。start()会调用run()方法。</p>
+<p>​    标准的run() 方法会执行 target 函数，并使用 args, kwargs参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">t = threading.Thread(target=worker, args=(i,))</span><br><span class="line">t.start() #启动线程，即让线程开始执行</span><br></pre></td></tr></table></figure>
+
+<p>b. 通过继承 <code>threading.Thread</code> 的子类重写 <code>run</code> 方法实现我们上面的功能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThreading</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        super(MyThreading, self).__init__() <span class="comment"># 有两种方法调用父类，注意self的区别</span></span><br><span class="line">        <span class="comment"># threading.Thread.__init__(self)</span></span><br><span class="line">        self.args = args</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"线程 %s 正在运行"</span> % self.args)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        t = MyThreading(i)</span><br><span class="line">        t.start()</span><br></pre></td></tr></table></figure>
+
+<p>或者，更加通用一点</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThreading</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, group=None, target=None, name=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                 args=<span class="params">()</span>, kwargs=None, *, daemon=None)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self, group=<span class="literal">None</span>, target=<span class="literal">None</span>, name=<span class="literal">None</span>,</span><br><span class="line">                 args=(), kwargs=<span class="literal">None</span>, daemon=<span class="literal">None</span>)</span><br><span class="line">        self.args = args</span><br><span class="line">        self.kwargs = kwargs</span><br><span class="line">        self.func = target</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.func(*self.args)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        t = MyThreading(target=worker, args=(i,))</span><br><span class="line">        t.start() <span class="comment">#启动线程，即让线程开始执行</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h4><ul>
+<li><p>threading.active_count() 当前存活的线程数目</p>
+<p>len(threading.enumerate()) 也可以计算出相同的结果</p>
+</li>
+<li><p>threading.current_thread()  当前正在执行的线程对象</p>
+</li>
+<li><p>threading.enumerate() 当前活着的线程列表</p>
+</li>
+<li><p>threading.main_thread() 主线程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; threading.enumerate())</span><br><span class="line">[&lt;_MainThread(MainThread, started <span class="number">4573310400</span>)&gt;, &lt;MyThreading(Thread<span class="number">-1</span>, started <span class="number">123145406984192</span>)&gt;, &lt;MyThreading(Thread<span class="number">-2</span>, started <span class="number">123145412239360</span>)&gt;, &lt;MyThreading(Thread<span class="number">-3</span>, started <span class="number">123145417494528</span>)&gt;, &lt;MyThreading(Thread<span class="number">-4</span>, started <span class="number">123145422749696</span>)&gt;, &lt;MyThreading(Thread<span class="number">-5</span>, started <span class="number">123145428004864</span>)&gt;]</span><br><span class="line">&gt;&gt; threading.main_thread()</span><br><span class="line">&lt;_MainThread(MainThread, started <span class="number">4573310400</span>)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们有一个主线程和程序运行中自主创建的5个子线程</p>
+</li>
+</ul>
+<blockquote>
+<p>线程 threading 和 mutiprocessing 异同</p>
+<ul>
+<li><p>没有线程池</p>
+</li>
+<li><p>线程间共享全局变量，没有多进程间复杂的沟通方式</p>
+</li>
+<li><p>共享全局变量依旧会存在冲突的问题，使用的方法为互斥锁</p>
+<p>Lock, RLock, Condtion, Semaphore, Event. Barrier<br>这一部分和 mutiprocessing一样</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="GIL-锁"><a href="#GIL-锁" class="headerlink" title="GIL 锁"></a>GIL 锁</h2><h3 id="GIL的基本概念"><a href="#GIL的基本概念" class="headerlink" title="GIL的基本概念"></a>GIL的基本概念</h3><blockquote>
+<p>In CPython, the global interpreter lock, or GIL, is a mutex that prevents multiple native threads from executing Python bytecodes at once. This lock is necessary mainly because CPython’s memory management is not thread-safe. (However, since the GIL exists, other features have grown to depend on the guarantees that it enforces.)</p>
+</blockquote>
+<p><strong>GIL(Global Interpreter Lock)，中文译为全局解释器锁。</strong></p>
+<p>Python 虽然是近年来非常火的一个语言，但是它并不是一个新语言，1991年第一个Python编译器诞生。那时候的计算机大多是单核CPU，也就不存在并行计算的问题。随着CPU性能的提升，单核CPU逐渐被多核CPU替代。随着而来的问题是，如何保持数据间的一致性。解决的最简单的方法是加锁，只是Python的这把锁太大了点。</p>
+<p>GIL本质上类似操作系统的 Mutex。GIL 的功能是：在 CPython 解释器中执行的每一个 Python 线程，都会先锁住自己，以阻止别的线程执行。</p>
+<h3 id="GIL的工作原理"><a href="#GIL的工作原理" class="headerlink" title="GIL的工作原理"></a>GIL的工作原理</h3><p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200607024751.png" alt="GIL工作原理"></p>
+<p>可以看到 Thread 1 和 Thread 3 并不是一次性执行完的，而是线程会主动释放。这里的原因是CPython中存在一个叫做 <code>间隔式检查（check_interval）</code> 的机制。CPython 解释器会轮询线程，每隔一段时间，CPython 就会强制当前线程释放GIL锁。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200607030558.png" alt=""></p>
+<p><strong>这和CPU时间片的概念一样</strong> 在Python3 中，“时间片”大致为15毫秒。 </p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="使用-multiprocessing-替代-threading"><a href="#使用-multiprocessing-替代-threading" class="headerlink" title="使用 multiprocessing 替代 threading"></a>使用 multiprocessing 替代 threading</h3><blockquote>
+<p>multiprocessing库的出现很大程度上是为了弥补thread库因为GIL而低效的缺陷。它完整的复制了一套thread所提供的接口方便迁移。唯一的不同就是它使用了多进程而不是多线程。每个进程有自己的独立的GIL，因此也不会出现进程之间的GIL争抢。</p>
+<p>– 作者：rookieyu<br>– 链接：<a href="https://www.jianshu.com/p/756c505ab828" target="_blank" rel="noopener">https://www.jianshu.com/p/756c505ab828</a></p>
+</blockquote>
+<p>multiprocessing 的问题在于，其占用的资源是高于多线程的。而且由于进程间不能读取对方的地址空间，导致了多进程沟通是较为复杂的，这个额外的成本使得原本就非常复杂的多线程编程变得更加困难了点。</p>
+<p>不过 threading 也并非是一无是处，虽然在CPU 利用率上表现的不尽人意，但是在高I/O操作的时候就非常方便。</p>
+<p><strong>总结：高CPU使用multiprocessing，高I/O使用threading</strong></p>
+<h3 id="改用其他编译器"><a href="#改用其他编译器" class="headerlink" title="改用其他编译器"></a>改用其他编译器</h3><p>使用JPython 或者 IronPython 编译器，可以解决这类问题</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p> <a href="https://docs.python.org/zh-cn/3/library/threading.html#threading.Thread.run" target="_blank" rel="noopener">threading— 基于线程的并行</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/38147045" target="_blank" rel="noopener">食之无味，弃之可惜—Python threading——线程对象</a></p>
+<p><a href="http://c.biancheng.net/view/5537.html" target="_blank" rel="noopener">Python GIL全局解释器锁详解（深度剖析）</a></p>
+<p><a href="https://www.jianshu.com/p/756c505ab828" target="_blank" rel="noopener">rookieyu 简书– GIL</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2020/06/07/python-threading-basic/" target="_blank" title="python并发编程——多线程编程 threading 协程">http://ppsteven.github.io/2020/06/07/python-threading-basic/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/threading/" rel="tag">threading</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/19/vmware-centos-environment-network/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">mac + VMware + Centos7 下的网络配置</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#threading-库使用"><span class="nav-number">1.</span> <span class="nav-text">threading 库使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#属性-amp-方法"><span class="nav-number">1.1.1.</span> <span class="nav-text">属性 &amp; 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">类方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIL-锁"><span class="nav-number">2.</span> <span class="nav-text">GIL 锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GIL的基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">GIL的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIL的工作原理"><span class="nav-number">2.2.</span> <span class="nav-text">GIL的工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">3.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-multiprocessing-替代-threading"><span class="nav-number">3.1.</span> <span class="nav-text">使用 multiprocessing 替代 threading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改用其他编译器"><span class="nav-number">3.2.</span> <span class="nav-text">改用其他编译器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
