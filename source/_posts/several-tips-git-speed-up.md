@@ -164,7 +164,7 @@ nohup /root/miniconda2/envs/base/bin/sslocal -c ss.json >> ss.log 1>2&
 > P.S. 查看服务器绑定端口的命令:  `netstat -tunlp`
 > ![](https://cdn.jsdelivr.net/gh/PPsteven/pictures/img/20200508005806.png)
 
-有了远端代理，所有东西突然就方便了很多。所有的配置都只要走 `x.x.x.x:1081` 转发一下就可以了。因为我们本地的代理并不是会一直开着的，而远端的代理是一直存在的。(我于是把 [SwitchyOmega](chrome-extension://padekgcemlokbadohgkifijomclgjgif/options.html#!/about) 、git 这些地方都加上了远端的代理)
+有了远端代理，所有东西突然就方便了很多。所有的配置都只要走 `x.x.x.x:1081` 转发一下就可以了。因为我们本地的代理并不是会一直开着的，而远端的代理是一直存在的。
 
 
 

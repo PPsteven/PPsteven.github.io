@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>docker 实战:利用 docker 搭建服务 | 软微9133</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="docker, mysql, redis, ELK" />
+  
+  
+  
+  
+  <meta name="description" content="用 docker 安装需要用到的服务实在是太方便了，我们下面介绍一些好的轮子来用。  web-vscode: 搭建一个web版的vscode，不过实测下来不是特别好用。很多vscode上的插件用不了 redis web: web端的web管理工具，不过配置起来稍微有点麻烦。 lamp: php基础开发环境">
+<meta name="keywords" content="docker, mysql, redis, ELK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker 实战:利用 docker 搭建服务">
+<meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;06&#x2F;18&#x2F;docker-some-service-build-instruction&#x2F;index.html">
+<meta property="og:site_name" content="软微9133">
+<meta property="og:description" content="用 docker 安装需要用到的服务实在是太方便了，我们下面介绍一些好的轮子来用。  web-vscode: 搭建一个web版的vscode，不过实测下来不是特别好用。很多vscode上的插件用不了 redis web: web端的web管理工具，不过配置起来稍微有点麻烦。 lamp: php基础开发环境">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-06-18T12:08:01.576Z">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="软微9133" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt; src:url("css/fonts/FuturaPTBold.otf") format("woff");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt-light; src:url("css/fonts/FuturaPTBook.otf") format("woff");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt-italic; src:url("css/fonts/FuturaPTBookOblique.otf") format("woff");font-weight:400;font-style:italic;}
+}
+
+  </style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">首页</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">归档</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">分类</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">标签</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">关于</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/link">我的关注</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(无标题)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-docker-some-service-build-instruction" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      docker 实战:利用 docker 搭建服务
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/06/18/docker-some-service-build-instruction/" class="article-date">
+	  <time datetime="2020-06-18T11:15:21.000Z" itemprop="datePublished">2020-06-18</time>
+	</a>
+
+      
+    <a class="article-category-link" href="/categories/docker/">docker</a>
+
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		阅读量<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+      
+	<a class="article-edit" target="_blank" rel="noopener" href="https://github.com/ppsteven/blog/edit/master/source/_posts/docker-some-service-build-instruction.md">
+	<span id="edit">编辑</span>
+	</span>
+	</a>
+
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>用 <code>docker</code> 安装需要用到的服务实在是太方便了，我们下面介绍一些好的轮子来用。</p>
+<ul>
+<li>web-vscode: 搭建一个web版的vscode，不过实测下来不是特别好用。很多<code>vscode</code>上的插件用不了</li>
+<li>redis web: web端的web管理工具，不过配置起来稍微有点麻烦。</li>
+<li>lamp: php基础开发环境</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="web-vscode-安装"><a href="#web-vscode-安装" class="headerlink" title="web-vscode 安装"></a>web-vscode 安装</h2><blockquote>
+<p> 传送门: <a href="https://github.com/cdr/code-server" target="_blank" rel="noopener">code-server</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建</span></span><br><span class="line">docker rm -f vscode </span><br><span class="line">docker run \</span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line">-d \ </span><br><span class="line"><span class="comment"># 总是运行</span></span><br><span class="line">--restart=always \ </span><br><span class="line"><span class="comment"># Alias</span></span><br><span class="line">--name web_vscode \ </span><br><span class="line"><span class="comment"># hostname</span></span><br><span class="line">-h vscode \ </span><br><span class="line"><span class="comment"># 一定要以root账号运行,不然会报 Permission denied</span></span><br><span class="line">-u root \ </span><br><span class="line"><span class="comment"># 所有端口映射，而不要是127.0.0.1</span></span><br><span class="line">-p 8086:8080 \ </span><br><span class="line">-v <span class="string">"<span class="variable">$&#123;HOME&#125;</span>/.local/share/code-server:/home/coder/.local/share/code-server"</span> \ </span><br><span class="line"><span class="comment"># 密码是通过环境变量加入的</span></span><br><span class="line">-e PASSWORD=mycode \ </span><br><span class="line"><span class="comment"># $PWD 是当前希望项目放置的位置</span></span><br><span class="line">-v <span class="string">"<span class="variable">$PWD</span>:/home/coder/project"</span> \</span><br><span class="line"><span class="comment"># 镜像名，本地不存在的话，会从仓库拉取</span></span><br><span class="line">codercom/code-server:v2  </span><br><span class="line"></span><br><span class="line"><span class="comment">#查看</span></span><br><span class="line">docker ps -l</span><br><span class="line">docker logs web_vscode</span><br></pre></td></tr></table></figure>
+
+<p>运行成功后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">info  Server listening on http://0.0.0.0:8080</span><br><span class="line">info    - Password is 558ba38067432e3beddf1228</span><br><span class="line">info      - To use your own password, <span class="built_in">set</span> the PASSWORD environment variable</span><br><span class="line">info      - To <span class="built_in">disable</span> use `--auth none`</span><br><span class="line">info    - Not serving HTTPS</span><br></pre></td></tr></table></figure>
+
+<p>由于我们的 web-vscode 是运行在容器内的，所以很多环境我们需要自己配置，参考上述操作。</p>
+<h2 id="redis-web-管理工具"><a href="#redis-web-管理工具" class="headerlink" title="redis web 管理工具"></a>redis web 管理工具</h2><p>mac 上 redis 管理工具破解版不好找，但是在 github 上找到了一个开源的工具，非常方便。拿来用一下</p>
+<blockquote>
+<p>传送门: <a href="https://github.com/erikdubbelboer/phpRedisAdmin" target="_blank" rel="noopener">phpRedisAdmin</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull erikdubbelboer/phpredisadmin</span><br><span class="line">docker run --rm -itd -e REDIS_1_HOST=redis -e REDIS_1_NAME=myredis  -p 8015:80  --link redis-test:redis --name redisadmin erikdubbelboer/phpredisadmin</span><br><span class="line"><span class="comment"># 需要注意的是 REDIS_1_HOST 填写的是自己 redis 服务器的地址</span></span><br><span class="line"><span class="comment"># 这里我采用的是容器链接的方式</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="redis-amp-redis可视化工具"><a href="#redis-amp-redis可视化工具" class="headerlink" title="redis &amp; redis可视化工具"></a>redis &amp; redis可视化工具</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker pull redis</span><br><span class="line">docker run -p 127.0.0.1:6379:6379 -d --name redis redis --requirepass &quot;mypassword&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看redis的ip地址 172.17.0.2</span><br><span class="line">docker inspect redis | grep -ai &apos;ipa&apos;</span><br><span class="line">docker run --rm -it -e REDIS_1_HOST=172.17.0.2 -e REDIS_1_NAME=redis -p 80:80 erikdubbelboer/phpredisadmin</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="php-LAMP-环境搭建"><a href="#php-LAMP-环境搭建" class="headerlink" title="php LAMP 环境搭建"></a>php LAMP 环境搭建</h2><p>利用 <code>docker</code> 搭建 LAMP 环境本身应该是比较省力气的方式，但是网上 <code>CSDN</code> 之类的教程很多都是复制黏贴，很多实现不了，优质教程很少。目前发现了国外的一个 <code>linode</code> 的 docke r镜像，有非常详细的教程，很好用。</p>
+<blockquote>
+<p>linode 详细配置，请看</p>
+<ul>
+<li><a href="https://hub.docker.com/r/linode/lamp" target="_blank" rel="noopener">https://hub.docker.com/r/linode/lamp</a></li>
+<li><a href="https://www.linode.com/docs/applications/containers/how-to-install-docker-and-deploy-a-lamp-stack/" target="_blank" rel="noopener">https://www.linode.com/docs/applications/containers/how-to-install-docker-and-deploy-a-lamp-stack/</a></li>
+</ul>
+</blockquote>
+<h3 id="docker-安装"><a href="#docker-安装" class="headerlink" title="docker 安装"></a>docker 安装</h3><p>docker 环境搭建请看我的 <a href="https://ppsteven.github.io/2020/01/12/centos-install-introduction/">Centos 环境配置（持续总结）</a> 这一篇教程</p>
+<h3 id="拉取docker镜像"><a href="#拉取docker镜像" class="headerlink" title="拉取docker镜像"></a>拉取docker镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker search -s 10 lamp</span></span><br><span class="line">Flag --stars has been deprecated, use --filter=stars=3 instead</span><br><span class="line">NAME                DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mattrayner/lamp     A simple LAMP docker image running the prere…   211                                     [OK]</span><br><span class="line">linode/lamp         LAMP on Ubuntu 14.04.1 LTS Container            178</span><br><span class="line">... linode 的镜像 star数还是比较高的</span><br><span class="line"><span class="comment"># sudo docker pull linode/lamp</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="生成配置文件目录"><a href="#生成配置文件目录" class="headerlink" title="生成配置文件目录"></a>生成配置文件目录</h3><p>这一步很多教程里面都缺失的一部分，lamp 的很多文件需要映射到宿主机，方法后面的配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动进入容器 </span></span><br><span class="line">$ docker run -itd --name lamp linode/lamp:latest /bin/bash</span><br><span class="line"><span class="comment"># 将需要映射的文件拷贝出来，主要就是 apache2, mysql的配置文件 和 www文件夹</span></span><br><span class="line">.</span><br><span class="line">├── apache2.conf</span><br><span class="line">├── my.cnf</span><br><span class="line">└── www</span><br><span class="line">    ├── example.com</span><br><span class="line">    │   ├── backups</span><br><span class="line">    │   ├── <span class="built_in">log</span></span><br><span class="line">    │   └── public_html</span><br><span class="line">    └── html</span><br><span class="line">        └── index.html</span><br><span class="line"> </span><br><span class="line">$ docker cp lamp:/var/www /Users/xxx/Documents/Dockerfile/lamp/www</span><br><span class="line">$ docker cp lamp:/etc/apache2/apache2.conf  /Users/xxx/Documents/Dockerfile/lamp/apache2.conf</span><br><span class="line">$ docker cp lamp:/etc/mysql/my.cnf /Users/xxx/Documents/Dockerfile/lamp/my.cnf</span><br><span class="line"><span class="comment"># 删除旧的容器</span></span><br><span class="line">$ docker container rm -f lamp</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -p 8010:80 -p 3309:3306 \</span><br><span class="line">         -v /Users/ppsteven/Documents/Dockerfile/lamp/www:/var/www \</span><br><span class="line">         -v /Users/ppsteven/Documents/Dockerfile/lamp/apache2.conf:/etc/apache2/apache2.conf \</span><br><span class="line">         -v /Users/ppsteven/Documents/Dockerfile/lamp/my.cnf:/etc/mysql/my.cnf \</span><br><span class="line">         --name lamp \</span><br><span class="line">         -itd linode/lamp:latest /bin/bash</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="启动-Apache-和-MySQL-服务"><a href="#启动-Apache-和-MySQL-服务" class="headerlink" title="启动 Apache 和 MySQL 服务"></a>启动 Apache 和 MySQL 服务</h3><p>容器内部的 Apache 和 MySQL 服务是默认不自动启动的（当 LAMP 重启的时候需要注意查看这两个服务是否也启动了）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service apache2 start</span><br><span class="line">service mysql start</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="MySQL-初始化配置"><a href="#MySQL-初始化配置" class="headerlink" title="MySQL 初始化配置"></a>MySQL 初始化配置</h3><p>这一步是很多地方没有提的，linode 的 MySQL 是有默认密码，<code>Admin2015</code>。我们需要初始化对于 MySQL 数据库的配置。</p>
+<blockquote>
+<p>参考：<a href="https://zhuanlan.zhihu.com/p/111605563" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/111605563</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如下命令即可</span></span><br><span class="line">mysql_secure_installation</span><br><span class="line">按下回城键你会看见结尾如下的对话。</span><br><span class="line"></span><br><span class="line">Enter current password <span class="keyword">for</span> root (enter <span class="keyword">for</span> none): <span class="comment">#</span></span><br><span class="line">Set root password? <span class="comment"># 是否设置root用户密码  y</span></span><br><span class="line">New password: <span class="comment"># 新密码</span></span><br><span class="line">Re-enter new password: </span><br><span class="line">Remove anonymous users? [Y/n] <span class="comment"># 是否删除匿名用户，回车 y</span></span><br><span class="line">Disallow root login remotely? [Y/n] <span class="comment"># 是否禁止root远程登录</span></span><br><span class="line">Remove <span class="built_in">test</span> database and access to it? [Y/n] <span class="comment"># 是否删除test数据库</span></span><br><span class="line">Reload privilege tables now? [Y/n] <span class="comment"># 是否重新加载权限表  y</span></span><br><span class="line">All <span class="keyword">done</span>! If you’ve completed all of the above steps, your MariaDB</span><br><span class="line">installation should now be secure.</span><br><span class="line">Thanks <span class="keyword">for</span> using MariaDB!</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试登录</span></span><br><span class="line">mysql -uroot -p<span class="string">"自己的数据库密码"</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="测试是否成功"><a href="#测试是否成功" class="headerlink" title="测试是否成功"></a>测试是否成功</h3><p>游览器输入 <a href="http://localhost:8010/" target="_blank" rel="noopener">http://localhost:8010/</a> ，看到如下信息，表示成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The Docker LAMP stack is working.</span><br><span class="line">The configuration information can be found here or here</span><br><span class="line">This index.html file is located in the &quot;/var/www/example.com/public_html&quot; directory.</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="排查问题方法"><a href="#排查问题方法" class="headerlink" title="排查问题方法"></a>排查问题方法</h2><h3 id="docker-退出"><a href="#docker-退出" class="headerlink" title="docker 退出"></a>docker 退出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 千万不要用 exit，容器会跟着退出的</span><br><span class="line">CTRL + P + Q</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker-ip查看"><a href="#docker-ip查看" class="headerlink" title="docker ip查看"></a>docker ip查看</h3><ol>
+<li><p>进入容器查看，这种方法可能会失败，因为可能容器的系统中没有对应的命令工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker exec -ti &lt;NAME OR ID&gt; /bin/bash</span><br><span class="line"># ifconfig/ip addr</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最正统的写法(可以写在 shell 脚本里)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker inspect --format '&#123;&#123; .NetworkSettings.IPAddress &#125;&#125;' 2e23d01384ac</span></span><br><span class="line">172.17.0.2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最简单查询的写法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect lamp | grep -ai <span class="string">'ipa'</span></span><br><span class="line">            <span class="string">"SecondaryIPAddresses"</span>: null,</span><br><span class="line">            <span class="string">"IPAddress"</span>: <span class="string">"172.17.0.2"</span>,</span><br><span class="line">                    <span class="string">"IPAMConfig"</span>: null,</span><br><span class="line">                    <span class="string">"IPAddress"</span>: <span class="string">"172.17.0.2"</span>,</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h3 id="docker-日志排查（tail-f-dev-null）"><a href="#docker-日志排查（tail-f-dev-null）" class="headerlink" title="docker 日志排查（tail -f /dev/null）"></a>docker 日志排查（tail -f /dev/null）</h3><p>利用 <code>tail -f /dev/null</code> 长命令阻塞，不让容器立马结束，这种用法非常好用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -ti &lt;NAME OR ID&gt; tail -f /dev/null</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      <div>
+        <ul class="post-copyright">
+          <li class="post-copyright-author">
+          <strong>本文作者:  </strong>PPsteven</a>
+          </li>
+          <li class="post-copyright-link">
+          <strong>本文链接:  </strong>
+          <a href="/2020/06/18/docker-some-service-build-instruction/" target="_blank" title="docker 实战:利用 docker 搭建服务">http://ppsteven.github.io/2020/06/18/docker-some-service-build-instruction/</a>
+          </li>
+          <li class="post-copyright-license">
+            <strong>版权声明:   </strong>
+            本博客所有文章除特别声明外，均采用 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">CC BY-NC-ND 4.0</a>
+            许可协议。转载请注明出处
+          </li>
+         
+        </ul>
+<div>
+
+      
+      
+      
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker-mysql-redis-ELK/" rel="tag">docker, mysql, redis, ELK</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/07/python-threading-basic/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">python并发编程——多线程编程 threading 协程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#web-vscode-安装"><span class="nav-number">1.</span> <span class="nav-text">web-vscode 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-web-管理工具"><span class="nav-number">2.</span> <span class="nav-text">redis web 管理工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-amp-redis可视化工具"><span class="nav-number">2.1.</span> <span class="nav-text">redis &amp; redis可视化工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php-LAMP-环境搭建"><span class="nav-number">3.</span> <span class="nav-text">php LAMP 环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-安装"><span class="nav-number">3.1.</span> <span class="nav-text">docker 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉取docker镜像"><span class="nav-number">3.2.</span> <span class="nav-text">拉取docker镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成配置文件目录"><span class="nav-number">3.3.</span> <span class="nav-text">生成配置文件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动容器"><span class="nav-number">3.4.</span> <span class="nav-text">启动容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-Apache-和-MySQL-服务"><span class="nav-number">3.5.</span> <span class="nav-text">启动 Apache 和 MySQL 服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-初始化配置"><span class="nav-number">3.6.</span> <span class="nav-text">MySQL 初始化配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试是否成功"><span class="nav-number">3.7.</span> <span class="nav-text">测试是否成功</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排查问题方法"><span class="nav-number">4.</span> <span class="nav-text">排查问题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-退出"><span class="nav-number">4.1.</span> <span class="nav-text">docker 退出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-ip查看"><span class="nav-number">4.2.</span> <span class="nav-text">docker ip查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-日志排查（tail-f-dev-null）"><span class="nav-number">4.3.</span> <span class="nav-text">docker 日志排查（tail -f /dev/null）</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2019 - 2020 软微9133 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				访客数 : <span id="busuanzi_value_site_uv"></span> |  
+				访问量 : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/link" class="mobile-nav-link">Link</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            软微9133
+          </div>
+          <div class="panel-body">
+            Copyright © 2020 PPsteven All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

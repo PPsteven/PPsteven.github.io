@@ -15,14 +15,11 @@ copyright:
 
 本章节收集一下配置一个centos 环境所需要的操作
 
-第一部分：必要软件的安装
-
 - git
 - wget
 - MiniConda(python)
 - mysql
-
-第二部分：Docker 服务
+- ...
 
 - web-vscode
 - phpredisAdmin(redis web 管理工具)
@@ -111,6 +108,15 @@ $ yum -y install lrzsz
 sz filename # 下载文件 filename
 rz # 上传文件
 ```
+
+### 进程树
+
+```bash
+yum -y install psmisc
+pstree
+```
+
+
 
 ### MiniConda
 
@@ -308,8 +314,8 @@ set global validate_password.length=4;
 
 最后，修改为合适的密码
 
-```
-  ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
+```sql
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'new password';
 ```
 
 如果我们安装的是 MySQL8.0 以上的版本，加密规则是mysql_native_password,而在mysql8之后,加密规则是caching_sha2_password。为了解决兼容性问题，一般来说，我选择把加密等级调低一点。
@@ -335,8 +341,7 @@ FLUSH PRIVILEGES;
 > 参考资料:
 > [CentOS7 安装并配置MySQL8.0](https://www.cnblogs.com/zipxzf/p/10718544.html)
 > [How To Install MySQL on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-centos-7)
-
-
+> [centos彻底卸载mysql（不保留数据）](https://www.cnblogs.com/leelice/p/10728129.html)
 
 ### Redis
 
@@ -516,79 +521,4 @@ print(driver.page_source)
 
 
 
-## Docker 服务
-
-用 `docker` 安装需要用到的服务实在是太方便了，我们下面介绍一些好的轮子来用。
-
-### web-vscode 安装
-
->  传送门: [code-server](https://github.com/cdr/code-server)
-
-```bash
-#创建
-docker rm -f vscode 
-docker run \
-# 后台运行
--d \ 
-# 总是运行
---restart=always \ 
-# Alias
---name web_vscode \ 
-# hostname
--h vscode \ 
-# 一定要以root账号运行,不然会报 Permission denied
--u root \ 
-# 所有端口映射，而不要是127.0.0.1
--p 8086:8080 \ 
--v "${HOME}/.local/share/code-server:/home/coder/.local/share/code-server" \ 
-# 密码是通过环境变量加入的
--e PASSWORD=mycode \ 
-# $PWD 是当前希望项目放置的位置
--v "$PWD:/home/coder/project" \
-# 镜像名，本地不存在的话，会从仓库拉取
-codercom/code-server:v2  
-
-#查看
-docker ps -l
-docker logs web_vscode 
-```
-
-运行成功后
-
-```bash
-info  Server listening on http://0.0.0.0:8080
-info    - Password is 558ba38067432e3beddf1228
-info      - To use your own password, set the PASSWORD environment variable
-info      - To disable use `--auth none`
-info    - Not serving HTTPS
-```
-
-由于我们的 web-vscode 是运行在容器内的，所以很多环境我们需要自己配置，参考上述操作。
-
-
-
-### redis web 管理工具
-
-mac 上 redis 管理工具破解版不好找，但是在 github 上找到了一个开源的工具，非常方便。拿来用一下
-
-> 传送门: [phpRedisAdmin](https://github.com/erikdubbelboer/phpRedisAdmin)
-
-```bash
-docker pull erikdubbelboer/phpredisadmin
-docker run --rm -itd -e REDIS_1_HOST=redis -e REDIS_1_NAME=myredis  -p 8015:80  --link redis-test:redis --name redisadmin erikdubbelboer/phpredisadmin
-# 需要注意的是 REDIS_1_HOST 填写的是自己 redis 服务器的地址
-# 这里我采用的是容器链接的方式
-```
-
-### redis & redis可视化工具
-
-```
-docker pull redis
-docker run -p 127.0.0.1:6379:6379 -d --name redis redis --requirepass "mypassword"
-
-
-# 查看redis的ip地址 172.17.0.2
-docker inspect redis | grep -ai 'ipa'
-docker run --rm -it -e REDIS_1_HOST=172.17.0.2 -e REDIS_1_NAME=redis -p 80:80 erikdubbelboer/phpredisadmin
-```
 

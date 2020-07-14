@@ -34,6 +34,27 @@ set global validate_password.length=4;
 
 
 
+## yum安装mysql 下载速度慢
+
+```bash
+# 备份系统自带yum源配置文件
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+# 下载ailiyun的yum源配置文件(阿里云速度比较快)
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+# 生成缓存
+yum makecache
+# yum 升级
+yum -y update
+# 安装yum
+yum install -y mysql-server
+```
+
+
+
+
+
+
+
 ## 创建新的用户
 
 ```mysql

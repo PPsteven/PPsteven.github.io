@@ -28,8 +28,6 @@ Python编码规范
 
 ## 命名
 
-module_name, package_name, ClassName, method_name, ExceptionName, function_name, GLOBAL_VAR_NAME, instance_var_name, function_parameter_name, local_var_name.
-
 **应该避免的名称**
 
 1. 单字符名称, 除了计数器和迭代器.
@@ -140,7 +138,7 @@ def pinyin(hans, style=Style.TONE, heteronym=False,
 
 
 
-## Py文件头文件
+## .py文件头文件
 
 ```python
 # -*- encoding:utf-8 -*-
@@ -156,5 +154,82 @@ def pinyin(hans, style=Style.TONE, heteronym=False,
 -------------------------------------------------
 """
 # 上面的代码加入 PyCharm 中
+```
+
+
+
+### 样例代码
+
+这里我们参考 `崔庆才` 书中 `Scrapy 微博爬虫` 的编码风格
+
+### 项目结构
+
+```
+Weibo
+├── README.md
+├── scrapy.cfg
+└── weibo
+    ├── __init__.py
+    ├── items.py
+    ├── middlewares.py
+    ├── pipelines.py
+    ├── settings.py
+    └── spiders
+        ├── __init__.py
+        └── weibocn.py
+```
+
+## weibocn.py 文件
+
+```diff
+import json
++ from scrapy import Request, Spider # 可以看到导入的模块名也是 双驼峰 
+from weibo.items import *
+
+
++ class WeiboSpider(Spider): # 类名双驼峰  WebioSpider
+    name = 'weibocn'
+    
++   allowed_domains = ['m.weibo.cn'] # 变量全部小写，用下划线_ 连接
+    
+    ...
+    
++   start_users = ['3217179555', '1742566624', '2282991915', '1288739185', '3952070245', '5878659096']
+    
++   def start_requests(self): # 函数名全部小写，用下划线_ 连接
+        for uid in self.start_users:
+            yield Request(self.user_url.format(uid=uid), callback=self.parse_user)
+    
+    def parse_user(self, response): 
++       """
++       解析用户信息                          代码注释风格
++       :param response: Response对象
++        """
+        self.logger.debug(response)
+        result = json.loads(response.text)
+        if result.get('data').get('userInfo'):
+            user_info = result.get('data').get('userInfo')
+            user_item = UserItem()
+            field_map = {
+                'id': 'id', 'name': 'screen_name', 'avatar': 'profile_image_url', 'cover': 'cover_image_phone',
+                'gender': 'gender', 'description': 'description', 'fans_count': 'followers_count',
+                'follows_count': 'follow_count', 'weibos_count': 'statuses_count', 'verified': 'verified',
+                'verified_reason': 'verified_reason', 'verified_type': 'verified_type'
+            }
+            for field, attr in field_map.items():
+                user_item[field] = user_info.get(attr)
+            yield user_item
++           # 关注
+            uid = user_info.get('id')
+            yield Request(self.follow_url.format(uid=uid, page=1), callback=self.parse_follows,
+                          meta={'page': 1, 'uid': uid})
++           # 粉丝
+            yield Request(self.fan_url.format(uid=uid, page=1), callback=self.parse_fans,
+                          meta={'page': 1, 'uid': uid})
++           # 微博
+            yield Request(self.weibo_url.format(uid=uid, page=1), callback=self.parse_weibos,
+                          meta={'page': 1, 'uid': uid})
+
+....
 ```
 

@@ -13,7 +13,7 @@ toc_number:
 copyright:
 ---
 
-Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 **多进程编程 multiprocessing** 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，稍稍简单了点。
+Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 **多进程编程 multiprocessing** 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，更加简单。
 
 本章主要介绍
 
@@ -124,7 +124,7 @@ class threading.Thread(group=None, target=None, name=None, args=(), kwargs={}, *
 
   
 
-#### 类方法
+#### threading 提供的方法
 
 - threading.active_count() 当前存活的线程数目
 
@@ -190,14 +190,13 @@ GIL本质上类似操作系统的 Mutex。GIL 的功能是：在 CPython 解释�
 
 >multiprocessing库的出现很大程度上是为了弥补thread库因为GIL而低效的缺陷。它完整的复制了一套thread所提供的接口方便迁移。唯一的不同就是它使用了多进程而不是多线程。每个进程有自己的独立的GIL，因此也不会出现进程之间的GIL争抢。
 >
->-- 作者：rookieyu
->-- 链接：https://www.jianshu.com/p/756c505ab828
+>-- 作者：[rookieyu](https://www.jianshu.com/p/756c505ab828)
 
 multiprocessing 的问题在于，其占用的资源是高于多线程的。而且由于进程间不能读取对方的地址空间，导致了多进程沟通是较为复杂的，这个额外的成本使得原本就非常复杂的多线程编程变得更加困难了点。
 
-不过 threading 也并非是一无是处，虽然在CPU 利用率上表现的不尽人意，但是在高I/O操作的时候就非常方便。
+不过 threading 也并非是一无是处，虽然在CPU 利用率上表现的不尽人意，但是在高I/O操作的时候，多线程可以起到避免阻塞的作用。
 
-**总结：高CPU使用multiprocessing，高I/O使用threading**
+> 计算密集型使用多进程，I/O密集型使用多线程或者多协程
 
 ### 改用其他编译器
 

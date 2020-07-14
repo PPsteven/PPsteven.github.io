@@ -11,17 +11,17 @@
   
   
   
-  <meta name="description" content="Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 多进程编程 multiprocessing 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager&#x2F;Array&#x2F;Values 这种进程间通信的方法，稍稍简单了点。 本章主要介绍  多线程threadin">
+  <meta name="description" content="Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 多进程编程 multiprocessing 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager&#x2F;Array&#x2F;Values 这种进程间通信的方法，更加简单。 本章主要介绍  多线程threading">
 <meta name="keywords" content="python,threading">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python并发编程——多线程编程 threading 协程">
 <meta property="og:url" content="http:&#x2F;&#x2F;ppsteven.github.io&#x2F;2020&#x2F;06&#x2F;07&#x2F;python-threading-basic&#x2F;index.html">
 <meta property="og:site_name" content="软微9133">
-<meta property="og:description" content="Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 多进程编程 multiprocessing 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager&#x2F;Array&#x2F;Values 这种进程间通信的方法，稍稍简单了点。 本章主要介绍  多线程threadin">
+<meta property="og:description" content="Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 多进程编程 multiprocessing 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager&#x2F;Array&#x2F;Values 这种进程间通信的方法，更加简单。 本章主要介绍  多线程threading">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200607024751.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200607030558.png">
-<meta property="og:updated_time" content="2020-06-06T19:12:46.805Z">
+<meta property="og:updated_time" content="2020-06-07T03:13:52.823Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;gh&#x2F;PPsteven&#x2F;pictures&#x2F;img&#x2F;20200607024751.png">
   
@@ -203,7 +203,7 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 <strong>多进程编程 multiprocessing</strong> 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，稍稍简单了点。</p>
+        <p>Python 并发编程可以分为三块：多进程编程，多线程编程，多协程编程。之前一篇文章已经讲解过了 <strong>多进程编程 multiprocessing</strong> 的用法，threading 的使用基本上和 multiprocessing 的差别不大，由于协程是共享同一个进程下的内存地址，所以无需使用 Manager/Array/Values 这种进程间通信的方法，更加简单。</p>
 <p>本章主要介绍</p>
 <ul>
 <li>多线程threading 的基本使用方法</li>
@@ -251,7 +251,7 @@
 
 </li>
 </ul>
-<h4 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h4><ul>
+<h4 id="threading-提供的方法"><a href="#threading-提供的方法" class="headerlink" title="threading 提供的方法"></a>threading 提供的方法</h4><ul>
 <li><p>threading.active_count() 当前存活的线程数目</p>
 <p>len(threading.enumerate()) 也可以计算出相同的结果</p>
 </li>
@@ -289,11 +289,13 @@
 <p><strong>这和CPU时间片的概念一样</strong> 在Python3 中，“时间片”大致为15毫秒。 </p>
 <h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="使用-multiprocessing-替代-threading"><a href="#使用-multiprocessing-替代-threading" class="headerlink" title="使用 multiprocessing 替代 threading"></a>使用 multiprocessing 替代 threading</h3><blockquote>
 <p>multiprocessing库的出现很大程度上是为了弥补thread库因为GIL而低效的缺陷。它完整的复制了一套thread所提供的接口方便迁移。唯一的不同就是它使用了多进程而不是多线程。每个进程有自己的独立的GIL，因此也不会出现进程之间的GIL争抢。</p>
-<p>– 作者：rookieyu<br>– 链接：<a href="https://www.jianshu.com/p/756c505ab828" target="_blank" rel="noopener">https://www.jianshu.com/p/756c505ab828</a></p>
+<p>– 作者：<a href="https://www.jianshu.com/p/756c505ab828" target="_blank" rel="noopener">rookieyu</a></p>
 </blockquote>
 <p>multiprocessing 的问题在于，其占用的资源是高于多线程的。而且由于进程间不能读取对方的地址空间，导致了多进程沟通是较为复杂的，这个额外的成本使得原本就非常复杂的多线程编程变得更加困难了点。</p>
-<p>不过 threading 也并非是一无是处，虽然在CPU 利用率上表现的不尽人意，但是在高I/O操作的时候就非常方便。</p>
-<p><strong>总结：高CPU使用multiprocessing，高I/O使用threading</strong></p>
+<p>不过 threading 也并非是一无是处，虽然在CPU 利用率上表现的不尽人意，但是在高I/O操作的时候，多线程可以起到避免阻塞的作用。</p>
+<blockquote>
+<p>计算密集型使用多进程，I/O密集型使用多线程或者多协程</p>
+</blockquote>
 <h3 id="改用其他编译器"><a href="#改用其他编译器" class="headerlink" title="改用其他编译器"></a>改用其他编译器</h3><p>使用JPython 或者 IronPython 编译器，可以解决这类问题</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p> <a href="https://docs.python.org/zh-cn/3/library/threading.html#threading.Thread.run" target="_blank" rel="noopener">threading— 基于线程的并行</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/38147045" target="_blank" rel="noopener">食之无味，弃之可惜—Python threading——线程对象</a></p>
@@ -337,6 +339,15 @@
     
 <nav id="article-nav">
   
+    <a href="/2020/06/18/docker-some-service-build-instruction/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          docker 实战:利用 docker 搭建服务
+        
+      </div>
+    </a>
+  
   
     <a href="/2020/05/19/vmware-centos-environment-network/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
@@ -354,7 +365,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
     
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#threading-库使用"><span class="nav-number">1.</span> <span class="nav-text">threading 库使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#属性-amp-方法"><span class="nav-number">1.1.1.</span> <span class="nav-text">属性 &amp; 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">类方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIL-锁"><span class="nav-number">2.</span> <span class="nav-text">GIL 锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GIL的基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">GIL的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIL的工作原理"><span class="nav-number">2.2.</span> <span class="nav-text">GIL的工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">3.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-multiprocessing-替代-threading"><span class="nav-number">3.1.</span> <span class="nav-text">使用 multiprocessing 替代 threading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改用其他编译器"><span class="nav-number">3.2.</span> <span class="nav-text">改用其他编译器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#threading-库使用"><span class="nav-number">1.</span> <span class="nav-text">threading 库使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法"><span class="nav-number">1.1.</span> <span class="nav-text">构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#属性-amp-方法"><span class="nav-number">1.1.1.</span> <span class="nav-text">属性 &amp; 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#threading-提供的方法"><span class="nav-number">1.1.2.</span> <span class="nav-text">threading 提供的方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIL-锁"><span class="nav-number">2.</span> <span class="nav-text">GIL 锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GIL的基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">GIL的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIL的工作原理"><span class="nav-number">2.2.</span> <span class="nav-text">GIL的工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">3.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-multiprocessing-替代-threading"><span class="nav-number">3.1.</span> <span class="nav-text">使用 multiprocessing 替代 threading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改用其他编译器"><span class="nav-number">3.2.</span> <span class="nav-text">改用其他编译器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol>
     
     </div>
   </aside>
