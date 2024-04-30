@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-技术笔记/运维/DB/SQL优化--Explain" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.2.1">
+<title data-rh="true">SQL优化--Explain | CodePainter</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://ppsteven.github.io/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://ppsteven.github.io/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://ppsteven.github.io/docs/技术笔记/运维/DB/SQL优化--Explain"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="SQL优化--Explain | CodePainter"><meta data-rh="true" name="description" content="Explain 输出详解"><meta data-rh="true" property="og:description" content="Explain 输出详解"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://ppsteven.github.io/docs/技术笔记/运维/DB/SQL优化--Explain"><link data-rh="true" rel="alternate" href="https://ppsteven.github.io/docs/技术笔记/运维/DB/SQL优化--Explain" hreflang="en"><link data-rh="true" rel="alternate" href="https://ppsteven.github.io/docs/技术笔记/运维/DB/SQL优化--Explain" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="CodePainter RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="CodePainter Atom Feed"><link rel="stylesheet" href="/assets/css/styles.4822eac9.css">
+<script src="/assets/js/runtime~main.d4a940cd.js" defer="defer"></script>
+<script src="/assets/js/main.d59d56ce.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/logo.svg" alt="CodePainter" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/logo.svg" alt="CodePainter" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">CodePainter</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/category/前端">Wiki</a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/PPsteven" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/docs/category/前端">前端</a><button aria-label="Expand sidebar category &#x27;前端&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/技术笔记/后端/Go/Go语法-类型判断">后端</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/技术笔记/运维/Docker/docker-elasticsearch-Kibana-installation">运维</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/技术笔记/运维/Docker/docker-elasticsearch-Kibana-installation">Docker</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/技术笔记/运维/Linux/linux-environment-variable-config-file-order">Linux</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/技术笔记/运维/Git/git-skill-in-learning">Git</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/docs/技术笔记/运维/DB/SQL进阶">DB</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/技术笔记/运维/DB/SQL进阶">SQL 进阶</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/技术笔记/运维/DB/mysql-bug-solution">MySQL 错误记录</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/技术笔记/运维/DB/mysql-freq-command">MySQL 常用命令</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/技术笔记/运维/DB/SQL优化--Explain">SQL优化--Explain</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/技术笔记/运维/DB/MongoDB 基本用法">MongoDB 基本用法</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/技术笔记/运维/DB/数据库迁移工具比较">数据库迁移工具比较</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/技术笔记/运维/Mac/Mac 开发环境配置">Mac</a></div></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/技术笔记/其它/学习资料/电子书/Go语言电子书">其它</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/技术笔记/Cheetsheet/Docker-cheetsheet">Cheetsheet</a></div></li></ul></nav><button type="button" title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_kv0_"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">运维</span><meta itemprop="position" content="1"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">DB</span><meta itemprop="position" content="2"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">SQL优化--Explain</span><meta itemprop="position" content="3"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>SQL优化--Explain</h1></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="explain-输出详解">Explain 输出详解<a href="#explain-输出详解" class="hash-link" aria-label="Direct link to Explain 输出详解" title="Direct link to Explain 输出详解">​</a></h2>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="explain-output-columns">Explain Output Columns<a href="#explain-output-columns" class="hash-link" aria-label="Direct link to Explain Output Columns" title="Direct link to Explain Output Columns">​</a></h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Column</th><th style="text-align:left">JSON Name</th><th style="text-align:left">Meaning</th><th>eg</th></tr></thead><tbody><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_id" target="_blank" rel="noopener noreferrer"><code>id</code></a></td><td style="text-align:left"><code>select_id</code></td><td style="text-align:left">每个select子句的标识id</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_select_type" target="_blank" rel="noopener noreferrer"><code>select_type</code></a></td><td style="text-align:left">None</td><td style="text-align:left">select语句的类型</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_table" target="_blank" rel="noopener noreferrer"><code>table</code></a></td><td style="text-align:left"><code>table_name</code></td><td style="text-align:left">当前表  名</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_partitions" target="_blank" rel="noopener noreferrer"><code>partitions</code></a></td><td style="text-align:left"><code>partitions</code></td><td style="text-align:left">匹配的分区</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_type" target="_blank" rel="noopener noreferrer"><code>type</code></a></td><td style="text-align:left"><code>access_type</code></td><td style="text-align:left">当前表内访问方式 join type</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_possible_keys" target="_blank" rel="noopener noreferrer"><code>possible_keys</code></a></td><td style="text-align:left"><code>possible_keys</code></td><td style="text-align:left">可能使用到的索引</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_key" target="_blank" rel="noopener noreferrer"><code>key</code></a></td><td style="text-align:left"><code>key</code></td><td style="text-align:left">经过优化器评估最终使用的索引</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_key_len" target="_blank" rel="noopener noreferrer"><code>key_len</code></a></td><td style="text-align:left"><code>key_length</code></td><td style="text-align:left">The length of the chosen key</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_ref" target="_blank" rel="noopener noreferrer"><code>ref</code></a></td><td style="text-align:left"><code>ref</code></td><td style="text-align:left">根据索引应用到的列（关联外表）</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_rows" target="_blank" rel="noopener noreferrer"><code>rows</code></a></td><td style="text-align:left"><code>rows</code></td><td style="text-align:left">Estimate of rows to be examined，估计真实扫描到的行数</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_filtered" target="_blank" rel="noopener noreferrer"><code>filtered</code></a></td><td style="text-align:left"><code>filtered</code></td><td style="text-align:left">根据条件过滤掉的百分比</td><td></td></tr><tr><td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html#explain_extra" target="_blank" rel="noopener noreferrer"><code>Extra</code></a></td><td style="text-align:left">None</td><td style="text-align:left">额外说明</td><td></td></tr></tbody></table>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="each-explain-column-detail">Each Explain Column Detail<a href="#each-explain-column-detail" class="hash-link" aria-label="Direct link to Each Explain Column Detail" title="Direct link to Each Explain Column Detail">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="1id">1.id<a href="#1id" class="hash-link" aria-label="Direct link to 1.id" title="Direct link to 1.id">​</a></h4>
+<p>SELECT的序号，查询序号是SQL执行语句的顺序。</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="2select_type">2.select_type<a href="#2select_type" class="hash-link" aria-label="Direct link to 2.select_type" title="Direct link to 2.select_type">​</a></h4>
+<p>SELECT类型有</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left"><code>select_type</code> Value</th><th style="text-align:left">JSON Name</th><th style="text-align:left">Meaning</th></tr></thead><tbody><tr><td style="text-align:left"><code>SIMPLE</code></td><td style="text-align:left">None</td><td style="text-align:left">简单查询（无UNION和子查询）</td></tr><tr><td style="text-align:left"><code>PRIMARY</code></td><td style="text-align:left">None</td><td style="text-align:left">最外层的SELECT</td></tr><tr><td style="text-align:left"><code>UNION</code></td><td style="text-align:left">None</td><td style="text-align:left">UNION操作中，查询中处于内层的SELECT，且与外层SELECT<strong>独立</strong></td></tr><tr><td style="text-align:left"><code>DEPENDENT UNION</code></td><td style="text-align:left"><code>dependent</code> (<code>true</code>)</td><td style="text-align:left">UNION操作中，查询中处于内层的SELECT，且与外层SELECT<strong>依赖</strong></td></tr><tr><td style="text-align:left"><code>UNION RESULT</code></td><td style="text-align:left"><code>union_result</code></td><td style="text-align:left">UNION的结果，对应ID为NULL</td></tr><tr><td style="text-align:left"><code>SUBQUERY</code></td><td style="text-align:left">None</td><td style="text-align:left">子查询的第一个SELECT</td></tr><tr><td style="text-align:left"><code>DEPENDENT SUBQUERY</code></td><td style="text-align:left"><code>dependent</code> (<code>true</code>)</td><td style="text-align:left">子查询中首个SELECT，但依赖于外层的表（如果有多个子查询存在）</td></tr><tr><td style="text-align:left"><code>DERIVED</code></td><td style="text-align:left">None</td><td style="text-align:left">Derived table</td></tr><tr><td style="text-align:left"><code>DEPENDENT DERIVED</code></td><td style="text-align:left"><code>dependent</code> (<code>true</code>)</td><td style="text-align:left">Derived table，依赖另外的表</td></tr><tr><td style="text-align:left"><code>MATERIALIZED</code></td><td style="text-align:left"><code>materialized_from_subquery</code></td><td style="text-align:left">Materialized 子查询</td></tr><tr><td style="text-align:left"><code>UNCACHEABLE SUBQUERY</code></td><td style="text-align:left"><code>cacheable</code> (<code>false</code>)</td><td style="text-align:left">无法缓存的子查询</td></tr><tr><td style="text-align:left"><code>UNCACHEABLE UNION</code></td><td style="text-align:left"><code>cacheable</code> (<code>false</code>)</td><td style="text-align:left">Union操作中，无法缓存的子查询</td></tr></tbody></table>
+<p><strong>视图（View）</strong> ：虚拟的数据库关系，视图不是数据库系统存储的真实逻辑关系，每次视图访问的时候都会实时生成。</p>
+<p><strong>物化视图（Materialized Views）</strong>：当视图的结果存储在数据库系统中时，就叫做物化视图，物化视图无法用SQL进行定义，而是由数据库软件管理使用。</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="3table">3.table<a href="#3table" class="hash-link" aria-label="Direct link to 3.table" title="Direct link to 3.table">​</a></h4>
+<p>当前表名</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="4partitions">4.partitions<a href="#4partitions" class="hash-link" aria-label="Direct link to 4.partitions" title="Direct link to 4.partitions">​</a></h4>
+<p>匹配的分区</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="5type">5.type<a href="#5type" class="hash-link" aria-label="Direct link to 5.type" title="Direct link to 5.type">​</a></h4>
+<p>当前表内访问方式，性能由好到坏排序：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>id</th><th>type value</th><th>Meaning</th></tr></thead><tbody><tr><td>1</td><td>system</td><td>表中只有一行，const 的一种特殊情况</td></tr><tr><td>2</td><td>const</td><td>单表中最多有一个匹配行，primary key 或者 unique index的检索</td></tr><tr><td>3</td><td>eq_ref</td><td>多表连接中被驱动表的连接列上有primary key或者unique index的检索</td></tr><tr><td>4</td><td>ref</td><td>与eq_ref类似，但不是使用primary key或者unique index，而是普通索引，或者是索引的左前缀序列。简言之，就是<strong>无法根据索引值确定单一行</strong>。</td></tr><tr><td>5</td><td>fulltext</td><td>使用FULLTEXT索引执行连接</td></tr><tr><td>6</td><td>ref_or_null</td><td>与ref类似，区别在于条件中包含对NULL的查询</td></tr><tr><td>7</td><td>index_merge</td><td>索引合并优化，利用一个表里的N个索引查询,key_len表示这些索引键的和最长长度。</td></tr><tr><td>8</td><td>unique_subquery</td><td>in的后面是一个查询primary key\unique字段的子查询</td></tr><tr><td>9</td><td>index_subquery</td><td>in的后面是一个查询普通index字段的子查询</td></tr><tr><td>10</td><td>range</td><td>单表索引中的范围查询,使用索引查询出单个表中的一些行数据。ref列会变为null</td></tr><tr><td>11</td><td>index</td><td>等于ALL，只是在遍历时使用了索引树。它有两种情况：(1)覆盖索引 (2)用索引的顺序做一个全表扫描。</td></tr><tr><td>12</td><td>all</td><td>全表扫描</td></tr></tbody></table>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="6possible_keys">6.possible_keys<a href="#6possible_keys" class="hash-link" aria-label="Direct link to 6.possible_keys" title="Direct link to 6.possible_keys">​</a></h4>
+<p>提示可以使用的索引</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="7key">7.key<a href="#7key" class="hash-link" aria-label="Direct link to 7.key" title="Direct link to 7.key">​</a></h4>
+<p>已经使用的索引</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="8key_len">8.key_len<a href="#8key_len" class="hash-link" aria-label="Direct link to 8.key_len" title="Direct link to 8.key_len">​</a></h4>
+<p>索引长度</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="9ref">9.ref<a href="#9ref" class="hash-link" aria-label="Direct link to 9.ref" title="Direct link to 9.ref">​</a></h4>
+<p>关联到的外部表的列</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="10rows">10.rows<a href="#10rows" class="hash-link" aria-label="Direct link to 10.rows" title="Direct link to 10.rows">​</a></h4>
+<p>预估扫描的行数</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="11filtered">11.filtered<a href="#11filtered" class="hash-link" aria-label="Direct link to 11.filtered" title="Direct link to 11.filtered">​</a></h4>
+<p>过滤掉行的百分比</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="12extra">12.Extra<a href="#12extra" class="hash-link" aria-label="Direct link to 12.Extra" title="Direct link to 12.Extra">​</a></h4>
+<p>Extra是对执行计划的额外说明，包含重要信息。由于过多，下面举出重要的优化项</p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="using-filesort">Using filesort<a href="#using-filesort" class="hash-link" aria-label="Direct link to Using filesort" title="Direct link to Using filesort">​</a></h5>
+<p>使用filesort来进行order by操作。</p>
+<p>Order by 排序操作有两种方式</p>
+<ul>
+<li>使用索引：借助B-Tree进行快速排序</li>
+<li>使用filesort：外部排序，基于磁盘与内存进行排序，效率低</li>
+</ul>
+<p>优化思路：建立索引</p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="using-temporary">Using temporary<a href="#using-temporary" class="hash-link" aria-label="Direct link to Using temporary" title="Direct link to Using temporary">​</a></h5>
+<p>使用了临时表去储存中间结果，通常在Group by 和 order by 语句中常见。属于重点优化项。</p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="using-where">Using where<a href="#using-where" class="hash-link" aria-label="Direct link to Using where" title="Direct link to Using where">​</a></h5>
+<p>使用了Where进行过滤，没有使用索引</p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="using-index">Using Index<a href="#using-index" class="hash-link" aria-label="Direct link to Using Index" title="Direct link to Using Index">​</a></h5>
+<p>查询使用了覆盖索引，不用回表，查询效率非常高。</p>
+<p>相关的有</p>
+<ul>
+<li><strong>Using index condition</strong>：</li>
+<li><strong>Using index for group-by</strong>：在Group By 中使用了索引，不用去访问表中查数据</li>
+<li><strong>Using index for skip scan</strong>：使用了Skip Scan 策略</li>
+</ul>
+<p><strong>Using join buffer</strong></p>
+<p>表明使用了连接缓存,比如说在查询的时候，多表<code>join</code>的次数非常多，那么将配置文件中的缓冲区的<code>join buffer</code>调大一些。</p>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="其他">其他<a href="#其他" class="hash-link" aria-label="Direct link to 其他" title="Direct link to 其他">​</a></h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>type value</th><th>Meaning</th><th>Suggestion</th></tr></thead><tbody><tr><td>const row not found</td><td>所要查询的表为空</td><td>SQL可能有错误</td></tr><tr><td>Distinct</td><td>mysql正在查询distinct值，因此当它每查到一个distinct值之后就会停止当前组的搜索，去查询下一个值</td><td>优化策略</td></tr><tr><td>Impossible HAVING</td><td>Having条件总为false，</td><td>SQL可能有错误</td></tr><tr><td>Impossible WHERE</td><td>where条件总为false</td><td>SQL可能有错误</td></tr><tr><td>Impossible WHERE noticed after reading const tables</td><td>在优化器评估了const表之后，发现where条件均不满足</td><td>SQL可能有错误</td></tr><tr><td>Not exists</td><td>优化器发现内表记录不可能满足where条件</td><td></td></tr><tr><td>Select tables optimized away</td><td>对索引进行MIN，MAX操作时进行优化</td><td>优化策略</td></tr></tbody></table>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="reference">Reference<a href="#reference" class="hash-link" aria-label="Direct link to Reference" title="Direct link to Reference">​</a></h2>
+<ul>
+<li>
+<p><a href="https://weikeqin.com/2020/02/05/mysql-explain/#2-explain%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3" target="_blank" rel="noopener noreferrer">mysql explain 详解</a></p>
+</li>
+<li>
+<p><a href="https://segmentfault.com/a/1190000023565685" target="_blank" rel="noopener noreferrer">MySQL explain 应用详解(吐血整理🤩)</a> 带SQL案例</p>
+</li>
+<li>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html" target="_blank" rel="noopener noreferrer">8.8.2 EXPLAIN Output Format</a></p>
+</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/docs/tags/sql">SQL</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/01.技术笔记/03.运维/04.DB/04.SQL优化--Explain.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/技术笔记/运维/DB/mysql-freq-command"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">MySQL 常用命令</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/技术笔记/运维/DB/MongoDB 基本用法"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">MongoDB 基本用法</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#explain-输出详解" class="table-of-contents__link toc-highlight">Explain 输出详解</a><ul><li><a href="#each-explain-column-detail" class="table-of-contents__link toc-highlight">Each Explain Column Detail</a></li></ul></li><li><a href="#reference" class="table-of-contents__link toc-highlight">Reference</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/面试技巧/数据结构/链表/链表简介">Interview Notes</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/PPsteven" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 PPsteven. Built with Docusaurus. Hosted by Github Pages.</div></div></div></footer></div>
+</body>
+</html>

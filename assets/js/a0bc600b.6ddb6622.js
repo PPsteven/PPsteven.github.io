@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcodepainter=self.webpackChunkcodepainter||[]).push([[4973],{60245:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/sunny-ngrok","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

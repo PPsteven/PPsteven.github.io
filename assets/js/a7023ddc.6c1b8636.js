@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcodepainter=self.webpackChunkcodepainter||[]).push([[9267],{28289:e=>{e.exports=JSON.parse('[{"label":"ssh","permalink":"/blog/tags/ssh","count":1},{"label":"sunny-ngrok","permalink":"/blog/tags/sunny-ngrok","count":1}]')}}]);
