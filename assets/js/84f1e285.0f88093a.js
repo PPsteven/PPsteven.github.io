@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkcodepainter=self.webpackChunkcodepainter||[]).push([[2452],{80652:e=>{e.exports=JSON.parse('{"title":"\u524d\u7aef","slug":"/category/\u524d\u7aef","permalink":"/docs/category/\u524d\u7aef","navigation":{"next":{"title":"CSS\u57fa\u7840\u77e5\u8bc6","permalink":"/docs/\u6280\u672f\u7b14\u8bb0/\u524d\u7aef/CSS/CSS\u57fa\u7840\u77e5\u8bc6"}}}')}}]);

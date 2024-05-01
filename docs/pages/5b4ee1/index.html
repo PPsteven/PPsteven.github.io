@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-技术笔记/Cheetsheet/VIM-CheetSheet" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.2.1">
+<title data-rh="true">Vim-CheetSheet | CodePainter</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://ppsteven.github.io/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://ppsteven.github.io/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://ppsteven.github.io/docs/pages/5b4ee1/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Vim-CheetSheet | CodePainter"><meta data-rh="true" name="description" content="Vim 安装"><meta data-rh="true" property="og:description" content="Vim 安装"><link data-rh="true" rel="icon" href="/img/gopher.svg"><link data-rh="true" rel="canonical" href="https://ppsteven.github.io/docs/pages/5b4ee1/"><link data-rh="true" rel="alternate" href="https://ppsteven.github.io/docs/pages/5b4ee1/" hreflang="en"><link data-rh="true" rel="alternate" href="https://ppsteven.github.io/docs/pages/5b4ee1/" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="CodePainter RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="CodePainter Atom Feed"><link rel="stylesheet" href="/assets/css/styles.4822eac9.css">
+<script src="/assets/js/runtime~main.96d0aaae.js" defer="defer"></script>
+<script src="/assets/js/main.d7439827.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/gopher.svg" alt="CodePainter" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/gopher.svg" alt="CodePainter" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">CodePainter</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/category/前端">Documents</a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">Topics</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/docs/pages/9e81db/">Interview Notes</a></li></ul></div><a href="https://github.com/PPsteven" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/docs/category/前端">前端</a><button aria-label="Expand sidebar category &#x27;前端&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/docs/category/后端">后端</a><button aria-label="Expand sidebar category &#x27;后端&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/docs/category/运维">运维</a><button aria-label="Expand sidebar category &#x27;运维&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/pages/916307/">其它</a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/docs/category/cheetsheet">Cheetsheet</a><button aria-label="Collapse sidebar category &#x27;Cheetsheet&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/pages/3f6ec3/">Docker-cheetsheet</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/pages/752e0b/">Git-cheetsheet</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/pages/9037d9/">Linux-cheetsheet</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/pages/58af8c/">SQL-CheetSheet</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/pages/5b4ee1/">Vim-CheetSheet</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/pages/0871b7/">Tmux-CheetSheet</a></li></ul></li></ul></nav><button type="button" title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_kv0_"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item"><a class="breadcrumbs__link" itemprop="item" href="/docs/category/cheetsheet"><span itemprop="name">Cheetsheet</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Vim-CheetSheet</span><meta itemprop="position" content="2"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Vim-CheetSheet</h1></header><h2 class="anchor anchorWithStickyNavbar_LWe7" id="vim-安装">Vim 安装<a href="#vim-安装" class="hash-link" aria-label="Direct link to Vim 安装" title="Direct link to Vim 安装">​</a></h2>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo apt-get install vim </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">brew install --HEAD nvim # Nightly version</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">brew install neovim --fetch-Head # Sometimes you need to update</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="新手指南">新手指南<a href="#新手指南" class="hash-link" aria-label="Direct link to 新手指南" title="Direct link to 新手指南">​</a></h2>
+<p>vim 自带教程</p>
+<ul>
+<li>vimtutor 英文教程</li>
+<li>vimtutor zh 中文教程</li>
+</ul>
+<p>视频教程</p>
+<ul>
+<li><a href="https://www.imooc.com/learn/1129" target="_blank" rel="noopener noreferrer">玩转Vim 从放弃到爱不释手</a></li>
+</ul>
+<p>网站</p>
+<ul>
+<li><a href="https://www.openvim.com/" target="_blank" rel="noopener noreferrer">https://www.openvim.com/</a></li>
+</ul>
+<p>插件</p>
+<ul>
+<li><a href="https://vimawesome.com/" target="_blank" rel="noopener noreferrer">https://vimawesome.com/</a></li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="vim-模式切换">Vim 模式切换<a href="#vim-模式切换" class="hash-link" aria-label="Direct link to Vim 模式切换" title="Direct link to Vim 模式切换">​</a></h2>
+<ul>
+<li>Normal 模式：Esc 或 CTRL+[</li>
+<li>Insert 模式：Normal 模式下
+<ul>
+<li>i/I (insert) 插入</li>
+<li>a/A (append) 追加</li>
+<li>o/O (open a line) 添加新行</li>
+</ul>
+</li>
+<li>Visual 模式：Normal 模式下，按 v</li>
+<li>Command 模式：Normal 模式下，按冒号(:)</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="插入模式小技巧">插入模式小技巧<a href="#插入模式小技巧" class="hash-link" aria-label="Direct link to 插入模式小技巧" title="Direct link to 插入模式小技巧">​</a></h2>
+<ul>
+<li>CTRL + h 删除上一个字符</li>
+<li>CTRL + w 删除上一个单词</li>
+<li>CTRL + u 删除当前行</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="快速移动">快速移动<a href="#快速移动" class="hash-link" aria-label="Direct link to 快速移动" title="Direct link to 快速移动">​</a></h2>
+<p><img decoding="async" loading="lazy" alt="image-20220120135726407" src="/assets/images/image-20220120135726407-8123f30903d8dbae42d0e1fdd3bb6133.png" width="298" height="271" class="img_ev3q"></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="基本移动">基本移动<a href="#基本移动" class="hash-link" aria-label="Direct link to 基本移动" title="Direct link to 基本移动">​</a></h4>
+<ul>
+<li>左下上右：hjkl</li>
+<li>w/W （word）下一个单词开头</li>
+<li>b/B （backword）上一个单词开头</li>
+<li>e/E (end) 下一个单词结尾</li>
+<li>ge 上一个单词结尾</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="行间搜索移动">行间搜索移动<a href="#行间搜索移动" class="hash-link" aria-label="Direct link to 行间搜索移动" title="Direct link to 行间搜索移动">​</a></h4>
+<ul>
+<li>f/F{char} (find) 移动到 {char} 字符</li>
+<li>t/T{char} (to) 移动到 {char} 的前一个字符</li>
+<li>如果没有找到，分号(;) 和 逗号(,) 搜索下一个/上一个</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="水平移动">水平移动<a href="#水平移动" class="hash-link" aria-label="Direct link to 水平移动" title="Direct link to 水平移动">​</a></h4>
+<ul>
+<li>0 行首</li>
+<li>^ 首个非空字符， 等价于 0w</li>
+<li>_ 行首</li>
+<li>$ 行尾</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="垂直移动不常用">垂直移动（不常用）<a href="#垂直移动不常用" class="hash-link" aria-label="Direct link to 垂直移动（不常用）" title="Direct link to 垂直移动（不常用）">​</a></h4>
+<p>shift</p>
+<ul>
+<li>() 句子间移动</li>
+<li>{} 段落间移动</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="页面移动">页面移动<a href="#页面移动" class="hash-link" aria-label="Direct link to 页面移动" title="Direct link to 页面移动">​</a></h4>
+<ul>
+<li>gg 文件开头</li>
+<li>G 文件结尾</li>
+<li>CTRL + o 快速返回</li>
+<li>15g/15G/:15  快速移动到15 行</li>
+<li>:+14/-14 下移/上移 14 行</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="屏幕移动">屏幕移动<a href="#屏幕移动" class="hash-link" aria-label="Direct link to 屏幕移动" title="Direct link to 屏幕移动">​</a></h4>
+<ul>
+<li>
+<p>H/M/L 屏幕开头（Head），中间(Middle)，结尾(Lower)</p>
+</li>
+<li>
+<p>CTRL + u (upward) 上翻半屏</p>
+</li>
+<li>
+<p>CTRL + d (down) 下翻半屏</p>
+</li>
+<li>
+<p>CTRL + f (forward)  下翻一页</p>
+</li>
+<li>
+<p>CTRL + b (backward) 上翻一页</p>
+</li>
+<li>
+<p>zz 当前行居中</p>
+</li>
+<li>
+<p>zt 当前行置顶</p>
+</li>
+<li>
+<p>zb 当前行置底</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="文档操作">文档操作<a href="#文档操作" class="hash-link" aria-label="Direct link to 文档操作" title="Direct link to 文档操作">​</a></h2>
+<ul>
+<li>
+<p>:e file –关闭当前编辑的文件，并开启新的文件。 如果对当前文件的修改未保存，vi会警告。</p>
+</li>
+<li>
+<p>:e! file –放弃对当前文件的修改，编辑新的文件。</p>
+</li>
+<li>
+<p>:e+file – 开始新的文件，并从文件尾开始编辑。</p>
+</li>
+<li>
+<p>:enew –编译一个未命名的新文档。(CTRL-W n)</p>
+</li>
+<li>
+<p>:e! – 重新加载当前文档，并丢弃已做的改动。</p>
+</li>
+<li>
+<p>:e#或ctrl+^ – 回到刚才编辑的文件，很实用。</p>
+</li>
+<li>
+<p>:f或ctrl+g – 显示文档名，是否修改，和光标位置。</p>
+</li>
+<li>
+<p>:f filename – 改变编辑的文件名，这时再保存相当于另存为。</p>
+</li>
+<li>
+<p>gf – 打开以光标所在字符串为文件名的文件。</p>
+</li>
+<li>
+<p>:w – 保存修改。</p>
+</li>
+<li>
+<p>保存并退出</p>
+<ul>
+<li>:wq</li>
+<li>ZZ</li>
+<li>:x</li>
+</ul>
+</li>
+<li>
+<p>:saveas newfilename – 另存为</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="增删改查">增删改查<a href="#增删改查" class="hash-link" aria-label="Direct link to 增删改查" title="Direct link to 增删改查">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="删除">删除<a href="#删除" class="hash-link" aria-label="Direct link to 删除" title="Direct link to 删除">​</a></h3>
+<ul>
+<li>x 删除一个字符</li>
+<li>dw 删除一个单词</li>
+<li>dt) (delete to <code>)</code> ) 删除至右括号<code>)</code> 处</li>
+<li>daw (delete around word) 删除一个单词（包含空格）</li>
+<li>diw (delete inner word) 删除一个单词 （不含空格）</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="修改">修改<a href="#修改" class="hash-link" aria-label="Direct link to 修改" title="Direct link to 修改">​</a></h3>
+<ul>
+<li>r (replace) 修改一个字符</li>
+<li>R 修改多个字符</li>
+<li>s (substitude) 等价于 di</li>
+<li>S 删除整行，并插入</li>
+<li>c (change) 修改
+<ul>
+<li>caw 删除单词，并插入， dawi</li>
+<li>ct&quot; (change to &quot;) 删除双引号内内容，并插入，dt&quot;i</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="查询">查询<a href="#查询" class="hash-link" aria-label="Direct link to 查询" title="Direct link to 查询">​</a></h3>
+<ul>
+<li>/ 正向查询</li>
+<li>? 反向查询</li>
+<li>n/N 搜索下一个，上一个</li>
+</ul>
+<p>查找很长的词，如果一个词很长，键入麻烦，可以将光标移动到该词上。</p>
+<ul>
+<li>* 相当于 /</li>
+<li># 相当于 ?</li>
+</ul>
+<p>配置：</p>
+<ul>
+<li>:set ic 忽略大小写</li>
+<li>:set noic 取消忽略大小写</li>
+<li>:set hls 匹配项高亮显示</li>
+<li>:set is 显示部分匹配</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="替换">替换<a href="#替换" class="hash-link" aria-label="Direct link to 替换" title="Direct link to 替换">​</a></h3>
+<ul>
+<li><code>:s/word/excel</code>：替换 <strong>一次</strong> 当前行<code>word</code>为<code>excel</code></li>
+<li><code>:%s/word/excel/gc</code>：替换当前行 <strong>所有</strong> <code>word</code>为<code>excel</code>，每次替换前都确认</li>
+<li><code>:3,5 s/word/excel/4</code>：替换 3-5 行  <code>word</code>为<code>excel</code>，替换4次</li>
+</ul>
+<p>配置项</p>
+<ul>
+<li>
+<p>% 所有行</p>
+</li>
+<li>
+<p><code>.,$</code> 当前行到最后行</p>
+</li>
+<li>
+<p>g (global) 全局执行</p>
+</li>
+<li>
+<p>c (confirm) 需要确认</p>
+</li>
+<li>
+<p>n (number) 只输入次数</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="撤销">撤销<a href="#撤销" class="hash-link" aria-label="Direct link to 撤销" title="Direct link to 撤销">​</a></h3>
+<ul>
+<li>u/:undo 撤销变动</li>
+<li>CTRL+r 重做，反撤销</li>
+<li>U 撤销当前行所有改动</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="多文件操作缓存区">多文件操作&amp;缓存区<a href="#多文件操作缓存区" class="hash-link" aria-label="Direct link to 多文件操作&amp;缓存区" title="Direct link to 多文件操作&amp;缓存区">​</a></h2>
+<ul>
+<li>vim file1 file2 ... 多个文件打开到 buffer</li>
+<li><code>:ls</code> 显示打开的文件</li>
+<li><code>:bn (:bnext)</code> 下一个文件</li>
+<li><code>:bp (:bprevious)</code> 上一个文件</li>
+<li><code>:bf (:bfirst)</code> 第一个文件</li>
+<li><code>:bl (:blast)</code> 最后一个文件</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="窗口操作">窗口操作<a href="#窗口操作" class="hash-link" aria-label="Direct link to 窗口操作" title="Direct link to 窗口操作">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="多窗口打开">多窗口打开<a href="#多窗口打开" class="hash-link" aria-label="Direct link to 多窗口打开" title="Direct link to 多窗口打开">​</a></h3>
+<ul>
+<li>vim -o file1 file2 横向分屏打开</li>
+<li>vim -O file1 file2 纵向分屏打开</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="分割">分割<a href="#分割" class="hash-link" aria-label="Direct link to 分割" title="Direct link to 分割">​</a></h3>
+<p>水平分割</p>
+<ul>
+<li><code>&lt;CTRL+w&gt; s</code></li>
+<li><code>:sp [filename]</code></li>
+</ul>
+<p>垂直分割</p>
+<ul>
+<li><code>&lt;CTRL+w&gt;+ v</code></li>
+<li><code>:vs [filename]</code></li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="移动光标">移动光标<a href="#移动光标" class="hash-link" aria-label="Direct link to 移动光标" title="Direct link to 移动光标">​</a></h3>
+<ul>
+<li><code>&lt;CTRL+w&gt; w</code> 窗口循环切换</li>
+<li><code>&lt;CTRL+w&gt; hjkl</code> 窗口方向切换</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="移动分屏">移动分屏<a href="#移动分屏" class="hash-link" aria-label="Direct link to 移动分屏" title="Direct link to 移动分屏">​</a></h3>
+<ul>
+<li><code>&lt;CTRL+w&gt; HJKL</code></li>
+<li><code>&lt;CTRL+w&gt; r</code> 旋转窗口的位置</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="重排窗口大小">重排窗口大小<a href="#重排窗口大小" class="hash-link" aria-label="Direct link to 重排窗口大小" title="Direct link to 重排窗口大小">​</a></h3>
+<ul>
+<li><code>&lt;CTRL-w&gt;=</code> 窗口等宽，等高</li>
+<li><code>&lt;CTRL-w&gt;_</code> 窗口最大化高度</li>
+<li><code>&lt;CTRL-w&gt;|</code> 窗口最大化宽度</li>
+<li><code>&lt;CTRL-w&gt; [n]+-</code> 修改屏幕尺寸 增加/减少 [n] 行</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="关闭窗口">关闭窗口<a href="#关闭窗口" class="hash-link" aria-label="Direct link to 关闭窗口" title="Direct link to 关闭窗口">​</a></h3>
+<ul>
+<li><code>&lt;CTRL+w&gt; q</code></li>
+<li><code>:q/x</code></li>
+<li>:qall -- 关闭所有窗口，退出vim。</li>
+<li>:wall -- 保存所有修改过的窗口。</li>
+<li>:only -- 只保留当前窗口，关闭其它窗口。(CTRL-W o)</li>
+<li>:close -- 关闭当前窗口，CTRL-W c能实现同样的功能。 (象 :q :x同样工作 )</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="分屏打开游览文件系统">分屏打开游览文件系统<a href="#分屏打开游览文件系统" class="hash-link" aria-label="Direct link to 分屏打开游览文件系统" title="Direct link to 分屏打开游览文件系统">​</a></h3>
+<ul>
+<li>:Sex – 水平分割一个窗口，浏览文件系统；</li>
+<li>:Vex – 垂直分割一个窗口，浏览文件系统；</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="文本对象text-object">文本对象（Text object）<a href="#文本对象text-object" class="hash-link" aria-label="Direct link to 文本对象（Text object）" title="Direct link to 文本对象（Text object）">​</a></h2>
+<blockquote>
+<p>基本用法： <code>[number] &lt;command&gt; [text object]</code></p>
+</blockquote>
+<ul>
+<li>iw (inner word)</li>
+<li>aw (around word)</li>
+<li>is (inner sentence)</li>
+<li>ip (inner paragraph)</li>
+</ul>
+<p>更丰富用法</p>
+<ul>
+<li>
+<p>ai 的右边还可以是</p>
+<p><code>[]{}&quot;&#x27;</code> 代表被这些括起来的文字</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="复制黏贴寄存器">复制黏贴&amp;寄存器<a href="#复制黏贴寄存器" class="hash-link" aria-label="Direct link to 复制黏贴&amp;寄存器" title="Direct link to 复制黏贴&amp;寄存器">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="基本使用">基本使用<a href="#基本使用" class="hash-link" aria-label="Direct link to 基本使用" title="Direct link to 基本使用">​</a></h3>
+<ul>
+<li>y (yank) 复制</li>
+<li>d (delete) 剪切</li>
+<li>p (put) 黏贴</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="使用寄存器">使用寄存器<a href="#使用寄存器" class="hash-link" aria-label="Direct link to 使用寄存器" title="Direct link to 使用寄存器">​</a></h3>
+<ul>
+<li>
+<p><code>&quot;{register}</code> 使用寄存器</p>
+</li>
+<li>
+<p><code>&quot;ayiw</code> 复制一个单词到 a 寄存器</p>
+</li>
+<li>
+<p><code>&quot;bdd</code> 剪切一个行到 b 寄存器</p>
+</li>
+<li>
+<p><code>&quot;+</code> 引用系统剪切板</p>
+</li>
+<li>
+<p><code>&quot;%</code> 引用文件名</p>
+</li>
+</ul>
+<p>黏贴缩进混乱</p>
+<ul>
+<li>
+<p><code>:set paste</code> 和 <code>:set nopaste</code></p>
+</li>
+<li>
+<p><code>:set clipboard=unnamed</code> 剪切版等于 无名寄存器</p>
+</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="视图模式">视图模式<a href="#视图模式" class="hash-link" aria-label="Direct link to 视图模式" title="Direct link to 视图模式">​</a></h2>
+<ul>
+<li>v 选中一个</li>
+<li>V 选中一行</li>
+<li>CTRL+v  选中块</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="重复工作宏">重复工作&amp;宏<a href="#重复工作宏" class="hash-link" aria-label="Direct link to 重复工作&amp;宏" title="Direct link to 重复工作&amp;宏">​</a></h2>
+<p>最简单的宏</p>
+<ul>
+<li>. 点，重复上一个动作</li>
+</ul>
+<p>宏录制，本质上就是录制一段键盘代码，然后反复执行</p>
+<ol>
+<li>
+<p>qa: 录制 宏a</p>
+</li>
+<li>
+<p>操作</p>
+</li>
+<li>
+<p>q: 停止录制</p>
+</li>
+<li>
+<p>选中需要重复操作的文本</p>
+</li>
+<li>
+<p>@a: 播放宏a</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="自动补全">自动补全<a href="#自动补全" class="hash-link" aria-label="Direct link to 自动补全" title="Direct link to 自动补全">​</a></h2>
+<ul>
+<li>CTRL+n/ CTRL+p 补全单词</li>
+<li>CTRL+x CTRL+f 补全文件名</li>
+<li>CTRL+x CTRL+o 补全代码，需要开启插件</li>
+</ul>
+<p>当弹出补全菜单后：</p>
+<ul>
+<li>C-p 向前切换成员；</li>
+<li>C-n 向后切换成员；</li>
+<li>C-e 退出下拉菜单，并退回到原来录入的文字；</li>
+<li>C-y 退出下拉菜单，并接受当前选项。</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="vim配置">Vim配置<a href="#vim配置" class="hash-link" aria-label="Direct link to Vim配置" title="Direct link to Vim配置">​</a></h2>
+<blockquote>
+<p>参考：<a href="http://www.ruanyifeng.com/blog/2018/09/vimrc.html" target="_blank" rel="noopener noreferrer">Vim配置入门【阮一峰】</a>、<a href="https://www.shortcutfoo.com/blog/top-50-vim-configuration-options/" target="_blank" rel="noopener noreferrer">Top 50 Vim Configuration Options</a>、<a href="https://www.cnblogs.com/shamojituan/p/4285469.html" target="_blank" rel="noopener noreferrer">Vim 强大的配置</a><a href="https://www.cnblogs.com/shamojituan/p/4285469.html" target="_blank" rel="noopener noreferrer">https://www.cnblogs.com/shamojituan/p/4285469.html</a></p>
+</blockquote>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  基本配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">let mapleader=&quot;;&quot;  &quot; 设置 &lt;leader&gt;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if &amp;compatible</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set nocompatible  &quot; 不要兼容vi</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&#x27;syntax&#x27;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    syntax enable</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    syntax on  &quot; 设置语法高亮</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&#x27;multi_byte&#x27;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set helplang=en  &quot; 帮助文件使用英文</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set encoding=utf-8</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set fileencoding=utf-8</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set fileencodings=utf-8,ucs-bom,gb18030,cp936,latin1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set showcmd  &quot; 显示输入的命令</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set mouse=a  &quot; 允许使用鼠标, n是normal生效，a则是全模式生效</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  缩进配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set smarttab  &quot; 智能tab</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set smartindent  &quot; 智能缩进</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set autoindent  &quot; 自动换行缩进</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set cindent  &quot; C Program 自动缩进</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set expandtab  &quot; tab 换成空格</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set tabstop=4  &quot; tab 替换成4个空格</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set softtabstop=4  &quot; 连续数量的空格看作一个制表符</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set shiftround  &quot; shift缩进取整</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set shiftround  &quot; shift缩进取整</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set shiftwidth=4  &quot; shift每次移动4个空格</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&#x27;autocmd&#x27;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    filetype plugin indent on  &quot; 载入文件类型拆件，载入相关缩进文件</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; 打开折叠</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&#x27;folding&#x27;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set foldenable</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set foldmethod=indent  &quot; 基于缩进的折叠</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set foldlevel=99  &quot; 默认打开所有缩进</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  外观配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set shortmess+=c &quot; 报错信息使用简写</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;set shortmess=atI   &quot; 启动的时候不显示那个援助乌干达儿童的提示</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set number  &quot; 显示行号</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; set relativenumber  &quot; 设置相对行号</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wrap  &quot; 自动折行</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set cmdheight=3  &quot;命令窗口高度</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; set scrolloff=3     &quot; 光标移动到buffer的顶部和底部时保持3行距离</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set visualbell    &quot; 报错时闪烁</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; set background=dark  &quot;背景使用黑色</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set ruler  &quot; 显示光标当前位置</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set confirm  &quot; 显示确认对话框</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set showmode  &quot; 显示当前模式</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set linebreak  &quot; 软折行</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set cursorline  &quot; 光标所在行高亮</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; set textwidth=80 &quot; 一行显示多少字符</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set laststatus=2  &quot; 总是显示状态行</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  搜索配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set showmatch  &quot; 高亮括号</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set hlsearch  &quot; 高亮匹配结果</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set incsearch  &quot; 跳至第一个匹配结果</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set ignorecase  &quot; 忽略大小写</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  编辑配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set noswapfile  &quot; 禁止生成swap文件</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set nobackup  &quot; 不创建备份文件</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set nowritebackup</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set noundofile  &quot; 删除撤销历史</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set hidden  &quot; 终端隐藏后不结束</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set ignorecase&quot; 忽略大小写</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; set smartcase</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set clipboard+=unnamed  &quot; 共享剪贴板</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set autoread  &quot; 文件在外部被修改过，重新读入</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set autowrite  &quot; 自动写回</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set infercase</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set history=500  &quot; 历史命令</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; set splitbelow  &quot; 在下方分割</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set splitright  &quot; 在右方分割</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set sessionoptions+=globals</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  性能配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set matchtime=2  &quot; 匹配括号所用时间，单位为0.1秒</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set lazyredraw  &quot; 延迟绘制，提升性能</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set ttimeout</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set timeoutlen=500</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set ttimeoutlen=10</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set updatetime=100  &quot; 更新时间100ms 默认4000ms 写入swap的时间</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;  性能配置  &quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; 其余配置</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set ffs=unix,dos,mac  &quot; 文件换行符，默认使用unix换行符</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set winaltkeys=no  &quot; 不允许使用alt键</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&#x27;nvim&#x27;) == 0 &amp;&amp; has(&#x27;patch-8.1.2020&#x27;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set cursorlineopt=number cursorline</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&#x27;patch-8.1.1564&#x27;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set signcolumn=yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    &quot; set signcolumn=number</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">else</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    set signcolumn=yes</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; 定位到退出位置并移动到屏幕中央</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if has(&quot;autocmd&quot;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    au BufReadPost * if line(&quot;&#x27;\&quot;&quot;) &gt; 1 &amp;&amp; line(&quot;&#x27;\&quot;&quot;) &lt;= line(&quot;$&quot;) | exe &quot;normal! g&#x27;\&quot;&quot; | endif | normal! zvzz</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">endif</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; 6. 补全配置</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildmenu  &quot; 显示补全菜单</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildmode=full  &quot; 补全模式</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; 一下内容来自韦大的配置</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; 文件搜索和补全时忽略下面的扩展名</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot;stuff to ignore when tab completing</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&quot; MacOSX/Linux</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*DS_Store*,*.ipch</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.gem</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/.rbenv/**</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*/.nx/**,*.app,*.git,.git</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.wav,*.mp3,*.ogg,*.pcm</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.mht,*.suo,*.sdf,*.jnlp</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.chm,*.epub,*.pdf,*.mobi,*.ttf</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="其他">其他<a href="#其他" class="hash-link" aria-label="Direct link to 其他" title="Direct link to 其他">​</a></h2>
+<ul>
+<li>:pwd 当前工作目录</li>
+<li>:cd path 切换工作目录</li>
+<li>:set autochdir 根据编辑的文件自动切换工作目录</li>
+<li>:set nu 设置行号</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="vim-配置">vim 配置<a href="#vim-配置" class="hash-link" aria-label="Direct link to vim 配置" title="Direct link to vim 配置">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="neovim-配置">NeoVim 配置<a href="#neovim-配置" class="hash-link" aria-label="Direct link to NeoVim 配置" title="Direct link to NeoVim 配置">​</a></h3>
+<p>我的 <a href="https://github.com/PPsteven/my-vime-config#%E5%AE%89%E8%A3%85" target="_blank" rel="noopener noreferrer">neovim 配置</a> 是 forked from <a href="https://github.com/fgheng/vime" target="_blank" rel="noopener noreferrer">fgheng/vime</a></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="目录">目录<a href="#目录" class="hash-link" aria-label="Direct link to 目录" title="Direct link to 目录">​</a></h3>
+<p>安装</p>
+<div class="codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Plug &#x27;preservim/nerdtree&#x27;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Plug &#x27;Xuyuanp/nerdtree-git-plugin&#x27;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>快捷键</p>
+<div class="language- codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language- codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">&lt;F2&gt; 打开目录</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">W 竖分屏</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">w 横分屏</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">h 关闭文件夹</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">l 打开文件夹</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">L 递归打开文件夹</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">. 显示隐藏文件</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">bb 进入目录</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&lt;backspace&gt; 回到上一级目录</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">t 在新的tab打开</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">yp 复制文件路径</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&lt;leader&gt;v 搜索目录</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="vim-server">Vim-Server<a href="#vim-server" class="hash-link" aria-label="Direct link to Vim-Server" title="Direct link to Vim-Server">​</a></h3>
+<p>特别简单的 vim 配置，没有任何插件，适用于服务器端的配置</p>
+<blockquote>
+<p>Github: <a href="https://github.com/wklken/vim-for-server" target="_blank" rel="noopener noreferrer">https://github.com/wklken/vim-for-server</a></p>
+</blockquote>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="参考教程">参考教程<a href="#参考教程" class="hash-link" aria-label="Direct link to 参考教程" title="Direct link to 参考教程">​</a></h2>
+<ul>
+<li><a href="https://www.cnblogs.com/jiqingwu/archive/2012/06/14/vim_notes.html" target="_blank" rel="noopener noreferrer">Vim使用笔记</a></li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/docs/tags/vim">Vim</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/01.技术笔记/20.Cheetsheet/05.VIM-CheetSheet.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/pages/58af8c/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SQL-CheetSheet</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/pages/0871b7/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Tmux-CheetSheet</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#vim-安装" class="table-of-contents__link toc-highlight">Vim 安装</a></li><li><a href="#新手指南" class="table-of-contents__link toc-highlight">新手指南</a></li><li><a href="#vim-模式切换" class="table-of-contents__link toc-highlight">Vim 模式切换</a></li><li><a href="#插入模式小技巧" class="table-of-contents__link toc-highlight">插入模式小技巧</a></li><li><a href="#快速移动" class="table-of-contents__link toc-highlight">快速移动</a></li><li><a href="#文档操作" class="table-of-contents__link toc-highlight">文档操作</a></li><li><a href="#增删改查" class="table-of-contents__link toc-highlight">增删改查</a><ul><li><a href="#删除" class="table-of-contents__link toc-highlight">删除</a></li><li><a href="#修改" class="table-of-contents__link toc-highlight">修改</a></li><li><a href="#查询" class="table-of-contents__link toc-highlight">查询</a></li><li><a href="#替换" class="table-of-contents__link toc-highlight">替换</a></li><li><a href="#撤销" class="table-of-contents__link toc-highlight">撤销</a></li></ul></li><li><a href="#多文件操作缓存区" class="table-of-contents__link toc-highlight">多文件操作&amp;缓存区</a></li><li><a href="#窗口操作" class="table-of-contents__link toc-highlight">窗口操作</a><ul><li><a href="#多窗口打开" class="table-of-contents__link toc-highlight">多窗口打开</a></li><li><a href="#分割" class="table-of-contents__link toc-highlight">分割</a></li><li><a href="#移动光标" class="table-of-contents__link toc-highlight">移动光标</a></li><li><a href="#移动分屏" class="table-of-contents__link toc-highlight">移动分屏</a></li><li><a href="#重排窗口大小" class="table-of-contents__link toc-highlight">重排窗口大小</a></li><li><a href="#关闭窗口" class="table-of-contents__link toc-highlight">关闭窗口</a></li><li><a href="#分屏打 开游览文件系统" class="table-of-contents__link toc-highlight">分屏打开游览文件系统</a></li></ul></li><li><a href="#文本对象text-object" class="table-of-contents__link toc-highlight">文本对象（Text object）</a></li><li><a href="#复制黏贴寄存器" class="table-of-contents__link toc-highlight">复制黏贴&amp;寄存器</a><ul><li><a href="#基本使用" class="table-of-contents__link toc-highlight">基本使用</a></li><li><a href="#使用寄存器" class="table-of-contents__link toc-highlight">使用寄存器</a></li></ul></li><li><a href="#视图模式" class="table-of-contents__link toc-highlight">视图模式</a></li><li><a href="#重复工作宏" class="table-of-contents__link toc-highlight">重复工作&amp;宏</a></li><li><a href="#自动补全" class="table-of-contents__link toc-highlight">自动补全</a></li><li><a href="#vim配置" class="table-of-contents__link toc-highlight">Vim配置</a></li><li><a href="#其他" class="table-of-contents__link toc-highlight">其他</a></li><li><a href="#vim-配置" class="table-of-contents__link toc-highlight">vim 配置</a><ul><li><a href="#neovim-配置" class="table-of-contents__link toc-highlight">NeoVim 配置</a></li><li><a href="#目录" class="table-of-contents__link toc-highlight">目录</a></li><li><a href="#vim-server" class="table-of-contents__link toc-highlight">Vim-Server</a></li></ul></li><li><a href="#参考教程" class="table-of-contents__link toc-highlight">参考教程</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/pages/9e81db/">Interview Notes</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/PPsteven" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 PPsteven. Built with Docusaurus. Hosted by Github Pages.</div></div></div></footer></div>
+</body>
+</html>
