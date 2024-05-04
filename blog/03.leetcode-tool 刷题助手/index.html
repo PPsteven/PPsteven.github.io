@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v3.2.1">
 <title data-rh="true">03.leetcode-tool 刷题助手 | CodePainter</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://ppsteven.github.io/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://ppsteven.github.io/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="03.leetcode-tool 刷题助手 | CodePainter"><meta data-rh="true" name="description" content="前言"><meta data-rh="true" property="og:description" content="前言"><meta data-rh="true" property="og:type" content="article"><meta data-rh="true" property="article:published_time" content="2024-05-04T18:51:03.000Z"><link data-rh="true" rel="icon" href="/img/gopher.svg"><link data-rh="true" rel="canonical" href="https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手"><link data-rh="true" rel="alternate" href="https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手" hreflang="en"><link data-rh="true" rel="alternate" href="https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手","mainEntityOfPage":"https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手","url":"https://ppsteven.github.io/blog/03.leetcode-tool 刷题助手","headline":"03.leetcode-tool 刷题助手","name":"03.leetcode-tool 刷题助手","description":"前言","datePublished":"2024-05-04T18:51:03.000Z","author":[],"keywords":[],"isPartOf":{"@type":"Blog","@id":"https://ppsteven.github.io/blog","name":"Blog"}}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="CodePainter RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="CodePainter Atom Feed"><link rel="stylesheet" href="/assets/css/styles.4822eac9.css">
-<script src="/assets/js/runtime~main.f7fe2bc8.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.d75e93e8.js" defer="defer"></script>
 <script src="/assets/js/main.e86fe23a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -17,6 +17,11 @@
 <li>使用GPT辅助答题</li>
 <li>刷题记录导出至Notion看板</li>
 </ol>
+<p>项目地址如下：<a href="https://github.com/PPsteven/leetcode-tool" target="_blank" rel="noopener noreferrer">https://github.com/PPsteven/leetcode-tool</a>
+编码不易，欢迎点Star多多支持！！</p>
+<p>效果如下图所示：</p>
+<p><img decoding="async" loading="lazy" src="https://raw.githubusercontent.com/PPsteven/leetcode-tool/master/screenshots/toc.png" alt="img" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://raw.githubusercontent.com/PPsteven/leetcode-tool/master/screenshots/notion-leetcode-summary.png" alt="img" class="img_ev3q"></p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="leetcode-刷题的痛点">Leetcode 刷题的痛点<a href="#leetcode-刷题的痛点" class="hash-link" aria-label="Direct link to Leetcode 刷题的痛点" title="Direct link to Leetcode 刷题的痛点">​</a></h2>
 <p>Leetcode 是一个很好的刷题网站，但是对于做好的题目，在Leetcode上存在如下痛点：</p>
 <ol>
@@ -139,7 +144,7 @@
 <ol start="4">
 <li>更新数据库</li>
 </ol>
-<p>将上面获取的 database_id 手动添加至 <code>.leetcode.json</code> 文件中后， 未来的每次更新都会更新该数据库，当且仅当数据发生变动后才会更新</p>
+<p>将上面获取的 database_id 手动添加至 <code>.leetcode.json</code> 文件中后，未来的每次更新都会更新该数据库，当且仅当数据发生变动后才会更新</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ leetcode-tool sync --notion</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="后记">后记<a href="#后记" class="hash-link" aria-label="Direct link to 后记" title="Direct link to 后记">​</a></h2>
 <p>本项目在开发过程中，如下开源项目给予了灵感和代码参考</p>
